@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC 2026 Analytics | Garrincha Shirts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+:root{--bg:#f8f7f4;--sf:#fff;--sf2:#f2f0ec;--bd:rgba(0,0,0,.10);--bd2:rgba(0,0,0,.18);--tx:#1a1a18;--tx2:#5a5a54;--tx3:#9a9a92;--bl:#185FA5;--bl-bg:#e6f1fb;--bl-tx:#0c447c;--rd:#E24B4A;--rd-bg:#fcebeb;--rd-tx:#791f1f;--gn:#1D9E75;--gn-bg:#e1f5ee;--gn-tx:#085041;--am:#BA7517;--am-bg:#faeeda;--am-tx:#633806;--ac:#1a6b3c;--r:10px;--rl:14px;--sh:0 1px 3px rgba(0,0,0,.08)}
+@media(prefers-color-scheme:dark){:root{--bg:#141412;--sf:#1e1e1c;--sf2:#272724;--bd:rgba(255,255,255,.10);--bd2:rgba(255,255,255,.18);--tx:#f0efe8;--tx2:#a0a098;--tx3:#606058;--bl:#378ADD;--bl-bg:#0c2a44;--bl-tx:#85b7eb;--rd:#E24B4A;--rd-bg:#3a1515;--rd-tx:#f09595;--gn:#1D9E75;--gn-bg:#083420;--gn-tx:#5dcaa5;--am:#EF9F27;--am-bg:#3a2508;--am-tx:#fac775;--ac:#2a9a54;--sh:0 1px 4px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6}
+/* HEADER */
+.hdr{background:var(--sf);border-bottom:1px solid var(--bd);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;gap:10px}
+.hdr-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hdr-logo img{height:30px;object-fit:contain}
+.hdr-sep{width:1px;height:20px;background:var(--bd2);flex-shrink:0}
+.hdr-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700}
+.hdr-title span{color:var(--ac)}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.live-badge{display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;background:var(--gn-bg);color:var(--gn-tx);font-size:11px;font-weight:600}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.lang-bar{display:flex;gap:3px}
+.lb{padding:3px 8px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.lb.active{background:var(--sf2);color:var(--tx);border-color:var(--bd2);font-weight:500}
+/* NAV */
+.nav-wrap{background:var(--sf);border-bottom:1px solid var(--bd);padding:0 1.25rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav{display:flex;white-space:nowrap}
+.nb{padding:11px 13px;border:none;background:transparent;color:var(--tx2);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:5px}
+.nb.active{color:var(--ac);border-bottom-color:var(--ac);font-weight:500}
+.nb:hover:not(.active){color:var(--tx);background:var(--sf2)}
+.nb i{font-size:14px}
+/* LAYOUT */
+.page{max-width:960px;margin:0 auto;padding:1.25rem}
+.sec{display:none}.sec.active{display:block}
+/* CARDS */
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:1.1rem 1.25rem;margin-bottom:12px;box-shadow:var(--sh)}
+.mc{background:var(--sf2);border-radius:var(--r);padding:.8rem .9rem}
+.mc .lbl{font-size:10px;color:var(--tx3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.mc .val{font-size:21px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.mc .sub{font-size:10px;color:var(--tx3);margin-top:1px}
+.stitle{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:.9rem;color:var(--tx)}
+/* GRIDS */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px;margin-bottom:12px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-bottom:12px}
+/* BADGES & PILLS */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.bg-gn{background:var(--gn-bg);color:var(--gn-tx)}
+.bg-am{background:var(--am-bg);color:var(--am-tx)}
+.bg-bl{background:var(--bl-bg);color:var(--bl-tx)}
+.bg-gy{background:var(--sf2);color:var(--tx2)}
+.vpill{display:inline-block;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600}
+.vph{background:var(--gn-bg);color:var(--gn-tx)}
+.vpm{background:var(--am-bg);color:var(--am-tx)}
+.vpl{background:var(--sf2);color:var(--tx2)}
+.vpn{background:var(--rd-bg);color:var(--rd-tx)}
+/* TEAM ROW */
+.team-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.team-row:last-child{border-bottom:none}
+.rnk{width:20px;text-align:right;font-size:12px;color:var(--tx3);font-family:'Space Grotesk',sans-serif}
+.tflag{font-size:19px;width:24px;text-align:center}
+.tname{flex:1;font-size:13px}
+.rbar{height:4px;border-radius:2px;background:var(--bd);flex:1;max-width:90px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:2px}
+/* SCOUT CARD */
+.tcard{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:.8rem;cursor:pointer;transition:border-color .15s;box-shadow:var(--sh)}
+.tcard:hover{border-color:var(--bd2)}
+.tcard.selected{border-color:var(--bl);border-width:2px}
+.tcard-head{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.tcard-flag{font-size:22px}
+.tcard-name{font-size:12px;font-weight:500;flex:1}
+.tcard-rat{font-size:19px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.tcard-grp{font-size:10px;color:var(--tx3)}
+.sr{display:flex;justify-content:space-between;font-size:11px;padding:2px 0}
+.sr .sk{color:var(--tx3)}.sr .sv{font-weight:500}
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:14px}
+.hero-team{text-align:center;padding:1rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);box-shadow:var(--sh)}
+.hero-team.home{border-left:3px solid var(--bl);border-radius:0 var(--rl) var(--rl) 0}
+.hero-team.away{border-right:3px solid var(--rd);border-radius:var(--rl) 0 0 var(--rl)}
+.hero-flag{font-size:40px;line-height:1;margin-bottom:5px}
+.hero-name{font-size:13px;font-weight:600}
+.hero-sub{font-size:10px;color:var(--tx3);margin-top:1px}
+.hero-rat{font-size:24px;font-weight:700;font-family:'Space Grotesk',sans-serif;margin-top:6px}
+.hero-mid{text-align:center}
+.pline{font-size:13px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.plbl{font-size:10px;color:var(--tx3);margin:1px 0 5px}
+.hdiv{height:1px;background:var(--bd);margin:4px 0}
+/* COMPARE */
+.cmp-row{display:grid;grid-template-columns:1fr 110px 1fr;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--bd)}
+.cmp-row:last-child{border-bottom:none}
+.cmp-lbl{font-size:11px;color:var(--tx2);text-align:center}
+.cmp-vh{font-size:12px;font-weight:500;text-align:right}
+.cmp-va{font-size:12px;font-weight:500}
+/* SW */
+.sw-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:.8rem .9rem;box-shadow:var(--sh)}
+.sw-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;margin-top:.4rem}
+.sw-lbl.str{color:var(--gn-tx)}.sw-lbl.wk{color:var(--rd-tx)}
+.sw-item{display:flex;align-items:flex-start;gap:5px;font-size:11px;color:var(--tx2);padding:2px 0;line-height:1.4}
+.sw-item i{font-size:12px;flex-shrink:0;margin-top:1px}
+.sw-item.str i{color:var(--gn)}.sw-item.wk i{color:var(--rd)}
+/* BET CARDS */
+.bet-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:.9rem 1.1rem;margin-bottom:9px;box-shadow:var(--sh)}
+.bet-card.hot{border-color:var(--gn);border-left-width:4px;border-radius:0 var(--rl) var(--rl) 0}
+.bet-card.med{border-color:var(--am);border-left-width:4px;border-radius:0 var(--rl) var(--rl) 0}
+.bet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:.3rem}
+.bet-title{font-size:13px;font-weight:600;font-family:'Space Grotesk',sans-serif}
+.bet-reason{font-size:11px;color:var(--tx2);margin-bottom:.5rem;line-height:1.5}
+.bet-stats{display:flex;gap:14px;flex-wrap:wrap}
+.bet-stat{font-size:10px;color:var(--tx3)}
+.bet-stat strong{display:block;font-size:12px;font-weight:600;color:var(--tx)}
+.ebar{height:3px;border-radius:2px;background:var(--bd);margin-top:8px;overflow:hidden}
+.efill{height:100%;border-radius:2px}
+/* TRENDS */
+.trow{display:flex;align-items:flex-start;gap:9px;font-size:11px;padding:6px 0;color:var(--tx2);border-bottom:1px solid var(--bd);line-height:1.5}
+.trow:last-child{border-bottom:none}
+.trow i{font-size:13px;color:var(--bl);flex-shrink:0;margin-top:2px}
+/* ODDS SECTION */
+.match-odds-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:.9rem 1.1rem;margin-bottom:10px;box-shadow:var(--sh)}
+.match-odds-card.has-value{border-left:3px solid var(--gn);border-radius:0 var(--rl) var(--rl) 0}
+.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:6px}
+.mteams{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.mtime{font-size:11px;color:var(--tx3)}
+.ogrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
+.obox{text-align:center;padding:7px 4px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf2)}
+.obox.value{border-color:var(--gn);background:var(--gn-bg)}
+.olbl{font-size:10px;color:var(--tx3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em}
+.oval{font-size:17px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.obox.value .oval{color:var(--gn-tx)}
+.oedge{font-size:10px;color:var(--gn-tx);font-weight:600;margin-top:1px}
+.mmarkets{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.mmarket{display:flex;align-items:center;gap:5px;padding:4px 9px;background:var(--sf2);border-radius:20px;font-size:11px}
+.mmarket span{font-weight:600}
+/* AI PANEL */
+.ai-panel{background:linear-gradient(135deg,var(--bl-bg),var(--sf));border:1px solid var(--bl);border-radius:var(--rl);padding:.9rem 1.1rem;margin-top:10px}
+.ai-panel-head{display:flex;align-items:center;gap:8px;margin-bottom:.5rem}
+.ai-panel-head i{font-size:18px;color:var(--bl)}
+.ai-title{font-size:13px;font-weight:600}
+.ai-body{font-size:12px;color:var(--tx2);line-height:1.6;min-height:40px}
+.ai-body.loading{color:var(--tx3);font-style:italic}
+.ai-btn-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+/* STATUS */
+.api-st{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx3);margin-bottom:.85rem}
+.api-st i{font-size:13px}
+.api-st.ok i{color:var(--gn)}
+.api-st.err i{color:var(--rd)}
+.api-st.loading i{color:var(--am);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rbtn{padding:4px 10px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px}
+.rbtn:hover{background:var(--sf2)}
+/* MISC */
+.filter-bar{display:flex;gap:8px;margin-bottom:.9rem;flex-wrap:wrap;align-items:center}
+.filter-bar label{font-size:11px;color:var(--tx3)}
+.sel-block{background:var(--sf2);border-radius:var(--rl);padding:1.1rem;margin-bottom:1.25rem;border:1px solid var(--bd)}
+.sel-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.sel-vs{font-size:13px;font-weight:600;color:var(--tx3)}
+.grp-hdr{background:var(--sf2);padding:7px 11px;border-radius:var(--r);font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:9px;display:flex;justify-content:space-between;font-family:'Space Grotesk',sans-serif}
+.detail-panel{background:var(--sf2);border-radius:var(--rl);padding:1.1rem;margin-top:12px;border:1px solid var(--bd)}
+select{padding:6px 10px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf);color:var(--tx);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;outline:none}
+select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
+.btn{padding:7px 15px;border-radius:var(--r);border:1px solid var(--bd2);background:var(--sf);color:var(--tx);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn:hover{background:var(--sf2)}
+.btn-primary{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn-primary:hover{opacity:.9}
+.btn-sm{padding:5px 12px;font-size:11px}
+.no-games{padding:2rem;text-align:center;color:var(--tx3);font-size:13px}
+.footer{text-align:center;padding:1.5rem 1rem;color:var(--tx3);font-size:11px;border-top:1px solid var(--bd);margin-top:2rem}
+.footer a{color:var(--tx2)}
+@media(max-width:580px){.page{padding:.9rem}.hero{gap:6px}.hero-team{padding:.7rem .4rem}.hero-flag{font-size:30px}.hero-rat{font-size:19px}.nb{padding:9px 10px;font-size:11px}.ogrid{gap:4px}.oval{font-size:14px}.hdr-title{display:none}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">
+    <img src="https://www.garrinchashirts.com/cdn/shop/files/GARRINCHA_SHIRTS_LOGO_for_SOCIAL_MEDIA_2.png?v=1735150542&width=160" alt="Garrincha Shirts" onerror="this.style.display='none'">
+    <div class="hdr-sep"></div>
+    <div class="hdr-title">WC 2026 <span>Analytics</span></div>
+  </div>
+  <div class="hdr-r">
+    <div class="live-badge"><div class="live-dot"></div>LIVE ODDS</div>
+    <div class="lang-bar">
+      <button class="lb active" onclick="setLang('pt')">🇧🇷</button>
+      <button class="lb" onclick="setLang('en')">🇬🇧</button>
+      <button class="lb" onclick="setLang('es')">🇪🇸</button>
+      <button class="lb" onclick="setLang('it')">🇮🇹</button>
+    </div>
+  </div>
+</header>
+
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="nb active" onclick="showSec('odds')"><i class="ti ti-activity"></i><span data-t="navOdds">Odds ao vivo</span></button>
+    <button class="nb" onclick="showSec('dashboard')"><i class="ti ti-layout-dashboard"></i><span data-t="navDash">Dashboard</span></button>
+    <button class="nb" onclick="showSec('grupos')"><i class="ti ti-tournament"></i><span data-t="navGrupos">Grupos</span></button>
+    <button class="nb" onclick="showSec('scouts')"><i class="ti ti-radar"></i><span data-t="navScouts">Scouts</span></button>
+    <button class="nb" onclick="showSec('value')"><i class="ti ti-coin"></i><span data-t="navValue">Value</span></button>
+    <button class="nb" onclick="showSec('tendencias')"><i class="ti ti-trending-up"></i><span data-t="navTrend">Tendências</span></button>
+    <button class="nb" onclick="showSec('confronto')"><i class="ti ti-swords"></i><span data-t="navMatch">Confronto</span></button>
+  </nav>
+</div>
+
+<main class="page">
+
+<!-- ODDS AO VIVO -->
+<section id="odds" class="sec active">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:8px">
+    <div class="api-st loading" id="apiSt"><i class="ti ti-loader-2"></i><span id="apiStTx" data-t="loadingOdds">Buscando odds...</span></div>
+    <div style="display:flex;gap:7px;align-items:center">
+      <button class="rbtn" onclick="loadOdds()"><i class="ti ti-refresh"></i><span data-t="refresh">Atualizar</span></button>
+      <span style="font-size:10px;color:var(--tx3)" id="lastUpd"></span>
+    </div>
+  </div>
+  <div id="oddsContent"><div class="no-games" data-t="loadingOdds">Buscando odds da Copa do Mundo 2026...</div></div>
+  <div style="margin-top:.6rem;padding:.7rem;background:var(--sf2);border-radius:var(--r);font-size:11px;color:var(--tx3)">
+    <i class="ti ti-info-circle" style="vertical-align:-2px"></i>
+    Odds via <strong>The Odds API</strong>. Atualizado diariamente. Value edge = prob. scout vs prob. implícita das odds. Aposte com responsabilidade.
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="sec">
+  <div class="g4" id="dashMetrics"></div>
+  <div class="g2">
+    <div class="card"><div class="stitle" data-t="top10Title">Top 10 por rating</div><div id="top10list"></div></div>
+    <div class="card"><div class="stitle" data-t="xgTitle">xG ofensivo vs xGA</div><div style="position:relative;height:250px"><canvas id="xgChart"></canvas></div></div>
+  </div>
+  <div class="card"><div class="stitle" data-t="groupRatingTitle">Rating médio por grupo</div><div style="position:relative;height:180px"><canvas id="groupChart"></canvas></div></div>
+</section>
+
+<!-- GRUPOS -->
+<section id="grupos" class="sec">
+  <div class="filter-bar"><label>Grupo:</label>
+    <select id="groupSel" onchange="renderGrupo()">
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+      <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+      <option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option>
+    </select>
+  </div>
+  <div id="grupoContent"></div>
+</section>
+
+<!-- SCOUTS -->
+<section id="scouts" class="sec">
+  <div class="filter-bar">
+    <label data-t="sortLabel">Ordenar:</label>
+    <select id="scoutSort" onchange="renderScouts()">
+      <option value="rating">Rating</option><option value="xG">xG</option><option value="pos">Posse</option><option value="FD">Duelos</option>
+    </select>
+    <label>Grupo:</label>
+    <select id="scoutGroup" onchange="renderScouts()">
+      <option value="">Todos</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+      <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+      <option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option>
+    </select>
+  </div>
+  <p style="font-size:11px;color:var(--tx3);margin-bottom:.9rem" data-t="scoutHint">Clique numa seleção para ver detalhes</p>
+  <div id="scoutGrid" class="g3"></div>
+  <div id="scoutDetail"></div>
+</section>
+
+<!-- VALUE -->
+<section id="value" class="sec">
+  <div class="filter-bar">
+    <label>Grupo:</label>
+    <select id="valGroup" onchange="renderValue()">
+      <option value="">Todos</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+      <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+      <option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option>
+    </select>
+    <label data-t="minEdgeLabel">Edge mín.:</label>
+    <select id="valEdge" onchange="renderValue()">
+      <option value="0" data-t="edgeAny">Qualquer</option>
+      <option value="5">+5%</option><option value="10">+10%</option><option value="15">+15%</option>
+    </select>
+  </div>
+  <p style="font-size:11px;color:var(--tx3);margin-bottom:.9rem" data-t="valueHint">Value edge = diferença entre probabilidade implícita das odds e probabilidade estimada pelo scout.</p>
+  <div id="valueGrid" class="g2"></div>
+</section>
+
+<!-- TENDÊNCIAS -->
+<section id="tendencias" class="sec">
+  <div class="g2" id="trendBlocks"></div>
+  <div class="card">
+    <div class="stitle">Perfil classificados vs eliminados — WC 2022</div>
+    <div style="position:relative;height:230px"><canvas id="trendChart"></canvas></div>
+    <div style="display:flex;gap:14px;margin-top:7px;font-size:11px;color:var(--tx2)">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:2px;background:#185FA5;display:inline-block;border-radius:1px"></span><span data-t="qualified">Classificados</span></span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:2px;background:#E24B4A;display:inline-block;border-radius:1px;border-top:2px dashed #E24B4A;height:0"></span><span data-t="eliminated">Eliminados</span></span>
+    </div>
+  </div>
+  <div class="card"><div class="stitle" data-t="trendAlignTitle">Times mais alinhados com perfil de classificados</div><div id="trendAlignment"></div></div>
+</section>
+
+<!-- CONFRONTO -->
+<section id="confronto" class="sec">
+  <div class="sel-block">
+    <div class="sel-row">
+      <select id="selHome" onchange="clearMatch()" style="flex:1;min-width:140px"></select>
+      <span class="sel-vs">vs</span>
+      <select id="selAway" onchange="clearMatch()" style="flex:1;min-width:140px"></select>
+      <button class="btn btn-primary" onclick="renderMatchup()"><i class="ti ti-chart-bar"></i><span data-t="analyze">Analisar</span></button>
+    </div>
+  </div>
+  <div id="matchup" style="display:none">
+    <div class="hero" id="heroBlock"></div>
+    <div style="margin-bottom:12px"><div class="stitle" data-t="swTitle">Pontos fortes e fracos</div><div class="g2" id="swBlock"></div></div>
+    <div class="card"><div class="stitle" data-t="cmpTitle">Comparativo de métricas</div><div id="cmpBlock"></div></div>
+    <div class="g2">
+      <div class="card"><div class="stitle" data-t="radarTitle">Perfil ofensivo / defensivo</div><div style="position:relative;height:220px"><canvas id="radarChart"></canvas></div></div>
+      <div class="card"><div class="stitle" data-t="probTitle">Probabilidades estimadas</div><div style="position:relative;height:220px"><canvas id="probChart"></canvas></div></div>
+    </div>
+    <!-- LIVE ODDS FOR THIS MATCHUP -->
+    <div id="matchOddsLive"></div>
+    <!-- AI ANALYSIS -->
+    <div class="ai-panel" id="aiPanel">
+      <div class="ai-panel-head"><i class="ti ti-sparkles"></i><div class="ai-title" data-t="aiTitle">Análise por IA</div></div>
+      <div class="ai-body" id="aiBody" data-t="aiReady">Clique em "Analisar com IA" para gerar uma análise tática e de apostas para este confronto.</div>
+      <div class="ai-btn-row">
+        <button class="btn btn-sm" onclick="runAI()"><i class="ti ti-sparkles"></i><span data-t="aiBtn">Analisar com IA</span></button>
+        <button class="btn btn-sm" onclick="copyAI()"><i class="ti ti-copy"></i><span data-t="copyBtn">Copiar</span></button>
+      </div>
+    </div>
+    <div class="stitle" style="margin-top:14px" data-t="betsTitle">Melhores apostas</div>
+    <div id="betsBlock"></div>
+    <div class="card"><div class="stitle" data-t="trendsTitle">Tendências WC 2022 → 2026</div><div id="trendsBlock"></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>WC 2026 Analytics · <a href="https://www.garrinchashirts.com" target="_blank">Garrincha Shirts</a> · <a href="https://github.com/garrinchashirts-create/wc2026" target="_blank">GitHub</a></p>
+  <p style="margin-top:3px">Odds via The Odds API · Análise IA via Claude · Aposte com responsabilidade.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+// ─── CONFIG ───────────────────────────────────────────────
+const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';
+// NOTE: In production, proxy Claude calls through a backend to protect your API key.
+// For GitHub Pages (static), we use a free proxy or direct call with CORS headers.
+// See README.md for setup instructions.
+const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+
+// ─── TRANSLATIONS ─────────────────────────────────────────
+const L = {
+  pt:{navOdds:"Odds ao vivo",navDash:"Dashboard",navGrupos:"Grupos",navScouts:"Scouts",navValue:"Value",navTrend:"Tendências",navMatch:"Confronto",top10Title:"Top 10 por rating",xgTitle:"xG ofensivo vs xGA",groupRatingTitle:"Rating médio por grupo",sortLabel:"Ordenar:",minEdgeLabel:"Edge mín.:",scoutHint:"Clique numa seleção para ver detalhes",valueHint:"Value edge = diferença entre probabilidade implícita das odds e probabilidade estimada pelo scout.",trendAlignTitle:"Times mais alinhados com perfil de classificados",swTitle:"Pontos fortes e fracos",cmpTitle:"Comparativo de métricas",radarTitle:"Perfil ofensivo / defensivo",probTitle:"Probabilidades estimadas",betsTitle:"Melhores apostas",trendsTitle:"Tendências WC 2022 → 2026",analyze:"Analisar",aiTitle:"Análise por IA",aiBtn:"Analisar com IA",aiReady:"Clique em \"Analisar com IA\" para gerar uma análise tática e de apostas para este confronto.",copyBtn:"Copiar",loadingOdds:"Buscando odds...",refresh:"Atualizar",strengths:"Pontos fortes",weaknesses:"Pontos fracos",win:"Vitória",draw:"Empate",rating:"rating",prob:"Prob.",fairOdd:"Odd justa",mktOdd:"Odds mercado",valueEdge:"Value edge",shots:"Chutes/j",sot:"A gol/j",corners:"Escanteios/j",yellows:"Cartões/j",xg:"xG",xga:"xGA",poss:"Posse",goals:"Gols/j",conceded:"Sofridos/j",duels:"Duelos",defEff:"Efic.def",vHigh:"Value alto",vMed:"A considerar",vWatch:"Observar",rec:"Recomendado",qualified:"Classificados",eliminated:"Eliminados",noOdds:"Sem odds disponíveis para este jogo no momento.",oddsOk:"Odds atualizadas",oddsErr:"Erro ao buscar odds",teamsAnalyzed:"Seleções",gamesBase:"Jogos na base",topRating:"Top rating",valueOpps:"Oportunidades value",metricLabels:["xG atq","Posse","Chutes","Efic.def","Gols/j","Duelos"],probLabels:["Vitória","Empate","Vitória"],trendBlocks:[{title:"Tipo de gol — WC 2022",body:"Mais de metade dos gols vieram em ataque posicional vs defesa fechada. Equipas classificadas marcaram 73% em AP vs def. fechada.",stats:["AP vs def. fechada: 73%","Contra-ataque: ~25%","Bola parada: ~15%"]},{title:"Perfil das equipas classificadas",body:"Marcaram mais gols, criaram mais ocasiões, sofreram menos. Remontadas em 50% dos casos. Pico de gols nos +80'.",stats:["Gols marcados: 62%","Gols sofridos: 32%","Remontadas: 50%"]},{title:"Timing dos gols",body:"Pico de gols no 81-90'. 65% dos gols em AP vs def. fechada na 2ª parte. Tempo médio de ataque: 7,6s após trigger.",stats:["1ª parte: 35%","2ª parte: 65%","+81': pico máximo"]},{title:"Fase eliminatória vs grupos",body:"Avançados marcaram 55% dos gols nas eliminatórias. Ter mais ocasiões leva à vitória em 80% dos casos.",stats:["Mais ocasiões → 80%","Mais posse → 40%","Finalizações → 50%"]}]},
+  en:{navOdds:"Live Odds",navDash:"Dashboard",navGrupos:"Groups",navScouts:"Scouts",navValue:"Value",navTrend:"Trends",navMatch:"Matchup",top10Title:"Top 10 by rating",xgTitle:"Offensive xG vs xGA",groupRatingTitle:"Avg rating by group",sortLabel:"Sort:",minEdgeLabel:"Min edge:",scoutHint:"Click a team to see full details",valueHint:"Value edge = difference between implied odds probability and scout-estimated probability.",trendAlignTitle:"Teams most aligned with WC22 qualifying profile",swTitle:"Strengths & weaknesses",cmpTitle:"Metrics comparison",radarTitle:"Offensive / defensive profile",probTitle:"Estimated probabilities",betsTitle:"Best bets",trendsTitle:"WC 2022 → 2026 trends",analyze:"Analyze",aiTitle:"AI Analysis",aiBtn:"Analyze with AI",aiReady:"Click \"Analyze with AI\" to generate a tactical and betting analysis for this matchup.",copyBtn:"Copy",loadingOdds:"Fetching odds...",refresh:"Refresh",strengths:"Strengths",weaknesses:"Weaknesses",win:"Win",draw:"Draw",rating:"rating",prob:"Prob.",fairOdd:"Fair odd",mktOdd:"Market odds",valueEdge:"Value edge",shots:"Shots/g",sot:"On target/g",corners:"Corners/g",yellows:"Yellows/g",xg:"xG",xga:"xGA",poss:"Possession",goals:"Goals/g",conceded:"Conceded/g",duels:"Duels",defEff:"Def.eff",vHigh:"High value",vMed:"Consider",vWatch:"Watch",rec:"Recommended",qualified:"Qualifying",eliminated:"Eliminated",noOdds:"No odds available for this game at the moment.",oddsOk:"Odds updated",oddsErr:"Error fetching odds",teamsAnalyzed:"Teams",gamesBase:"Games in dataset",topRating:"Top rating",valueOpps:"Value opportunities",metricLabels:["xG att","Possession","Shots","Def.eff","Goals/g","Duels"],probLabels:["Win","Draw","Win"],trendBlocks:[{title:"Goal type — WC 2022",body:"Over half of goals came from positional attack vs compact defense. Qualifying teams scored 73% in PA vs closed defense.",stats:["PA vs closed def: 73%","Counter-attack: ~25%","Set pieces: ~15%"]},{title:"Qualifying team profile",body:"Scored more, created more, conceded less. Came back from 1-0 in 50% of cases. More late goals (+80').",stats:["Goals scored: 62%","Goals conceded: 32%","Comebacks: 50%"]},{title:"Goal timing",body:"Goal peak in 81-90'. 65% of PA vs closed defense goals in 2nd half. Average attack duration: 7.6s after trigger.",stats:["1st half: 35%","2nd half: 65%","+81': peak"]},{title:"Knockout vs group stage",body:"Forwards scored 55% of knockout goals. Creating more chances leads to victory in 80% of cases.",stats:["More chances → 80%","More possession → 40%","Shots on target → 50%"]}]},
+  es:{navOdds:"Cuotas en vivo",navDash:"Dashboard",navGrupos:"Grupos",navScouts:"Scouts",navValue:"Value",navTrend:"Tendencias",navMatch:"Enfrentamiento",top10Title:"Top 10 por rating",xgTitle:"xG ofensivo vs xGA",groupRatingTitle:"Rating medio por grupo",sortLabel:"Ordenar:",minEdgeLabel:"Edge mín.:",scoutHint:"Haz clic en un equipo para ver detalles",valueHint:"Value edge = diferencia entre probabilidad implícita de cuotas y probabilidad estimada por scout.",trendAlignTitle:"Equipos más alineados con el perfil de clasificados",swTitle:"Fortalezas y debilidades",cmpTitle:"Comparativa de métricas",radarTitle:"Perfil ofensivo / defensivo",probTitle:"Probabilidades estimadas",betsTitle:"Mejores apuestas",trendsTitle:"Tendencias WC 2022 → 2026",analyze:"Analizar",aiTitle:"Análisis con IA",aiBtn:"Analizar con IA",aiReady:"Haz clic en \"Analizar con IA\" para generar un análisis táctico y de apuestas.",copyBtn:"Copiar",loadingOdds:"Buscando cuotas...",refresh:"Actualizar",strengths:"Fortalezas",weaknesses:"Debilidades",win:"Victoria",draw:"Empate",rating:"rating",prob:"Prob.",fairOdd:"Cuota justa",mktOdd:"Cuotas mercado",valueEdge:"Value edge",shots:"Tiros/p",sot:"A puerta/p",corners:"Córners/p",yellows:"Amarillas/p",xg:"xG",xga:"xGA",poss:"Posesión",goals:"Goles/p",conceded:"Encajados/p",duels:"Duelos",defEff:"Efic.def",vHigh:"Value alto",vMed:"A considerar",vWatch:"Observar",rec:"Recomendado",qualified:"Clasificados",eliminated:"Eliminados",noOdds:"Sin cuotas disponibles para este partido.",oddsOk:"Cuotas actualizadas",oddsErr:"Error al obtener cuotas",teamsAnalyzed:"Selecciones",gamesBase:"Partidos en la base",topRating:"Top rating",valueOpps:"Oportunidades value",metricLabels:["xG atq","Posesión","Tiros","Efic.def","Goles/p","Duelos"],probLabels:["Victoria","Empate","Victoria"],trendBlocks:[{title:"Tipo de gol — WC 2022",body:"Más de la mitad de los goles vinieron en ataque posicional vs defensa cerrada.",stats:["AP vs def. cerrada: 73%","Contraataque: ~25%","Balón parado: ~15%"]},{title:"Perfil de equipos clasificados",body:"Marcaron más, crearon más y encajaron menos. Remontas en el 50% de los casos.",stats:["Goles marcados: 62%","Goles encajados: 32%","Remontas: 50%"]},{title:"Timing de goles",body:"Pico de goles en el 81-90'. 65% de goles en AP vs def. cerrada en 2ª parte.",stats:["1ª parte: 35%","2ª parte: 65%","+81': máximo"]},{title:"Eliminatorias vs grupos",body:"Delanteros marcaron el 55% en eliminatorias. Tener más ocasiones lleva a la victoria en el 80%.",stats:["Más ocasiones → 80%","Más posesión → 40%","Remates → 50%"]}]},
+  it:{navOdds:"Quote live",navDash:"Dashboard",navGrupos:"Gironi",navScouts:"Scout",navValue:"Value",navTrend:"Tendenze",navMatch:"Confronto",top10Title:"Top 10 per rating",xgTitle:"xG offensivo vs xGA",groupRatingTitle:"Rating medio per girone",sortLabel:"Ordina:",minEdgeLabel:"Edge min.:",scoutHint:"Clicca su una squadra per i dettagli",valueHint:"Value edge = differenza tra probabilità implicita delle quote e probabilità stimata dallo scout.",trendAlignTitle:"Squadre più allineate al profilo delle qualificate",swTitle:"Punti di forza e debolezza",cmpTitle:"Confronto metriche",radarTitle:"Profilo offensivo / difensivo",probTitle:"Probabilità stimate",betsTitle:"Migliori scommesse",trendsTitle:"Tendenze WC 2022 → 2026",analyze:"Analizza",aiTitle:"Analisi con IA",aiBtn:"Analizza con IA",aiReady:"Clicca \"Analizza con IA\" per generare un'analisi tattica e di scommesse.",copyBtn:"Copia",loadingOdds:"Cercando quote...",refresh:"Aggiorna",strengths:"Punti di forza",weaknesses:"Punti deboli",win:"Vittoria",draw:"Pareggio",rating:"rating",prob:"Prob.",fairOdd:"Quota giusta",mktOdd:"Quote mercato",valueEdge:"Value edge",shots:"Tiri/p",sot:"In porta/p",corners:"Angoli/p",yellows:"Gialli/p",xg:"xG",xga:"xGA",poss:"Possesso",goals:"Gol/p",conceded:"Subiti/p",duels:"Duelli",defEff:"Eff.dif",vHigh:"Value alto",vMed:"Da considerare",vWatch:"Osservare",rec:"Consigliato",qualified:"Qualificate",eliminated:"Eliminate",noOdds:"Nessuna quota disponibile per questa partita.",oddsOk:"Quote aggiornate",oddsErr:"Errore nel recupero quote",teamsAnalyzed:"Squadre",gamesBase:"Partite nel dataset",topRating:"Top rating",valueOpps:"Opportunità value",metricLabels:["xG att","Possesso","Tiri","Eff.dif","Gol/p","Duelli"],probLabels:["Vittoria","Pareggio","Vittoria"],trendBlocks:[{title:"Tipo di gol — WC 2022",body:"Più della metà dei gol sono arrivati da attacco posizionale vs difesa chiusa.",stats:["AP vs dif. chiusa: 73%","Contropiede: ~25%","Palla inattiva: ~15%"]},{title:"Profilo squadre qualificate",body:"Hanno segnato di più, creato più occasioni, subito di meno. Rimonte nel 50%.",stats:["Gol segnati: 62%","Gol subiti: 32%","Rimonte: 50%"]},{title:"Timing dei gol",body:"Picco di gol nel tratto 81-90'. 65% dei gol in AP nel 2° tempo.",stats:["1° tempo: 35%","2° tempo: 65%","+81': picco"]},{title:"Eliminatorie vs gironi",body:"Gli attaccanti hanno segnato il 55% nelle eliminatorie. Più occasioni porta alla vittoria nell'80%.",stats:["Più occasioni → 80%","Più possesso → 40%","Tiri in porta → 50%"]}]}
+};
+
+// ─── SCOUT DATA ──────────────────────────────────────────
+const SCOUTS={ESP:{name:"Espanha",names:{en:"Spain",es:"España",it:"Spagna",pt:"Espanha"},flag:"🇪🇸",group:"H",rating:100,gm:3.00,gs:0.90,pos:63.6,xG:2.95,xGA:0.88,FD:8.45,DE:2.05,DS:13.80,TAA:19.80},ARG:{name:"Argentina",names:{en:"Argentina",es:"Argentina",it:"Argentina",pt:"Argentina"},flag:"🇦🇷",group:"J",rating:97.1,gm:1.70,gs:0.60,pos:63.9,xG:2.40,xGA:2.00,FD:4.50,DE:1.70,DS:16.00,TAA:21.50},FRA:{name:"França",names:{en:"France",es:"Francia",it:"Francia",pt:"França"},flag:"🇫🇷",group:"I",rating:95.3,gm:2.35,gs:1.00,pos:62.3,xG:2.52,xGA:0.98,FD:7.10,DE:1.65,DS:15.05,TAA:23.50},ING:{name:"Inglaterra",names:{en:"England",es:"Inglaterra",it:"Inghilterra",pt:"Inglaterra"},flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",group:"L",rating:91.9,gm:2.80,gs:0.00,pos:74.4,xG:2.59,xGA:0.26,FD:7.90,DE:0.80,DS:12.00,TAA:50.57},BRA:{name:"Brasil",names:{en:"Brazil",es:"Brasil",it:"Brasile",pt:"Brasil"},flag:"🇧🇷",group:"C",rating:90.1,gm:1.30,gs:0.90,pos:62.1,xG:4.50,xGA:1.90,FD:4.20,DE:2.10,DS:14.40,TAA:24.22},POR:{name:"Portugal",names:{en:"Portugal",es:"Portugal",it:"Portogallo",pt:"Portugal"},flag:"🇵🇹",group:"K",rating:89.9,gm:2.75,gs:1.15,pos:64.3,xG:2.75,xGA:1.07,FD:6.85,DE:2.65,DS:13.60,TAA:18.00},COL:{name:"Colômbia",names:{en:"Colombia",es:"Colombia",it:"Colombia",pt:"Colômbia"},flag:"🇨🇴",group:"K",rating:89.5,gm:1.60,gs:1.00,pos:56.8,xG:3.60,xGA:1.60,FD:5.30,DE:2.80,DS:14.10,TAA:22.44},HOL:{name:"Holanda",names:{en:"Netherlands",es:"Países Bajos",it:"Olanda",pt:"Holanda"},flag:"🇳🇱",group:"F",rating:87.7,gm:2.85,gs:1.00,pos:62.2,xG:2.30,xGA:1.11,FD:6.00,DE:2.35,DS:11.05,TAA:18.78},EQU:{name:"Equador",names:{en:"Ecuador",es:"Ecuador",it:"Ecuador",pt:"Equador"},flag:"🇪🇨",group:"E",rating:87.2,gm:0.80,gs:0.30,pos:52.4,xG:1.90,xGA:1.00,FD:3.90,DE:2.70,DS:14.30,TAA:15.33},ALE:{name:"Alemanha",names:{en:"Germany",es:"Alemania",it:"Germania",pt:"Alemanha"},flag:"🇩🇪",group:"E",rating:86.6,gm:2.55,gs:0.85,pos:67.0,xG:2.51,xGA:1.05,FD:6.20,DE:2.30,DS:13.30,TAA:16.75},NOR:{name:"Noruega",names:{en:"Norway",es:"Noruega",it:"Norvegia",pt:"Noruega"},flag:"🇳🇴",group:"I",rating:86.2,gm:4.60,gs:0.60,pos:57.5,xG:3.36,xGA:0.53,FD:7.60,DE:2.10,DS:10.60,TAA:46.29},CRO:{name:"Croácia",names:{en:"Croatia",es:"Croacia",it:"Croazia",pt:"Croácia"},flag:"🇭🇷",group:"L",rating:85.7,gm:2.30,gs:0.90,pos:58.8,xG:2.42,xGA:1.05,FD:6.75,DE:2.65,DS:15.50,TAA:18.73},JAP:{name:"Japão",names:{en:"Japan",es:"Japón",it:"Giappone",pt:"Japão"},flag:"🇯🇵",group:"F",rating:85.6,gm:3.40,gs:0.20,pos:69.2,xG:null,xGA:null,FD:6.90,DE:1.00,DS:13.50,TAA:32.50},TUR:{name:"Turquia",names:{en:"Turkey",es:"Turquía",it:"Turchia",pt:"Turquia"},flag:"🇹🇷",group:"D",rating:85.6,gm:2.40,gs:1.50,pos:54.7,xG:1.69,xGA:1.39,FD:4.60,DE:2.60,DS:16.50,TAA:25.43},SUI:{name:"Suíça",names:{en:"Switzerland",es:"Suiza",it:"Svizzera",pt:"Suíça"},flag:"🇨🇭",group:"B",rating:84.9,gm:1.65,gs:1.30,pos:59.2,xG:1.45,xGA:1.13,FD:4.50,DE:2.40,DS:12.90,TAA:10.83},URU:{name:"Uruguai",names:{en:"Uruguay",es:"Uruguay",it:"Uruguay",pt:"Uruguai"},flag:"🇺🇾",group:"H",rating:84.8,gm:1.20,gs:0.70,pos:52.8,xG:2.70,xGA:2.10,FD:3.20,DE:2.60,DS:17.80,TAA:20.00},BEL:{name:"Bélgica",names:{en:"Belgium",es:"Bélgica",it:"Belgio",pt:"Bélgica"},flag:"🇧🇪",group:"G",rating:84.6,gm:2.30,gs:1.20,pos:62.5,xG:2.48,xGA:1.11,FD:6.50,DE:2.35,DS:12.65,TAA:22.77},SEN:{name:"Senegal",names:{en:"Senegal",es:"Senegal",it:"Senegal",pt:"Senegal"},flag:"🇸🇳",group:"I",rating:83.4,gm:2.35,gs:0.35,pos:68.5,xG:1.86,xGA:0.83,FD:5.90,DE:1.25,DS:10.75,TAA:11.39},PAR:{name:"Paraguai",names:{en:"Paraguay",es:"Paraguay",it:"Paraguay",pt:"Paraguai"},flag:"🇵🇾",group:"D",rating:81.5,gm:0.80,gs:0.60,pos:37.9,xG:1.10,xGA:1.00,FD:3.70,DE:2.20,DS:19.30,TAA:15.83},AUT:{name:"Áustria",names:{en:"Austria",es:"Austria",it:"Austria",pt:"Áustria"},flag:"🇦🇹",group:"J",rating:81.3,gm:2.80,gs:0.50,pos:64.2,xG:2.34,xGA:0.81,FD:6.80,DE:1.50,DS:18.00,TAA:35.13},MAR:{name:"Marrocos",names:{en:"Morocco",es:"Marruecos",it:"Marocco",pt:"Marrocos"},flag:"🇲🇦",group:"C",rating:81,gm:2.05,gs:0.30,pos:60.3,xG:1.52,xGA:0.55,FD:5.50,DE:1.35,DS:15.15,TAA:14.53},AUS:{name:"Austrália",names:{en:"Australia",es:"Australia",it:"Australia",pt:"Austrália"},flag:"🇦🇺",group:"D",rating:78.2,gm:2.40,gs:0.40,pos:54.5,xG:null,xGA:null,FD:4.80,DE:1.60,DS:11.70,TAA:23.87},ESC:{name:"Escócia",names:{en:"Scotland",es:"Escocia",it:"Scozia",pt:"Escócia"},flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",group:"C",rating:78,gm:1.70,gs:1.25,pos:45.8,xG:1.23,xGA:1.59,FD:3.90,DE:3.25,DS:12.00,TAA:12.18},IRA:{name:"Irã",names:{en:"Iran",es:"Irán",it:"Iran",pt:"Irã"},flag:"🇮🇷",group:"G",rating:77.7,gm:1.90,gs:0.80,pos:55.1,xG:null,xGA:null,FD:6.20,DE:1.90,DS:15.00,TAA:24.33},AGL:{name:"Argélia",names:{en:"Algeria",es:"Argelia",it:"Algeria",pt:"Argélia"},flag:"🇩🇿",group:"J",rating:77.4,gm:2.15,gs:0.75,pos:68.1,xG:1.38,xGA:1.08,FD:4.30,DE:1.40,DS:11.60,TAA:9.61},COR:{name:"Coreia do Sul",names:{en:"South Korea",es:"Corea del Sur",it:"Corea del Sud",pt:"Coreia do Sul"},flag:"🇰🇷",group:"A",rating:77.2,gm:2.50,gs:0.50,pos:75.8,xG:null,xGA:null,FD:5.60,DE:0.90,DS:10.90,TAA:26.88},TCH:{name:"Rep. Tcheca",names:{en:"Czech Republic",es:"Rep. Checa",it:"Rep. Ceca",pt:"Rep. Tcheca"},flag:"🇨🇿",group:"A",rating:75.9,gm:2.20,gs:1.20,pos:55.2,xG:2.19,xGA:1.00,FD:6.10,DE:2.30,DS:16.00,TAA:37.20},PAN:{name:"Panamá",names:{en:"Panama",es:"Panamá",it:"Panamá",pt:"Panamá"},flag:"🇵🇦",group:"L",rating:75.9,gm:1.90,gs:0.50,pos:61.9,xG:1.32,xGA:0.99,FD:6.10,DE:1.70,DS:13.00,TAA:32.20},UZB:{name:"Uzbequistão",names:{en:"Uzbekistan",es:"Uzbekistán",it:"Uzbekistan",pt:"Uzbequistão"},flag:"🇺🇿",group:"K",rating:75.1,gm:1.40,gs:0.70,pos:52.1,xG:null,xGA:null,FD:4.90,DE:3.00,DS:16.00,TAA:26.20},SUE:{name:"Suécia",names:{en:"Sweden",es:"Suecia",it:"Svezia",pt:"Suécia"},flag:"🇸🇪",group:"F",rating:74.9,gm:1.30,gs:1.90,pos:50.4,xG:1.60,xGA:1.95,FD:3.10,DE:3.00,DS:10.40,TAA:22.88},EGI:{name:"Egito",names:{en:"Egypt",es:"Egipto",it:"Egitto",pt:"Egito"},flag:"🇪🇬",group:"G",rating:74.1,gm:1.75,gs:0.45,pos:55.1,xG:1.17,xGA:0.80,FD:2.85,DE:1.85,DS:11.00,TAA:4.47},JOR:{name:"Jordânia",names:{en:"Jordan",es:"Jordania",it:"Giordania",pt:"Jordânia"},flag:"🇯🇴",group:"J",rating:73.3,gm:2.00,gs:0.80,pos:55.7,xG:null,xGA:null,FD:3.80,DE:1.80,DS:13.30,TAA:16.75},CDM:{name:"Costa do Marfim",names:{en:"Ivory Coast",es:"Costa de Marfil",it:"Costa d'Avorio",pt:"Costa do Marfim"},flag:"🇨🇮",group:"E",rating:72.8,gm:2.25,gs:0.60,pos:60.1,xG:1.46,xGA:0.58,FD:2.75,DE:0.80,DS:6.90,TAA:5.63},RDC:{name:"RD Congo",names:{en:"DR Congo",es:"RD Congo",it:"RD Congo",pt:"RD Congo"},flag:"🇨🇩",group:"K",rating:71.9,gm:1.40,gs:0.55,pos:47.2,xG:1.65,xGA:0.88,FD:2.35,DE:1.35,DS:8.65,TAA:3.69},TUN:{name:"Tunísia",names:{en:"Tunisia",es:"Túnez",it:"Tunisia",pt:"Tunísia"},flag:"🇹🇳",group:"F",rating:70.4,gm:2.00,gs:0.75,pos:49.9,xG:1.15,xGA:1.00,FD:3.75,DE:1.50,DS:10.95,TAA:9.82},IRQ:{name:"Iraque",names:{en:"Iraq",es:"Irak",it:"Iraq",pt:"Iraque"},flag:"🇮🇶",group:"I",rating:69,gm:1.50,gs:0.70,pos:58.1,xG:null,xGA:null,FD:2.80,DE:1.70,DS:11.20,TAA:12.89},BOS:{name:"Bósnia",names:{en:"Bosnia",es:"Bosnia",it:"Bosnia",pt:"Bósnia"},flag:"🇧🇦",group:"B",rating:68,gm:1.30,gs:1.85,pos:43.0,xG:1.16,xGA:1.94,FD:3.90,DE:2.70,DS:13.60,TAA:10.94},CAB:{name:"Cabo Verde",names:{en:"Cape Verde",es:"Cabo Verde",it:"Capo Verde",pt:"Cabo Verde"},flag:"🇨🇻",group:"H",rating:67.2,gm:1.80,gs:0.90,pos:47.2,xG:null,xGA:null,FD:1.20,DE:0,DS:0,TAA:1.89},ARS:{name:"Arábia Saudita",names:{en:"Saudi Arabia",es:"Arabia Saudita",it:"Arabia Saudita",pt:"Arábia Saudita"},flag:"🇸🇦",group:"H",rating:66.6,gm:1.20,gs:0.70,pos:60.9,xG:null,xGA:null,FD:4.50,DE:1.70,DS:18.80,TAA:24.94},NZE:{name:"Nova Zelândia",names:{en:"New Zealand",es:"Nueva Zelanda",it:"Nuova Zelanda",pt:"Nova Zelândia"},flag:"🇳🇿",group:"G",rating:66.5,gm:5.80,gs:0.20,pos:null,xG:null,xGA:null,FD:5.80,DE:0,DS:0,TAA:11.00},HAI:{name:"Haiti",names:{en:"Haiti",es:"Haití",it:"Haiti",pt:"Haiti"},flag:"🇭🇹",group:"C",rating:66,gm:2.00,gs:1.30,pos:56.0,xG:0.74,xGA:0.72,FD:5.70,DE:3.70,DS:14.30,TAA:31.20},AFS:{name:"África do Sul",names:{en:"South Africa",es:"Sudáfrica",it:"Sudafrica",pt:"África do Sul"},flag:"🇿🇦",group:"A",rating:64,gm:1.60,gs:1.05,pos:63.0,xG:1.20,xGA:1.15,FD:5.10,DE:1.85,DS:13.40,TAA:12.18},GAN:{name:"Gana",names:{en:"Ghana",es:"Ghana",it:"Ghana",pt:"Gana"},flag:"🇬🇭",group:"L",rating:63.5,gm:2.60,gs:0.70,pos:66.7,xG:null,xGA:null,FD:1.90,DE:0,DS:0,TAA:3.33},CUR:{name:"Curaçao",names:{en:"Curaçao",es:"Curazao",it:"Curaçao",pt:"Curaçao"},flag:"🇨🇼",group:"E",rating:59.2,gm:2.80,gs:0.50,pos:56.4,xG:0.88,xGA:0.60,FD:6.40,DE:3.00,DS:16.80,TAA:30.20},CAT:{name:"Catar",names:{en:"Qatar",es:"Catar",it:"Qatar",pt:"Catar"},flag:"🇶🇦",group:"B",rating:58.7,gm:2.10,gs:1.60,pos:58.9,xG:null,xGA:null,FD:5.00,DE:2.00,DS:15.00,TAA:22.71},MEX:{name:"México",names:{en:"Mexico",es:"México",it:"Messico",pt:"México"},flag:"🇲🇽",group:"A",rating:null},CAN:{name:"Canadá",names:{en:"Canada",es:"Canadá",it:"Canada",pt:"Canadá"},flag:"🇨🇦",group:"B",rating:null},EUA:{name:"Estados Unidos",names:{en:"United States",es:"Estados Unidos",it:"Stati Uniti",pt:"Estados Unidos"},flag:"🇺🇸",group:"D",rating:null}};
+
+const CSV={IRQ:{games:21,wins:13,draws:5,losses:3,gf:1.52,ga:0.67,shots:9.8,sot:3.7,corners:4.5,yellows:1.4,avg_odds:2.56},BOS:{games:10,wins:5,draws:4,losses:1,gf:1.9,ga:0.9,shots:16.0,sot:5.3,corners:4.6,yellows:2.8,avg_odds:3.78},TCH:{games:10,wins:5,draws:3,losses:2,gf:2.1,ga:1.1,shots:16.3,sot:6.1,corners:7.5,yellows:0.9,avg_odds:2.01},RDC:{games:13,wins:8,draws:3,losses:2,gf:1.31,ga:0.54,shots:8.2,sot:3.5,corners:5.6,yellows:0.8,avg_odds:2.61},TUR:{games:8,wins:6,draws:1,losses:1,gf:2.38,ga:1.5,shots:13.1,sot:4.6,corners:6.0,yellows:2.5,avg_odds:3.68},SUE:{games:8,wins:2,draws:2,losses:4,gf:1.25,ga:1.88,shots:9.5,sot:3.1,corners:4.9,yellows:2.0,avg_odds:2.48},HAI:{games:10,wins:6,draws:2,losses:2,gf:2.0,ga:1.3,shots:6.5,sot:3.1,corners:2.5,yellows:1.2,avg_odds:2.52},CUR:{games:10,wins:7,draws:3,losses:0,gf:2.8,ga:0.5,shots:8.6,sot:3.7,corners:2.7,yellows:0.9,avg_odds:1.98},PAN:{games:10,wins:7,draws:3,losses:0,gf:1.9,ga:0.5,shots:9.8,sot:3.5,corners:3.5,yellows:0.7,avg_odds:1.39},AUT:{games:8,wins:6,draws:1,losses:1,gf:2.75,ga:0.5,shots:13.4,sot:6.8,corners:4.4,yellows:1.9,avg_odds:1.3},BEL:{games:8,wins:5,draws:3,losses:0,gf:3.62,ga:0.88,shots:22.2,sot:8.0,corners:10.4,yellows:1.1,avg_odds:1.22},SUI:{games:6,wins:4,draws:2,losses:0,gf:2.33,ga:0.33,shots:10.8,sot:5.3,corners:4.3,yellows:0.7,avg_odds:1.78},ESC:{games:6,wins:4,draws:1,losses:1,gf:2.17,ga:1.17,shots:11.2,sot:4.8,corners:4.5,yellows:2.0,avg_odds:3.33},ESP:{games:6,wins:5,draws:1,losses:0,gf:3.5,ga:0.33,shots:22.8,sot:9.7,corners:7.2,yellows:0.7,avg_odds:1.19},ALE:{games:6,wins:5,draws:0,losses:1,gf:2.67,ga:0.5,shots:17.2,sot:6.2,corners:5.8,yellows:1.3,avg_odds:1.23},CRO:{games:8,wins:7,draws:1,losses:0,gf:3.25,ga:0.5,shots:22.6,sot:8.5,corners:9.2,yellows:0.8,avg_odds:1.4},HOL:{games:8,wins:6,draws:2,losses:0,gf:3.38,ga:0.5,shots:17.4,sot:6.5,corners:6.5,yellows:0.8,avg_odds:1.2},ING:{games:8,wins:8,draws:0,losses:0,gf:2.75,ga:0.0,shots:18.9,sot:7.9,corners:7.5,yellows:0.8,avg_odds:1.21},FRA:{games:6,wins:5,draws:1,losses:0,gf:2.67,ga:0.67,shots:21.8,sot:7.7,corners:6.8,yellows:1.0,avg_odds:1.16},NOR:{games:8,wins:8,draws:0,losses:0,gf:4.62,ga:0.62,shots:19.4,sot:7.6,corners:5.0,yellows:1.0,avg_odds:1.63},POR:{games:6,wins:4,draws:1,losses:1,gf:3.33,ga:1.17,shots:25.0,sot:8.3,corners:6.7,yellows:1.3,avg_odds:1.22},AGL:{games:10,wins:8,draws:1,losses:1,gf:2.4,ga:0.8,shots:11.4,sot:6.4,corners:6.5,yellows:1.6,avg_odds:1.43},CDM:{games:10,wins:8,draws:2,losses:0,gf:2.5,ga:0.0,shots:15.1,sot:7.2,corners:6.9,yellows:1.0,avg_odds:1.32},MAR:{games:8,wins:8,draws:0,losses:0,gf:2.75,ga:0.25,shots:10.8,sot:5.8,corners:6.1,yellows:1.4,avg_odds:1.18},CAT:{games:18,wins:10,draws:3,losses:5,gf:2.06,ga:1.56,shots:13.4,sot:5.1,corners:5.6,yellows:1.8,avg_odds:2.19},ARS:{games:18,wins:8,draws:6,losses:4,gf:1.22,ga:0.72,shots:13.7,sot:4.5,corners:4.8,yellows:1.7,avg_odds:2.22},SEN:{games:10,wins:7,draws:3,losses:0,gf:2.2,ga:0.3,shots:11.4,sot:5.9,corners:4.7,yellows:1.0,avg_odds:1.36},AFS:{games:9,wins:5,draws:3,losses:1,gf:1.67,ga:0.67,shots:9.7,sot:4.7,corners:6.7,yellows:1.6,avg_odds:2.16},CAB:{games:10,wins:7,draws:2,losses:1,gf:1.6,ga:0.8,shots:8.9,sot:3.7,corners:5.4,yellows:1.1,avg_odds:2.31},TUN:{games:10,wins:9,draws:1,losses:0,gf:2.2,ga:0.0,shots:10.4,sot:5.5,corners:4.9,yellows:1.9,avg_odds:1.47},EGI:{games:10,wins:8,draws:2,losses:0,gf:2.0,ga:0.2,shots:12.2,sot:5.9,corners:5.6,yellows:1.4,avg_odds:1.34},GAN:{games:10,wins:8,draws:1,losses:1,gf:2.3,ga:0.6,shots:10.2,sot:4.6,corners:4.8,yellows:1.1,avg_odds:1.75},BRA:{games:18,wins:8,draws:4,losses:6,gf:1.33,ga:0.94,shots:3.5,sot:1.3,corners:1.4,yellows:0.4,avg_odds:1.7},URU:{games:18,wins:7,draws:7,losses:4,gf:1.22,ga:0.67,shots:2.9,sot:1.0,corners:1.7,yellows:0.4,avg_odds:2.81},ARG:{games:18,wins:12,draws:2,losses:4,gf:1.72,ga:0.56,shots:3.2,sot:1.1,corners:1.3,yellows:0.5,avg_odds:1.81},EQU:{games:18,wins:8,draws:8,losses:2,gf:0.78,ga:0.28,shots:2.8,sot:0.9,corners:0.7,yellows:0.4,avg_odds:3.51},PAR:{games:18,wins:7,draws:7,losses:4,gf:0.78,ga:0.56,shots:2.6,sot:1.1,corners:1.5,yellows:0.4,avg_odds:5.0},COL:{games:18,wins:7,draws:7,losses:4,gf:1.56,ga:1.0,shots:3.4,sot:1.4,corners:0.9,yellows:0.4,avg_odds:2.63},IRA:{games:16,wins:11,draws:4,losses:1,gf:2.19,ga:0.75,shots:13.6,sot:5.1,corners:3.5,yellows:1.4,avg_odds:1.52},JAP:{games:15,wins:12,draws:2,losses:1,gf:3.4,ga:0.2,shots:16.0,sot:7.1,corners:7.2,yellows:0.5,avg_odds:1.29},JOR:{games:16,wins:8,draws:5,losses:3,gf:2.0,ga:0.75,shots:13.8,sot:4.5,corners:5.8,yellows:1.4,avg_odds:2.58},AUS:{games:16,wins:11,draws:4,losses:1,gf:2.38,ga:0.44,shots:12.1,sot:4.7,corners:5.1,yellows:1.4,avg_odds:2.0},COR:{games:16,wins:11,draws:5,losses:0,gf:2.5,ga:0.5,shots:15.0,sot:6.0,corners:7.0,yellows:1.0,avg_odds:1.31},UZB:{games:16,wins:10,draws:5,losses:1,gf:1.69,ga:0.69,shots:15.6,sot:5.2,corners:5.9,yellows:1.4,avg_odds:2.2}};
+
+const GROUPS={A:["MEX","AFS","COR","TCH"],B:["CAN","BOS","CAT","SUI"],C:["BRA","MAR","HAI","ESC"],D:["EUA","PAR","AUS","TUR"],E:["ALE","CUR","CDM","EQU"],F:["HOL","JAP","SUE","TUN"],G:["BEL","EGI","IRA","NZE"],H:["ESP","CAB","ARS","URU"],I:["FRA","SEN","IRQ","NOR"],J:["ARG","AGL","AUT","JOR"],K:["POR","RDC","UZB","COL"],L:["ING","CRO","GAN","PAN"]};
+
+const SW={ESP:{str:{pt:["xG ofensivo #1 mundial (2.95)","Posse dominante (63%+) e pressing alto","Solidez defensiva: 0.9 gols sofridos/j","Consistência técnica — 100 de rating"]},wk:{pt:["Vulnerável em contra-ataques rápidos","Pode sofrer com calor/altitude","Dependência de criatividade coletiva vs blocos baixos","Tensão psicológica como favorita"]}},ARG:{str:{pt:["Campeã do mundo — mentalidade vencedora","Taxa de vitórias CONMEBOL: 67%","Solidez defensiva (0.6 gols sofridos/j)","Messi: liderança em momentos decisivos"]},wk:{pt:["xGA alto (2.00): sofre ameaças reais","Desgaste físico: 18 jogos recentes","Sucessão tática pós-Messi incerta","Baixa conversão vs xG disponível"]}},FRA:{str:{pt:["Profundidade de elenco única","xG elevado (2.52) com posse de 62%","Velocidade nas transições ofensivas","Consistência de rating ao longo dos anos"]},wk:{pt:["xGA de 0.98 — sofre algum volume","Instabilidade de grupo histórica","Dependência de Mbappé no ataque","Pressão francesa em grandes jogos"]}},ING:{str:{pt:["Melhor defesa: 0 gols sofridos em 7 jogos","TAA record: 50.57","xG sólido (2.59) com posse de 74%","Pressing organizado e alta intensidade"]},wk:{pt:["Amostra pequena (7 jogos recentes)","Pressão psicológica em eliminatórias","Dependência da forma física do Kane","Histórico de underperformance em Copas"]}},BRA:{str:{pt:["xG mais alto do torneio (4.50)","Alta intensidade física e defensiva","Maior experiência em Copas do Mundo","Jogadores de topo em forma nos clubes"]},wk:{pt:["Forma atual preocupante: 8V 4E 6D","xGA de 1.90 — vulnerável defensivamente","Falta de referência clara no ataque","Enorme pressão emocional interna"]}},NOR:{str:{pt:["Maior média de gols (4.60/j)","Invicta nos últimos 8 jogos","Haaland: máquina de gols","xG de 3.36 — superioridade na área"]},wk:{pt:["Pouca experiência em Copas","Amostra pequena (7 jogos)","Pode sofrer com a pressão do torneio","xGA baixo pode não se manter"]}},default:{str:{pt:["Bom desempenho recente","Coesão tática e organização defensiva","Forte motivação coletiva","Jogadores experientes em posições-chave"]},wk:{pt:["Dados scout limitados","Nível de competição variável","Incerteza tática para o torneio","Menor margem de erro em mata-mata"]}}};
+
+// ─── STATE ───────────────────────────────────────────────
+let curLang='pt', selTeam=null, oddsData=null, radarCh=null, probCh=null, xgCh=null, grpCh=null, trendCh=null;
+let aiAnalysis='', curMatchup={h:null,a:null};
+
+// ─── HELPERS ─────────────────────────────────────────────
+const T=k=>L[curLang]?.[k]??L.pt[k]??k;
+const tn=c=>SCOUTS[c]?.names?.[curLang]||SCOUTS[c]?.name||c;
+const f1=v=>v!=null?parseFloat(v).toFixed(1):'–';
+const f2=v=>v!=null?parseFloat(v).toFixed(2):'–';
+const pct=v=>v!=null?(v*100).toFixed(0)+'%':'–';
+const fo=p=>p>0?+(1/p).toFixed(2):null;
+const rCol=r=>r>=90?'#185FA5':r>=80?'#1D9E75':r>=70?'#BA7517':'#888780';
+function vpill(e){
+  if(e==null)return'<span class="vpill vpl">N/D</span>';
+  if(e>=15)return`<span class="vpill vph">▲ +${e.toFixed(1)}%</span>`;
+  if(e>=5)return`<span class="vpill vpm">▲ +${e.toFixed(1)}%</span>`;
+  if(e>=0)return`<span class="vpill vpl">+${e.toFixed(1)}%</span>`;
+  return`<span class="vpill vpn">▼ ${e.toFixed(1)}%</span>`;
+}
+function calcVal(code){
+  const s=SCOUTS[code],c=CSV[code];
+  if(!s?.rating||!c)return null;
+  const wr=c.wins/c.games;
+  const imp=c.avg_odds>0?1/c.avg_odds:0;
+  const adj=(s.rating/100)*0.6+wr*0.4;
+  return{edge:Math.round((adj-imp)*1000)/10,avgOdds:c.avg_odds,impliedProb:imp*100,scoutAdj:adj*100};
+}
+function calcProbs(hC,aC){
+  const h=SCOUTS[hC],a=SCOUTS[aC],hc=CSV[hC]||{},ac=CSV[aC]||{};
+  const rH=h.rating||70,rA=a.rating||70;
+  const wrH=hc.games?hc.wins/hc.games:0.4,wrA=ac.games?ac.wins/ac.games:0.4;
+  const xgH=h.xG||hc.gf||1.5,xgA=a.xG||ac.gf||1.5;
+  let pH=0.33+(rH-rA)*0.003+(wrH-wrA)*0.15+(xgH-xgA)*0.04;
+  let pA=0.33+(rA-rH)*0.003+(wrA-wrH)*0.15+(xgA-xgH)*0.04;
+  pH=Math.min(0.78,Math.max(0.10,pH));
+  pA=Math.min(0.78,Math.max(0.10,pA));
+  let pD=1-pH-pA;if(pD<0.10){const e=(0.10-pD)/2;pH-=e;pA-=e;pD=0.10;}
+  const tot=pH+pA+pD;return{pH:pH/tot,pA:pA/tot,pD:pD/tot};
+}
+function getSW(code){
+  const d=SW[code]||SW.default;
+  return{str:d.str?.[curLang]||d.str?.pt||SW.default.str.pt,wk:d.wk?.[curLang]||d.wk?.pt||SW.default.wk.pt};
+}
+
+// ─── NAV ─────────────────────────────────────────────────
+function showSec(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  const renders={dashboard:renderDashboard,grupos:renderGrupo,scouts:renderScouts,value:renderValue,tendencias:renderTendencias};
+  if(renders[id])renders[id]();
+}
+
+function setLang(l){
+  curLang=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lb[onclick="setLang('${l}')"]`).classList.add('active');
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const k=el.getAttribute('data-t');
+    if(L[l]?.[k]!==undefined&&typeof L[l][k]==='string')el.textContent=L[l][k];
+  });
+  const act=document.querySelector('.sec.active');
+  if(act){
+    const id=act.id;
+    const renders={dashboard:renderDashboard,grupos:renderGrupo,scouts:renderScouts,value:renderValue,tendencias:renderTendencias,odds:renderOddsUI};
+    if(renders[id])renders[id]();
+    if(id==='confronto'&&document.getElementById('matchup').style.display!=='none')renderMatchup();
+  }
+}
+
+// ─── ODDS ─────────────────────────────────────────────────
+async function loadOdds(){
+  setApiStatus('loading',T('loadingOdds'));
+  try{
+    // Load from odds_data.json in same repo (updated by GitHub Actions daily)
+    const r=await fetch('./odds_data.json?t='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    oddsData=await r.json();
+    const upd=new Date(oddsData.updated_at);
+    document.getElementById('lastUpd').textContent=`${T('oddsOk')}: ${upd.toLocaleDateString()} ${upd.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+    setApiStatus('ok',`${oddsData.games_count||0} jogos`);
+    renderOddsUI();
+  }catch(e){
+    console.warn('Odds load error:',e);
+    setApiStatus('err',T('oddsErr'));
+    document.getElementById('oddsContent').innerHTML=`<div class="no-games"><i class="ti ti-alert-circle" style="font-size:24px;color:var(--am);display:block;margin-bottom:8px"></i>${T('oddsErr')}. Os jogos começam em 11 de junho de 2026.</div>`;
+  }
+}
+
+function setApiStatus(type,msg){
+  const el=document.getElementById('apiSt');
+  const tx=document.getElementById('apiStTx');
+  el.className='api-st '+type;
+  const icons={loading:'ti-loader-2',ok:'ti-check',err:'ti-alert-circle'};
+  el.innerHTML=`<i class="ti ${icons[type]||'ti-info-circle'}"></i><span>${msg}</span>`;
+}
+
+// Match live odds from API to scout team names
+function findOddsGame(hName,aName){
+  if(!oddsData?.games)return null;
+  const norm=s=>s.toLowerCase().replace(/[^a-z]/g,'');
+  const hn=norm(hName),an=norm(aName);
+  return oddsData.games.find(g=>{
+    const ghn=norm(g.home_team),gan=norm(g.away_team);
+    return(ghn.includes(hn)||hn.includes(ghn))&&(gan.includes(an)||an.includes(gan));
+  })||null;
+}
+
+function renderOddsUI(){
+  if(!oddsData){loadOdds();return;}
+  const games=oddsData.games||[];
+  if(!games.length){
+    document.getElementById('oddsContent').innerHTML=`<div class="no-games"><i class="ti ti-calendar-off" style="font-size:28px;color:var(--tx3);display:block;margin-bottom:8px"></i>Nenhum jogo disponível no momento.<br><span style="font-size:11px">Os jogos da Copa começam em 11 de junho de 2026. As odds aparecerão aqui assim que forem publicadas pelas casas de apostas.</span></div>`;
+    return;
+  }
+  let html='';
+  for(const g of games){
+    const hTeam=g.home_team,aTeam=g.away_team;
+    const dt=new Date(g.commence_time);
+    const dateStr=dt.toLocaleDateString([],{day:'2-digit',month:'2-digit'});
+    const timeStr=dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const h2h=g.h2h||{},totals=g.totals||{};
+    // Find scout codes for value calc
+    const hCode=Object.keys(SCOUTS).find(k=>tn(k).toLowerCase().includes(hTeam.split(' ')[0].toLowerCase())||hTeam.toLowerCase().includes(tn(k).toLowerCase().split(' ')[0]));
+    const aCode=Object.keys(SCOUTS).find(k=>tn(k).toLowerCase().includes(aTeam.split(' ')[0].toLowerCase())||aTeam.toLowerCase().includes(tn(k).toLowerCase().split(' ')[0]));
+    let probs=null,hasValue=false;
+    if(hCode&&aCode)probs=calcProbs(hCode,aCode);
+    // Check value
+    const hEdge=probs&&h2h.home?Math.round((probs.pH-1/h2h.home)*1000)/10:null;
+    const aEdge=probs&&h2h.away?Math.round((probs.pA-1/h2h.away)*1000)/10:null;
+    const dEdge=probs&&h2h.draw?Math.round((probs.pD-1/h2h.draw)*1000)/10:null;
+    if((hEdge&&hEdge>=5)||(aEdge&&aEdge>=5))hasValue=true;
+    html+=`<div class="match-odds-card ${hasValue?'has-value':''}">
+      <div class="mhdr">
+        <div class="mteams">${hTeam} <span style="color:var(--tx3);font-weight:400;font-size:12px">vs</span> ${aTeam}</div>
+        <div class="mtime"><i class="ti ti-calendar" style="vertical-align:-2px"></i> ${dateStr} ${timeStr}</div>
+      </div>
+      <div class="ogrid">
+        <div class="obox ${hEdge&&hEdge>=5?'value':''}">
+          <div class="olbl">1 ${hTeam.split(' ')[0]}</div>
+          <div class="oval">${h2h.home?.toFixed(2)||'–'}</div>
+          ${hEdge!=null?`<div class="oedge">${hEdge>0?'▲ +':''}${hEdge.toFixed(1)}%</div>`:''}
+        </div>
+        <div class="obox ${dEdge&&dEdge>=5?'value':''}">
+          <div class="olbl">X</div>
+          <div class="oval">${h2h.draw?.toFixed(2)||'–'}</div>
+          ${dEdge!=null?`<div class="oedge">${dEdge>0?'▲ +':''}${dEdge.toFixed(1)}%</div>`:''}
+        </div>
+        <div class="obox ${aEdge&&aEdge>=5?'value':''}">
+          <div class="olbl">2 ${aTeam.split(' ')[0]}</div>
+          <div class="oval">${h2h.away?.toFixed(2)||'–'}</div>
+          ${aEdge!=null?`<div class="oedge">${aEdge>0?'▲ +':''}${aEdge.toFixed(1)}%</div>`:''}
+        </div>
+      </div>
+      <div class="mmarkets">
+        ${totals.over25?`<div class="mmarket"><span>Over 2.5</span>${totals.over25.toFixed(2)}</div>`:''}
+        ${totals.under25?`<div class="mmarket"><span>Under 2.5</span>${totals.under25.toFixed(2)}</div>`:''}
+        ${g.btts_yes?`<div class="mmarket"><span>BTTS</span>${g.btts_yes.toFixed(2)}</div>`:''}
+      </div>
+      ${probs?`<div style="font-size:10px;color:var(--tx3);margin-top:5px">Prob. estimada: ${hTeam.split(' ')[0]} ${pct(probs.pH)} · X ${pct(probs.pD)} · ${aTeam.split(' ')[0]} ${pct(probs.pA)}</div>`:''}
+    </div>`;
+  }
+  document.getElementById('oddsContent').innerHTML=html;
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────
+function renderDashboard(){
+  const sorted=Object.entries(SCOUTS).filter(([,t])=>t.rating).sort((a,b)=>b[1].rating-a[1].rating);
+  const valOpps=sorted.filter(([c])=>{const v=calcVal(c);return v&&v.edge>0;}).length;
+  document.getElementById('dashMetrics').innerHTML=`
+    <div class="mc"><div class="lbl">${T('teamsAnalyzed')}</div><div class="val">45</div><div class="sub">3 sem dados</div></div>
+    <div class="mc"><div class="lbl">${T('gamesBase')}</div><div class="val">889</div><div class="sub">Últimas temporadas</div></div>
+    <div class="mc"><div class="lbl">${T('topRating')}</div><div class="val" style="color:#185FA5">100</div><div class="sub">Espanha</div></div>
+    <div class="mc"><div class="lbl">${T('valueOpps')}</div><div class="val" style="color:#1D9E75">${valOpps}</div><div class="sub">Edge positivo</div></div>`;
+  document.getElementById('top10list').innerHTML=sorted.slice(0,10).map(([code,t],i)=>{
+    const v=calcVal(code);
+    return`<div class="team-row">
+      <span class="rnk">${i+1}</span><span class="tflag">${t.flag}</span>
+      <span class="tname">${tn(code)} <span style="font-size:10px;color:var(--tx3)">Gr.${t.group}</span></span>
+      <div class="rbar"><div class="rbar-fill" style="width:${t.rating}%;background:${rCol(t.rating)}"></div></div>
+      <span style="font-size:13px;font-weight:700;color:${rCol(t.rating)};font-family:'Space Grotesk',sans-serif;min-width:34px;text-align:right">${t.rating}</span>
+      ${v?vpill(v.edge):''}
+    </div>`;
+  }).join('');
+  if(xgCh){xgCh.destroy();xgCh=null;}
+  if(grpCh){grpCh.destroy();grpCh=null;}
+  const top14=sorted.filter(([,t])=>t.xG).slice(0,14);
+  xgCh=new Chart(document.getElementById('xgChart'),{type:'bar',data:{
+    labels:top14.map(([c,t])=>t.flag+' '+tn(c).substring(0,5)),
+    datasets:[{label:'xG',data:top14.map(([,t])=>t.xG),backgroundColor:'#B5D4F4',borderColor:'#185FA5',borderWidth:1},{label:'xGA',data:top14.map(([,t])=>t.xGA),backgroundColor:'#F7C1C1',borderColor:'#E24B4A',borderWidth:1}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{ticks:{font:{size:10}}}}}});
+  const grps=Object.keys(GROUPS);
+  const avgs=grps.map(g=>{const cs=GROUPS[g].filter(c=>SCOUTS[c]?.rating);return cs.length?Math.round(cs.reduce((s,c)=>s+SCOUTS[c].rating,0)/cs.length*10)/10:0;});
+  grpCh=new Chart(document.getElementById('groupChart'),{type:'bar',data:{
+    labels:grps.map(g=>'Gr.'+g),
+    datasets:[{data:avgs,backgroundColor:avgs.map(v=>v>=85?'#B5D4F4':v>=75?'#9FE1CB':'#D3D1C7'),borderColor:avgs.map(v=>v>=85?'#185FA5':v>=75?'#1D9E75':'#888780'),borderWidth:1.5}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}}},y:{min:60,ticks:{font:{size:10}}}}}});
+}
+
+// ─── GRUPOS ───────────────────────────────────────────────
+function renderGrupo(){
+  const g=document.getElementById('groupSel').value;
+  const sorted=[...GROUPS[g]].filter(c=>SCOUTS[c]?.rating).sort((a,b)=>SCOUTS[b].rating-SCOUTS[a].rating);
+  const noData=GROUPS[g].filter(c=>!SCOUTS[c]?.rating);
+  let html=`<div class="grp-hdr"><span>Grupo ${g}</span><span>4 seleções</span></div>`;
+  sorted.forEach((code,i)=>{
+    const t=SCOUTS[code],c=CSV[code]||{},v=calcVal(code);
+    const wr=c.games?Math.round(c.wins/c.games*100):null;
+    const liveGame=oddsData?findOddsGame(t.name,'')||null:null;
+    html+=`<div class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span style="font-size:12px;font-weight:700;color:var(--tx3);width:18px;font-family:'Space Grotesk',sans-serif">${i+1}º</span>
+        <span style="font-size:33px">${t.flag}</span>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600">${tn(code)}</div><div style="font-size:10px;color:var(--tx3)">${t.comp||'–'} · ${c.games||'–'} jogos</div></div>
+        <div style="text-align:right"><div style="font-size:22px;font-weight:700;color:${rCol(t.rating)};font-family:'Space Grotesk',sans-serif">${t.rating}</div><div style="font-size:10px;color:var(--tx3)">rating</div></div>
+      </div>
+      <div class="g4">
+        ${t.xG?`<div class="mc"><div class="lbl">${T('xg')}</div><div class="val" style="font-size:17px">${t.xG}</div></div>`:''}
+        ${t.pos?`<div class="mc"><div class="lbl">${T('poss')}</div><div class="val" style="font-size:17px">${t.pos}%</div></div>`:''}
+        ${t.gm?`<div class="mc"><div class="lbl">${T('goals')}</div><div class="val" style="font-size:17px">${t.gm}</div></div>`:''}
+        ${wr!=null?`<div class="mc"><div class="lbl">${T('win')}%</div><div class="val" style="font-size:17px">${wr}%</div></div>`:''}
+      </div>
+      ${v?`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:var(--tx2)"><span>${T('valueEdge')}:</span>${vpill(v.edge)}<span style="margin-left:6px">${T('mktOdd')}: <strong>${v.avgOdds}</strong></span></div>`:''}
+    </div>`;
+  });
+  noData.forEach(code=>{
+    const t=SCOUTS[code];
+    html+=`<div class="card" style="opacity:.5"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:26px">${t.flag}</span><div><div style="font-size:13px;font-weight:500">${tn(code)}</div><div style="font-size:10px;color:var(--tx3)">Sem dados scout</div></div></div></div>`;
+  });
+  document.getElementById('grupoContent').innerHTML=html;
+}
+
+// ─── SCOUTS ───────────────────────────────────────────────
+function renderScouts(){
+  const sb=document.getElementById('scoutSort').value;
+  const gf=document.getElementById('scoutGroup').value;
+  let teams=Object.entries(SCOUTS).filter(([,t])=>t.rating);
+  if(gf)teams=teams.filter(([,t])=>t.group===gf);
+  teams.sort((a,b)=>{if(sb==='rating')return b[1].rating-a[1].rating;if(sb==='xG')return(b[1].xG||0)-(a[1].xG||0);if(sb==='pos')return(b[1].pos||0)-(a[1].pos||0);if(sb==='FD')return(b[1].FD||0)-(a[1].FD||0);return 0;});
+  document.getElementById('scoutGrid').innerHTML=teams.map(([code,t])=>{
+    const v=calcVal(code);
+    return`<div class="tcard ${selTeam===code?'selected':''}" onclick="selectTeam('${code}')">
+      <div class="tcard-head"><span class="tcard-flag">${t.flag}</span><div style="flex:1"><div class="tcard-name">${tn(code)}</div><div class="tcard-grp">Gr. ${t.group}</div></div><span class="tcard-rat" style="color:${rCol(t.rating)}">${t.rating}</span></div>
+      <div class="sr"><span class="sk">${T('xg')}</span><span class="sv">${t.xG||'N/D'}</span></div>
+      <div class="sr"><span class="sk">${T('poss')}</span><span class="sv">${t.pos?t.pos+'%':'N/D'}</span></div>
+      <div class="sr"><span class="sk">${T('goals')}</span><span class="sv">${t.gm||'N/D'}</span></div>
+      ${v?`<div style="margin-top:5px">${vpill(v.edge)}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function selectTeam(code){
+  selTeam=selTeam===code?null:code;renderScouts();
+  if(!selTeam){document.getElementById('scoutDetail').innerHTML='';return;}
+  const t=SCOUTS[code],c=CSV[code]||{},v=calcVal(code),sw=getSW(code);
+  let html=`<div class="detail-panel">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:.9rem">
+      <span style="font-size:33px">${t.flag}</span>
+      <div><div style="font-size:15px;font-weight:700;font-family:'Space Grotesk',sans-serif">${tn(code)}</div><div style="font-size:11px;color:var(--tx3)">Grupo ${t.group}</div></div>
+    </div>
+    <div class="g4" style="margin-bottom:.9rem">
+      <div class="mc"><div class="lbl">Rating</div><div class="val" style="color:${rCol(t.rating)}">${t.rating}</div></div>
+      <div class="mc"><div class="lbl">${T('xg')}</div><div class="val">${t.xG||'–'}</div></div>
+      <div class="mc"><div class="lbl">${T('xga')}</div><div class="val">${t.xGA||'–'}</div></div>
+      <div class="mc"><div class="lbl">${T('poss')}</div><div class="val">${t.pos?t.pos+'%':'–'}</div></div>
+    </div>
+    <div class="g2" style="margin-bottom:0">
+      <div>
+        <div class="sw-lbl str">${T('strengths')}</div>
+        ${sw.str.map(s=>`<div class="sw-item str"><i class="ti ti-check"></i>${s}</div>`).join('')}
+      </div>
+      <div>
+        <div class="sw-lbl wk">${T('weaknesses')}</div>
+        ${sw.wk.map(s=>`<div class="sw-item wk"><i class="ti ti-alert-triangle"></i>${s}</div>`).join('')}
+      </div>
+    </div>
+    ${v?`<div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.75rem;margin-top:.9rem;display:flex;gap:14px;flex-wrap:wrap;font-size:12px">
+      <span><span style="color:var(--tx3)">${T('mktOdd')}: </span><strong>${v.avgOdds}</strong></span>
+      <span><span style="color:var(--tx3)">Prob. implícita: </span><strong>${v.impliedProb.toFixed(1)}%</strong></span>
+      <span><span style="color:var(--tx3)">Prob. estimada: </span><strong>${v.scoutAdj.toFixed(1)}%</strong></span>
+      <span>${vpill(v.edge)}</span>
+    </div>`:''}
+  </div>`;
+  document.getElementById('scoutDetail').innerHTML=html;
+}
+
+// ─── VALUE ────────────────────────────────────────────────
+function renderValue(){
+  const gf=document.getElementById('valGroup').value;
+  const me=parseFloat(document.getElementById('valEdge').value);
+  let teams=Object.entries(SCOUTS).filter(([,t])=>t.rating);
+  if(gf)teams=teams.filter(([,t])=>t.group===gf);
+  const res=teams.map(([code,t])=>({code,t,v:calcVal(code)})).filter(x=>x.v&&x.v.edge>=me).sort((a,b)=>b.v.edge-a.v.edge);
+  if(!res.length){document.getElementById('valueGrid').innerHTML=`<p style="color:var(--tx3);font-size:13px;padding:1rem 0">Nenhuma oportunidade com esses filtros.</p>`;return;}
+  document.getElementById('valueGrid').innerHTML=res.map(({code,t,v})=>`
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:28px">${t.flag}</span>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">${tn(code)}</div><div style="font-size:10px;color:var(--tx3)">Gr. ${t.group} · Rating ${t.rating}</div></div>
+        ${vpill(v.edge)}
+      </div>
+      <div style="display:flex;gap:7px">
+        <div class="mc" style="flex:1"><div class="lbl">${T('mktOdd')}</div><div class="val" style="font-size:17px">${v.avgOdds}</div></div>
+        <div class="mc" style="flex:1"><div class="lbl">Prob. imp.</div><div class="val" style="font-size:17px">${v.impliedProb.toFixed(1)}%</div></div>
+        <div class="mc" style="flex:1"><div class="lbl">Prob. est.</div><div class="val" style="font-size:17px">${v.scoutAdj.toFixed(1)}%</div></div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── TENDÊNCIAS ───────────────────────────────────────────
+function renderTendencias(){
+  const blocks=T('trendBlocks')||[];
+  document.getElementById('trendBlocks').innerHTML=blocks.map(b=>`
+    <div class="card"><div class="stitle">${b.title}</div>
+    <p style="font-size:12px;color:var(--tx2);margin-bottom:.7rem;line-height:1.6">${b.body}</p>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">${b.stats.map(s=>`<span class="badge bg-bl">${s}</span>`).join('')}</div></div>`).join('');
+  if(trendCh){trendCh.destroy();trendCh=null;}
+  trendCh=new Chart(document.getElementById('trendChart'),{type:'radar',data:{labels:['Gols marcados','Gols sofridos','Ocasiões','Def. eficiente','Bola parada','Contra-ataque'],datasets:[
+    {label:T('qualified'),data:[73,32,80,75,50,71],backgroundColor:'rgba(24,95,165,0.15)',borderColor:'#185FA5',borderWidth:2,pointRadius:3,pointBackgroundColor:'#185FA5'},
+    {label:T('eliminated'),data:[38,68,45,35,50,59],backgroundColor:'rgba(226,75,74,0.1)',borderColor:'#E24B4A',borderWidth:2,pointRadius:3,pointBackgroundColor:'#E24B4A',borderDash:[5,3]}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false},pointLabels:{font:{size:10}}}}}});
+  const topA=Object.entries(SCOUTS).filter(([,t])=>t.rating>=80&&t.xG&&t.gs!=null).map(([code,t])=>{
+    const sc=(t.rating/100)*40+(t.xG/5)*30+((5-t.xGA)/5)*30;return{code,t,sc:Math.round(sc*10)/10};
+  }).sort((a,b)=>b.sc-a.sc).slice(0,8);
+  document.getElementById('trendAlignment').innerHTML=topA.map(({code,t,sc},i)=>{
+    const v=calcVal(code);
+    return`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd)">
+      <span style="width:18px;text-align:right;font-size:11px;color:var(--tx3);font-family:'Space Grotesk',sans-serif">${i+1}</span>
+      <span style="font-size:18px">${t.flag}</span>
+      <span style="font-size:12px;flex:1">${tn(code)}</span>
+      <div style="flex:2;background:var(--bd);border-radius:2px;height:4px;overflow:hidden"><div style="height:100%;width:${sc}%;background:${sc>=70?'#185FA5':sc>=55?'#1D9E75':'#BA7517'};border-radius:2px"></div></div>
+      <span style="width:28px;text-align:right;font-size:12px;font-weight:600;font-family:'Space Grotesk',sans-serif">${sc.toFixed(0)}</span>
+      ${v?vpill(v.edge):''}
+    </div>`;
+  }).join('');
+}
+
+// ─── CONFRONTO ────────────────────────────────────────────
+function populateSelects(){
+  const sorted=Object.entries(SCOUTS).sort((a,b)=>(b[1].rating||0)-(a[1].rating||0));
+  const opts=sorted.map(([k,t])=>`<option value="${k}">${t.flag} ${t.name} (${t.group})</option>`).join('');
+  document.getElementById('selHome').innerHTML=opts;
+  document.getElementById('selAway').innerHTML=opts;
+  document.getElementById('selAway').value='ARG';
+}
+function clearMatch(){document.getElementById('matchup').style.display='none';aiAnalysis='';}
+
+function renderMatchup(){
+  const hC=document.getElementById('selHome').value,aC=document.getElementById('selAway').value;
+  if(hC===aC)return;
+  curMatchup={h:hC,a:aC};
+  const h=SCOUTS[hC],a=SCOUTS[aC],hc=CSV[hC]||{},ac=CSV[aC]||{};
+  const{pH,pA,pD}=calcProbs(hC,aC);
+  document.getElementById('heroBlock').innerHTML=`
+    <div class="hero-team home"><div class="hero-flag">${h.flag}</div><div class="hero-name">${tn(hC)}</div><div class="hero-sub">Gr. ${h.group}</div><div class="hero-rat" style="color:${rCol(h.rating||70)}">${h.rating||'–'}</div><div style="font-size:10px;color:var(--tx3)">rating</div></div>
+    <div class="hero-mid"><div class="pline" style="color:var(--bl)">${(pH*100).toFixed(0)}%</div><div class="plbl">${T('win')}</div><div class="hdiv"></div><div class="pline" style="color:var(--tx2)">${(pD*100).toFixed(0)}%</div><div class="plbl">${T('draw')}</div><div class="hdiv"></div><div class="pline" style="color:var(--rd)">${(pA*100).toFixed(0)}%</div><div class="plbl">${T('win')}</div></div>
+    <div class="hero-team away"><div class="hero-flag">${a.flag}</div><div class="hero-name">${tn(aC)}</div><div class="hero-sub">Gr. ${a.group}</div><div class="hero-rat" style="color:${rCol(a.rating||70)}">${a.rating||'–'}</div><div style="font-size:10px;color:var(--tx3)">rating</div></div>`;
+  const swH=getSW(hC),swA=getSW(aC);
+  document.getElementById('swBlock').innerHTML=`
+    <div class="sw-card"><div class="sw-head"><span style="font-size:20px">${h.flag}</span><span style="font-size:12px;font-weight:600">${tn(hC)}</span></div>
+      <div class="sw-lbl str">${T('strengths')}</div>${swH.str.map(s=>`<div class="sw-item str"><i class="ti ti-check"></i>${s}</div>`).join('')}
+      <div class="sw-lbl wk">${T('weaknesses')}</div>${swH.wk.map(s=>`<div class="sw-item wk"><i class="ti ti-alert-triangle"></i>${s}</div>`).join('')}
+    </div>
+    <div class="sw-card"><div class="sw-head"><span style="font-size:20px">${a.flag}</span><span style="font-size:12px;font-weight:600">${tn(aC)}</span></div>
+      <div class="sw-lbl str">${T('strengths')}</div>${swA.str.map(s=>`<div class="sw-item str"><i class="ti ti-check"></i>${s}</div>`).join('')}
+      <div class="sw-lbl wk">${T('weaknesses')}</div>${swA.wk.map(s=>`<div class="sw-item wk"><i class="ti ti-alert-triangle"></i>${s}</div>`).join('')}
+    </div>`;
+  const metrics=[
+    {label:T('rating'),hv:h.rating,av:a.rating,hi:true,fmt:v=>v||'–'},
+    {label:T('xg'),hv:h.xG||hc.gf,av:a.xG||ac.gf,hi:true,fmt:f2},
+    {label:T('xga'),hv:h.xGA||hc.ga,av:a.xGA||ac.ga,hi:false,fmt:f2},
+    {label:T('poss'),hv:h.pos,av:a.pos,hi:true,fmt:v=>v?parseFloat(v).toFixed(0)+'%':'–'},
+    {label:T('goals'),hv:h.gm||hc.gf,av:a.gm||ac.gf,hi:true,fmt:f2},
+    {label:T('conceded'),hv:h.gs||hc.ga,av:a.gs||ac.ga,hi:false,fmt:f2},
+    {label:T('shots'),hv:hc.shots,av:ac.shots,hi:true,fmt:f1},
+    {label:T('sot'),hv:hc.sot,av:ac.sot,hi:true,fmt:f1},
+    {label:T('corners'),hv:hc.corners,av:ac.corners,hi:true,fmt:f1},
+    {label:T('yellows'),hv:hc.yellows,av:ac.yellows,hi:false,fmt:f1},
+    {label:T('duels'),hv:h.FD,av:a.FD,hi:true,fmt:f1},
+    {label:T('defEff'),hv:h.DE,av:a.DE,hi:false,fmt:f1},
+  ];
+  document.getElementById('cmpBlock').innerHTML=metrics.map(m=>{
+    const hn=parseFloat(m.hv),an=parseFloat(m.av);
+    const hB=!isNaN(hn)&&!isNaN(an)&&(m.hi?hn>an:hn<an);
+    const aB=!isNaN(hn)&&!isNaN(an)&&(m.hi?an>hn:an<hn);
+    const mx=Math.max(Math.abs(hn)||1,Math.abs(an)||1);
+    const hw=isNaN(hn)?40:Math.round(Math.abs(hn)/mx*80),aw=isNaN(an)?40:Math.round(Math.abs(an)/mx*80);
+    return`<div class="cmp-row">
+      <div style="text-align:right"><span class="cmp-vh" style="color:${hB?'var(--bl)':'var(--tx)'}">${m.fmt(m.hv)}</span><br><div style="height:3px;border-radius:2px;width:${hw}px;float:right;background:${hB?'var(--bl)':'var(--bd)'}"></div></div>
+      <div class="cmp-lbl">${m.label}</div>
+      <div><span class="cmp-va" style="color:${aB?'var(--rd)':'var(--tx)'}">${m.fmt(m.av)}</span><br><div style="height:3px;border-radius:2px;width:${aw}px;background:${aB?'var(--rd)':'var(--bd)'}"></div></div>
+    </div>`;
+  }).join('');
+  if(radarCh){radarCh.destroy();radarCh=null;}
+  if(probCh){probCh.destroy();probCh=null;}
+  const norm=(v,mn,mx)=>v==null?50:Math.round(Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100)));
+  const ml=L[curLang].metricLabels;
+  radarCh=new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:ml,datasets:[
+    {label:tn(hC),data:[norm(h.xG||hc.gf,0,5),norm(h.pos||50,30,80),norm(hc.shots,0,25),norm(h.DE?10-h.DE:5,0,10),norm(h.gm||hc.gf,0,5),norm(h.FD,0,10)],backgroundColor:'rgba(24,95,165,0.15)',borderColor:'#185FA5',borderWidth:2,pointRadius:3,pointBackgroundColor:'#185FA5'},
+    {label:tn(aC),data:[norm(a.xG||ac.gf,0,5),norm(a.pos||50,30,80),norm(ac.shots,0,25),norm(a.DE?10-a.DE:5,0,10),norm(a.gm||ac.gf,0,5),norm(a.FD,0,10)],backgroundColor:'rgba(226,75,74,0.1)',borderColor:'#E24B4A',borderWidth:2,pointRadius:3,pointBackgroundColor:'#E24B4A',borderDash:[5,3]}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false},pointLabels:{font:{size:10}}}}}});
+  const pl=L[curLang].probLabels;
+  probCh=new Chart(document.getElementById('probChart'),{type:'bar',data:{
+    labels:[`${h.flag} ${pl[0]}`,pl[1],`${a.flag} ${pl[2]}`],
+    datasets:[{data:[(pH*100).toFixed(1),(pD*100).toFixed(1),(pA*100).toFixed(1)],backgroundColor:['#B5D4F4','#D3D1C7','#F7C1C1'],borderColor:['#185FA5','#888780','#E24B4A'],borderWidth:1.5}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{max:80,ticks:{font:{size:10},callback:v=>v+'%'}},x:{ticks:{font:{size:10}}}}}});
+  // Live odds for this matchup
+  const liveGame=oddsData?findOddsGame(h.name,a.name):null;
+  if(liveGame&&liveGame.h2h){
+    const hEdge=liveGame.h2h.home?Math.round((pH-1/liveGame.h2h.home)*1000)/10:null;
+    const aEdge=liveGame.h2h.away?Math.round((pA-1/liveGame.h2h.away)*1000)/10:null;
+    const dEdge=liveGame.h2h.draw?Math.round((pD-1/liveGame.h2h.draw)*1000)/10:null;
+    document.getElementById('matchOddsLive').innerHTML=`
+      <div class="card" style="border-color:var(--gn);margin-bottom:12px">
+        <div class="stitle"><i class="ti ti-activity" style="color:var(--gn)"></i> Odds ao vivo deste jogo</div>
+        <div class="ogrid">
+          <div class="obox ${hEdge&&hEdge>=5?'value':''}"><div class="olbl">1 ${tn(hC)}</div><div class="oval">${liveGame.h2h.home?.toFixed(2)||'–'}</div>${hEdge!=null?`<div class="oedge">${hEdge>0?'▲ +':''}${hEdge.toFixed(1)}%</div>`:''}</div>
+          <div class="obox ${dEdge&&dEdge>=5?'value':''}"><div class="olbl">X</div><div class="oval">${liveGame.h2h.draw?.toFixed(2)||'–'}</div>${dEdge!=null?`<div class="oedge">${dEdge>0?'▲ +':''}${dEdge.toFixed(1)}%</div>`:''}</div>
+          <div class="obox ${aEdge&&aEdge>=5?'value':''}"><div class="olbl">2 ${tn(aC)}</div><div class="oval">${liveGame.h2h.away?.toFixed(2)||'–'}</div>${aEdge!=null?`<div class="oedge">${aEdge>0?'▲ +':''}${aEdge.toFixed(1)}%</div>`:''}</div>
+        </div>
+        ${liveGame.totals?.over25||liveGame.btts_yes?`<div class="mmarkets">
+          ${liveGame.totals?.over25?`<div class="mmarket"><span>Over 2.5</span>${liveGame.totals.over25.toFixed(2)}</div>`:''}
+          ${liveGame.totals?.under25?`<div class="mmarket"><span>Under 2.5</span>${liveGame.totals.under25.toFixed(2)}</div>`:''}
+          ${liveGame.btts_yes?`<div class="mmarket"><span>BTTS</span>${liveGame.btts_yes.toFixed(2)}</div>`:''}
+        </div>`:''}
+      </div>`;
+  }else{
+    document.getElementById('matchOddsLive').innerHTML='';
+  }
+  // Bets
+  const mktH=(liveGame?.h2h?.home)||(CSV[hC]?.avg_odds)||fo(pH)||2;
+  const mktA=(liveGame?.h2h?.away)||(CSV[aC]?.avg_odds)||fo(pA)||3;
+  const eH=Math.round((pH-1/mktH)*1000)/10,eA=Math.round((pA-1/mktA)*1000)/10;
+  const xgH=h.xG||hc.gf||1.5,xgA=a.xG||ac.gf||1.5;
+  const expG=xgH*0.5+xgA*0.5;
+  const over25=Math.min(80,Math.round(30+expG*12));
+  const btts=Math.min(82,Math.round((h.gm||1.5)*(a.gm||1.5)*14));
+  const totCrn=(hc.corners||5)+(ac.corners||5);
+  const totYel=(hc.yellows||1.5)+(ac.yellows||1.5);
+  const bets=[];
+  if(eH>=8)bets.push({tier:'hot',title:`${T('win')} ${tn(hC)}`,badge:T('vHigh'),reason:`Rating +${Math.abs(Math.round((h.rating||70)-(a.rating||70)))} pts. ${T('fairOdd')}: ${fo(pH)} vs ${T('mktOdd')} ${mktH}.`,stats:[{l:T('mktOdd'),v:mktH},{l:T('fairOdd'),v:fo(pH)},{l:T('valueEdge'),v:'+'+eH+'%'},{l:T('prob'),v:pct(pH)}],edge:eH});
+  else if(eA>=8)bets.push({tier:'hot',title:`${T('win')} ${tn(aC)}`,badge:T('vHigh'),reason:`Underdog subprecificado. ${T('fairOdd')}: ${fo(pA)} vs ${T('mktOdd')} ${mktA}.`,stats:[{l:T('mktOdd'),v:mktA},{l:T('fairOdd'),v:fo(pA)},{l:T('valueEdge'),v:'+'+eA+'%'},{l:T('prob'),v:pct(pA)}],edge:eA});
+  if(over25>58)bets.push({tier:over25>68?'hot':'med',title:'Over 2.5',badge:over25>68?T('rec'):T('vMed'),reason:`xG combinado ${expG.toFixed(1)}.`,stats:[{l:'xG H',v:f2(xgH)},{l:'xG A',v:f2(xgA)},{l:'xG total',v:f2(expG)},{l:T('prob'),v:over25+'%'}],edge:over25-50});
+  if(btts>55)bets.push({tier:btts>65?'hot':'med',title:'BTTS',badge:btts>65?T('rec'):T('vMed'),reason:`Ambas criam e sofrem gols.`,stats:[{l:T('goals')+' H',v:f2(h.gm||hc.gf)},{l:T('xga')+' H',v:f2(h.xGA||hc.ga)},{l:T('goals')+' A',v:f2(a.gm||ac.gf)},{l:T('xga')+' A',v:f2(a.xGA||ac.ga)}],edge:btts-50});
+  if(totCrn>9.5)bets.push({tier:'med',title:`Over ${totCrn>11?'9.5':'8.5'} ${T('corners')}`,badge:T('vMed'),reason:`Média ${totCrn.toFixed(1)} escanteios/j combinado.`,stats:[{l:T('corners')+' H',v:f1(hc.corners)},{l:T('corners')+' A',v:f1(ac.corners)},{l:'Total',v:f1(totCrn)},{l:T('poss'),v:h.pos?h.pos.toFixed(0)+'%':'–'}],edge:Math.round((totCrn-9)*8)});
+  if(!bets.length||eH>=2)bets.push({tier:'watch',title:`${tn(hC)} ou Empate (1X)`,badge:T('vWatch'),reason:`Leve vantagem de rating.`,stats:[{l:'Prob. 1X',v:((pH+pD)*100).toFixed(0)+'%'},{l:T('fairOdd'),v:fo(pH+pD)},{l:'Rating H',v:h.rating||'–'},{l:'Rating A',v:a.rating||'–'}],edge:Math.round(eH)||5});
+  document.getElementById('betsBlock').innerHTML=bets.map(b=>`
+    <div class="bet-card ${b.tier==='hot'?'hot':b.tier==='med'?'med':''}">
+      <div class="bet-head"><div><div class="bet-title">${b.title}</div><div class="bet-reason">${b.reason}</div></div>
+        <span class="badge ${b.tier==='hot'?'bg-gn':b.tier==='med'?'bg-am':'bg-gy'}">${b.badge}</span></div>
+      <div class="bet-stats">${b.stats.map(s=>`<div class="bet-stat"><strong>${s.v}</strong>${s.l}</div>`).join('')}</div>
+      <div class="ebar"><div class="efill" style="width:${Math.min(100,b.edge*2.5)}%;background:${b.tier==='hot'?'var(--gn)':b.tier==='med'?'var(--am)':'var(--tx3)'}"></div></div>
+    </div>`).join('');
+  // Trends
+  const trds=[];
+  if(Math.abs((h.pos||50)-(a.pos||50))>8)trds.push({i:'ti-circle-dot',t:`Diferença de posse (${Math.max(h.pos||50,a.pos||50).toFixed(0)}% vs ${Math.min(h.pos||50,a.pos||50).toFixed(0)}%) — no WC22, ataque posicional vs defesa fechada gerou 73% dos gols de classificados.`});
+  if(expG>4.2)trds.push({i:'ti-trending-up',t:`xG combinado elevado (${expG.toFixed(1)}). No WC22, jogos com xG >4 terminaram over 2.5 em 68% dos casos.`});
+  trds.push({i:'ti-clock',t:`WC22: pico de gols no +81-90' (25 gols vs 9 no 1-10'). Mercados de 2ª parte têm valor histórico.`});
+  if(Math.abs((h.rating||70)-(a.rating||70))<8)trds.push({i:'ti-scale',t:`Diferença de rating <8 pts. No WC22, o time melhor rankeado avançou em apenas 52% desses confrontos.`});
+  document.getElementById('trendsBlock').innerHTML=trds.map(x=>`<div class="trow"><i class="ti ${x.i}"></i><span>${x.t}</span></div>`).join('');
+  // Reset AI
+  document.getElementById('aiBody').textContent=T('aiReady');
+  aiAnalysis='';
+  document.getElementById('matchup').style.display='block';
+}
+
+// ─── AI (CLAUDE) ──────────────────────────────────────────
+async function runAI(){
+  const hC=curMatchup.h,aC=curMatchup.a;
+  if(!hC||!aC)return;
+  const h=SCOUTS[hC],a=SCOUTS[aC],hc=CSV[hC]||{},ac=CSV[aC]||{};
+  const{pH,pA,pD}=calcProbs(hC,aC);
+  const prompt=`Você é um analista de apostas esportivas especializado em futebol. Analise este confronto da Copa do Mundo 2026 de forma concisa e objetiva.
+
+CONFRONTO: ${tn(hC)} vs ${tn(aC)}
+
+DADOS DOS SCOUTS:
+- ${tn(hC)}: Rating ${h.rating}, xG ${h.xG||'N/D'}, xGA ${h.xGA||'N/D'}, Posse ${h.pos||'N/D'}%, Gols/j ${h.gm||'N/D'}
+- ${tn(aC)}: Rating ${a.rating}, xG ${a.xG||'N/D'}, xGA ${a.xGA||'N/D'}, Posse ${a.pos||'N/D'}%, Gols/j ${a.gm||'N/D'}
+
+PROBABILIDADES ESTIMADAS: ${tn(hC)} ${(pH*100).toFixed(0)}% | Empate ${(pD*100).toFixed(0)}% | ${tn(aC)} ${(pA*100).toFixed(0)}%
+
+HISTÓRICO RECENTE:
+- ${tn(hC)}: ${hc.games||'?'}J, ${hc.wins||'?'}V, ${hc.draws||'?'}E, ${hc.losses||'?'}D
+- ${tn(aC)}: ${ac.games||'?'}J, ${ac.wins||'?'}V, ${ac.draws||'?'}E, ${ac.losses||'?'}D
+
+Responda em ${curLang==='pt'?'português':curLang==='en'?'inglês':curLang==='es'?'espanhol':'italiano'} com:
+1. CENÁRIO TÁTICO (2-3 linhas)
+2. MELHORES APOSTAS (3 apostas com justificativa)
+3. RISCO PRINCIPAL (1 linha)
+
+Seja direto e prático. Sem disclaimers.`;
+
+  const aiEl=document.getElementById('aiBody');
+  aiEl.className='ai-body loading';
+  aiEl.textContent='Gerando análise...';
+
+  try{
+    // Direct call to Claude API
+    // NOTE: For production, use a backend proxy to protect your API key
+    // See README.md for setup with Cloudflare Workers (free)
+    // Proxy URL — substitua pela URL do seu Cloudflare Worker após o deploy
+    // Instruções: veja cloudflare_worker.js no repositório
+    const PROXY_URL = 'https://wc2026-proxy.garrinchashirts-create.workers.dev';
+
+    const response=await fetch(PROXY_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:CLAUDE_MODEL,
+        max_tokens:600,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(!response.ok){
+      const err=await response.json().catch(()=>({}));
+      throw new Error(err.error?.message||'API error '+response.status);
+    }
+    const data=await response.json();
+    aiAnalysis=data.content?.[0]?.text||'';
+    aiEl.className='ai-body';
+    aiEl.innerHTML=aiAnalysis.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  }catch(e){
+    aiEl.className='ai-body';
+    aiEl.innerHTML=`<span style="color:var(--am)">⚠️ Erro na análise por IA: ${e.message}</span><br><br><span style="font-size:11px;color:var(--tx3)">Configure sua chave da API Claude no README.md para usar esta função.</span>`;
+  }
+}
+
+function copyAI(){
+  if(!aiAnalysis){return;}
+  navigator.clipboard.writeText(aiAnalysis).catch(()=>{});
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+populateSelects();
+renderDashboard();
+loadOdds();
+</script>
+</body>
+</html>
