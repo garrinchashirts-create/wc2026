@@ -216,6 +216,7 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
     <button class="nb" onclick="showSec('value')"><i class="ti ti-coin"></i><span data-t="navValue">Value</span></button>
     <button class="nb" onclick="showSec('tendencias')"><i class="ti ti-trending-up"></i><span data-t="navTrend">Tendências</span></button>
     <button class="nb" onclick="showSec('simulador')"><i class="ti ti-tournament"></i><span id="navSim">🏆 Simulador</span></button>
+    <button class="nb" onclick="showSec('betfair')"><i class="ti ti-trophy"></i><span>Betfair Tips</span></button>
       <button class="nb" onclick="showSec('ai_bets')"><i class="ti ti-robot"></i><span>IA Apostas</span></button>
     <button class="nb" onclick="showSec('previews')"><i class="ti ti-file-analytics"></i><span>Prévias</span></button>
     <button class="nb" onclick="showSec('clima')"><i class="ti ti-cloud"></i><span>Clima</span></button>
@@ -529,6 +530,44 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
   <div id="simTabGroupresults" style="display:none"></div>
   <div id="simTabMontecarlo" style="display:none"></div>
 </div>
+</section>
+
+
+<!-- BETFAIR TIPS -->
+<section id="betfair" class="sec">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+  <div>
+    <div class="stitle">🏆 Betfair — Odds & Tips Oficiais</div>
+    <div style="font-size:11px;color:var(--tx3)">Mark O'Haire · Betting.Betfair · 10 Jun 2026 · Odds de ganhar a Copa</div>
+  </div>
+  <div style="font-size:11px;background:var(--bl-bg);color:var(--bl-tx);padding:4px 10px;border-radius:20px;font-weight:500">Fonte oficial Betfair</div>
+</div>
+
+<!-- RECOMMENDED BETS -->
+<div class="stitle" style="font-size:13px;margin-bottom:.75rem">⭐ Apostas recomendadas por Mark O'Haire</div>
+<div id="betfairTips" class="g2" style="margin-bottom:1.5rem"></div>
+
+<!-- ODDS TABLE -->
+<div class="stitle" style="font-size:13px;margin-bottom:.75rem">📊 Odds para ganhar a Copa (Betfair Exchange)</div>
+<div style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead>
+      <tr style="background:var(--sf2)">
+        <th style="padding:8px 10px;text-align:left;font-weight:600;color:var(--tx3);font-size:10px;text-transform:uppercase;letter-spacing:.04em">Seleção</th>
+        <th style="padding:8px 10px;text-align:center;font-weight:600;color:var(--tx3);font-size:10px;text-transform:uppercase;letter-spacing:.04em">Betfair Odds</th>
+        <th style="padding:8px 10px;text-align:center;font-weight:600;color:var(--tx3);font-size:10px;text-transform:uppercase;letter-spacing:.04em">Prob. implícita</th>
+        <th style="padding:8px 10px;text-align:center;font-weight:600;color:var(--tx3);font-size:10px;text-transform:uppercase;letter-spacing:.04em">Scout Rating</th>
+        <th style="padding:8px 10px;text-align:center;font-weight:600;color:var(--tx3);font-size:10px;text-transform:uppercase;letter-spacing:.04em">Value edge</th>
+        <th style="padding:8px 10px;text-align:left;font-weight:600;color:var(--tx3);font-size:10px;text-transform:uppercase;letter-spacing:.04em">Técnico / Sistema</th>
+      </tr>
+    </thead>
+    <tbody id="betfairOddsTable"></tbody>
+  </table>
+</div>
+
+<!-- PROFILES -->
+<div class="stitle" style="font-size:13px;margin-top:1.5rem;margin-bottom:.75rem">🔍 Perfis táticos (Mark O'Haire)</div>
+<div id="betfairProfiles" class="g2"></div>
 </section>
 
 </main>
@@ -1653,6 +1692,87 @@ function renderMCTab(mc) {
   document.getElementById('simTabMontecarlo').innerHTML = html;
 }
 // ═══════════════════════════════════════════════════════
+
+
+// ── BETFAIR SECTION RENDER ──────────────────────────────────
+function renderBetfair() {
+  // Tips
+  const tips = window.BETFAIR_TIPS || [];
+  document.getElementById('betfairTips').innerHTML = tips.map(tip => {
+    const t = SCOUTS[tip.code] || {};
+    return `<div class="bet-card ${tip.tier==='hot'?'hot':'med'}">
+      <div class="bet-head">
+        <div>
+          <div class="bet-title">${t.flag||''} ${tip.bet}</div>
+          <div class="bet-reason">Fonte: ${tip.source} · ${tip.market}</div>
+        </div>
+        <span class="badge ${tip.tier==='hot'?'bg-gn':'bg-am'}" style="font-size:12px;padding:4px 12px">${tip.odd}</span>
+      </div>
+      <div class="bet-stats">
+        <div class="bet-stat"><strong>${tip.odd}</strong>Odd Betfair</div>
+        <div class="bet-stat"><strong>${(100/tip.odd).toFixed(1)}%</strong>Prob. implícita</div>
+        <div class="bet-stat"><strong>${t.rating||'N/D'}</strong>Scout rating</div>
+      </div>
+      <div class="ebar"><div class="efill" style="width:${Math.min(100,100/tip.odd*3)}%;background:${tip.tier==='hot'?'var(--gn)':'var(--am)'}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Odds table - sorted by odds ascending
+  const bf = window.BETFAIR_ODDS || {};
+  const sorted = Object.entries(SCOUTS)
+    .filter(([code, t]) => t.rating && bf[code])
+    .sort((a, b) => (bf[a[0]]||999) - (bf[b[0]]||999));
+
+  const rows = sorted.map(([code, t]) => {
+    const odd = bf[code];
+    const imp = odd ? (100/odd).toFixed(1) : '–';
+    // Scout-based win probability (rough estimate)
+    const scoutProb = t.rating ? (t.rating / 100 * 0.35).toFixed(1) : '–';
+    const edge = (odd && t.rating) ? Math.round((t.rating/100*0.35 - 1/odd)*1000)/10 : null;
+    const edgeStr = edge !== null ? `<span style="color:${edge>0?'var(--gn-tx)':'var(--rd-tx)';font-weight:600">${edge>0?'+':''}${edge.toFixed(1)}%</span>` : '–';
+    const profile = (window.BETFAIR_PROFILES||{})[code] || {};
+    return `<tr style="border-bottom:1px solid var(--bd)">
+      <td style="padding:7px 10px"><span style="font-size:16px">${t.flag||''}</span> ${tn(code)}</td>
+      <td style="padding:7px 10px;text-align:center;font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:14px">${odd}</td>
+      <td style="padding:7px 10px;text-align:center">${imp}%</td>
+      <td style="padding:7px 10px;text-align:center;font-weight:600;color:${rCol(t.rating)}">${t.rating}</td>
+      <td style="padding:7px 10px;text-align:center">${edgeStr}</td>
+      <td style="padding:7px 10px;font-size:11px;color:var(--tx2)">${profile.coach||'–'} · ${profile.system||'–'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('betfairOddsTable').innerHTML = rows;
+
+  // Profiles
+  const profileCodes = Object.keys(window.BETFAIR_PROFILES||{}).filter(c=>SCOUTS[c]);
+  document.getElementById('betfairProfiles').innerHTML = profileCodes.map(code => {
+    const t = SCOUTS[code] || {};
+    const p = (window.BETFAIR_PROFILES||{})[code] || {};
+    const odd = bf[code];
+    return `<div class="card" style="margin-bottom:0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.75rem">
+        <span style="font-size:28px">${t.flag||''}</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">${tn(code)}</div>
+          <div style="font-size:11px;color:var(--tx3)">${p.coach||''} · ${p.system||''} · Betfair: ${odd||'–'}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:${rCol(t.rating||70)}">${t.rating||'–'}</div>
+          <div style="font-size:10px;color:var(--tx3)">rating</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:.5rem">${p.note||''}</div>
+      <div style="font-size:11px;color:var(--bl-tx);font-weight:600">⭐ ${p.key_player||''}</div>
+    </div>`;
+  }).join('');
+}
+
+// Hook into showSec
+const _origShowSec = showSec;
+function showSec(id) {
+  _origShowSec.call(this, id);
+  if (id === 'betfair') renderBetfair();
+}
+// ──────────────────────────────────────────────────────────────
 
 </script>
 </body>
