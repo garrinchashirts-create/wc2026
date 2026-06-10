@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T11:00:00+00:00",
-  "generated_at_brt": "09/06/2026 08:00 BRT",
+  "generated_at": "2026-06-10T00:36:35.670433+00:00",
+  "generated_at_brt": "09/06/2026 21:36 BRT",
   "value_bets_today": {
-    "summary": "Dashboard sendo inicializado. As análises por IA aparecerão automaticamente após o primeiro ciclo de atualização do GitHub Actions.",
+    "summary": "Nenhum jogo da Copa encontrado para hoje/amanhã.",
     "bets": [],
     "tip_of_day": null
   },
