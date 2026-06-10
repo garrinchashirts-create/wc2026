@@ -520,11 +520,13 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
     <button class="sim-tab active" onclick="showSimTab('champion')">🏆 Campeão</button>
     <button class="sim-tab" onclick="showSimTab('bracket')">📊 Chaveamento</button>
     <button class="sim-tab" onclick="showSimTab('groups')">📋 Fase de Grupos</button>
+    <button class="sim-tab" onclick="showSimTab('groupresults')">⚽ Resultados</button>
     <button class="sim-tab" onclick="showSimTab('montecarlo')">🎲 Monte Carlo</button>
   </div>
   <div id="simTabChampion"></div>
   <div id="simTabBracket" style="display:none"></div>
   <div id="simTabGroups" style="display:none"></div>
+  <div id="simTabGroupresults" style="display:none"></div>
   <div id="simTabMontecarlo" style="display:none"></div>
 </div>
 </section>
@@ -1164,6 +1166,82 @@ if(window.LIVE_DATA && window.LIVE_DATA.games) {
 }
 
 
+
+function renderGroupResultsTab(det) {
+  const MATCH_SCHEDULE = {
+    A:["MEX vs AFS","MEX vs COR","MEX vs TCH","AFS vs COR","AFS vs TCH","COR vs TCH"],
+    B:["CAN vs BOS","CAN vs CAT","CAN vs SUI","BOS vs CAT","BOS vs SUI","CAT vs SUI"],
+    C:["BRA vs MAR","BRA vs HAI","BRA vs ESC","MAR vs HAI","MAR vs ESC","HAI vs ESC"],
+    D:["EUA vs PAR","EUA vs AUS","EUA vs TUR","PAR vs AUS","PAR vs TUR","AUS vs TUR"],
+    E:["ALE vs CUR","ALE vs CDM","ALE vs EQU","CUR vs CDM","CUR vs EQU","CDM vs EQU"],
+    F:["HOL vs JAP","HOL vs SUE","HOL vs TUN","JAP vs SUE","JAP vs TUN","SUE vs TUN"],
+    G:["BEL vs EGI","BEL vs IRA","BEL vs NZE","EGI vs IRA","EGI vs NZE","IRA vs NZE"],
+    H:["ESP vs CAB","ESP vs ARS","ESP vs URU","CAB vs ARS","CAB vs URU","ARS vs URU"],
+    I:["FRA vs SEN","FRA vs IRQ","FRA vs NOR","SEN vs IRQ","SEN vs NOR","IRQ vs NOR"],
+    J:["ARG vs AGL","ARG vs AUT","ARG vs JOR","AGL vs AUT","AGL vs JOR","AUT vs JOR"],
+    K:["POR vs RDC","POR vs UZB","POR vs COL","RDC vs UZB","RDC vs COL","UZB vs COL"],
+    L:["ING vs CRO","ING vs GAN","ING vs PAN","CRO vs GAN","CRO vs PAN","GAN vs PAN"]
+  };
+  const ROUND_NAMES = ["Rodada 1","Rodada 1","Rodada 2","Rodada 2","Rodada 3","Rodada 3"];
+
+  let html = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">`;
+
+  for (const [g, matches] of Object.entries(det.groupResults)) {
+    html += `<div class="card" style="margin-bottom:0">
+      <div class="grp-hdr" style="margin-bottom:.75rem">Grupo ${g}</div>`;
+
+    // Pair matches into rounds
+    for (let i = 0; i < matches.length; i++) {
+      const m = matches[i];
+      const tA = SCOUTS[m.a] || {flag:'🏳', name:m.a};
+      const tB = SCOUTS[m.b] || {flag:'🏳', name:m.b};
+      const roundLabel = ROUND_NAMES[i] || `Jogo ${i+1}`;
+      const isNewRound = i===0 || ROUND_NAMES[i] !== ROUND_NAMES[i-1];
+
+      if (isNewRound) {
+        html += `<div style="font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin:${i>0?'10px':0} 0 5px">${roundLabel}</div>`;
+      }
+
+      const aWon = m.winner===m.a, bWon = m.winner===m.b;
+      html += `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--bd)">
+        <span style="font-size:14px">${tA.flag||'🏳'}</span>
+        <span style="font-size:11px;flex:1;font-weight:${aWon?'700':'400'};color:${aWon?'var(--ac)':'var(--tx)'}">${tn(m.a)}</span>
+        <span style="font-size:13px;font-weight:700;font-family:'Space Grotesk',sans-serif;min-width:42px;text-align:center;background:var(--sf2);border-radius:6px;padding:1px 6px">
+          ${m.draw ? `<span style="color:var(--tx2)">${m.scoreA} - ${m.scoreB}</span>` :
+            `<span style="color:${aWon?'var(--ac)':'var(--rd-tx)'}">${m.scoreA}</span>
+             <span style="color:var(--tx3)"> - </span>
+             <span style="color:${bWon?'var(--ac)':'var(--rd-tx)'}">${m.scoreB}</span>`}
+        </span>
+        <span style="font-size:11px;flex:1;text-align:right;font-weight:${bWon?'700':'400'};color:${bWon?'var(--ac)':'var(--tx)'}">${tn(m.b)}</span>
+        <span style="font-size:14px">${tB.flag||'🏳'}</span>
+      </div>`;
+    }
+
+    // Mini standings for this group
+    const ranked = det.groupRankings[g];
+    const q1 = det.qualified[g].first, q2 = det.qualified[g].second;
+    html += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)">
+      <div style="font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Classificação</div>`;
+    for (let i=0; i<ranked.length; i++) {
+      const code = ranked[i];
+      const s = det.standings[code];
+      const t2 = SCOUTS[code]||{flag:'🏳'};
+      const isQ = code===q1||code===q2;
+      html += `<div style="display:flex;align-items:center;gap:6px;padding:2px 0;font-size:11px;${isQ?'font-weight:600':'opacity:.7'}">
+        <span style="width:14px;text-align:center;color:var(--tx3)">${i+1}</span>
+        <span>${t2.flag||'🏳'}</span>
+        <span style="flex:1">${tn(code)}</span>
+        ${isQ?'<span style="width:8px;height:8px;border-radius:50%;background:var(--gn);flex-shrink:0"></span>':'<span style="width:8px"></span>'}
+        <span style="font-weight:700;font-family:'Space Grotesk',sans-serif;min-width:22px;text-align:right">${s.pts}pts</span>
+        <span style="color:var(--tx3);min-width:60px;text-align:right">${s.gf}-${s.ga} (${s.gf-s.ga>0?'+':''}${s.gf-s.ga})</span>
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+  html += `</div>`;
+  document.getElementById('simTabGroupresults').innerHTML = html;
+}
+
 // ═══════════════════════════════════════════════════════
 // WC 2026 SIMULATOR — Monte Carlo + Deterministic
 // ═══════════════════════════════════════════════════════
@@ -1426,6 +1504,7 @@ function renderSimResults() {
   renderChampionTab(det);
   renderBracketTab(det);
   renderGroupsTab(det);
+  renderGroupResultsTab(det);
   if (window._simMC) renderMCTab(window._simMC);
 }
 
