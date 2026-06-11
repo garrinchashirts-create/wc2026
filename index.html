@@ -246,6 +246,18 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
     <div class="card"><div class="stitle" data-t="xgTitle">xG ofensivo vs xGA</div><div style="position:relative;height:250px"><canvas id="xgChart"></canvas></div></div>
   </div>
   <div class="card"><div class="stitle" data-t="groupRatingTitle">Rating médio por grupo</div><div style="position:relative;height:180px"><canvas id="groupChart"></canvas></div></div>
+  <div class="card" style="margin-top:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.75rem">
+      <div class="stitle" style="margin:0">📊 Ranking StatsBomb — xG real por jogo</div>
+      <div style="display:flex;gap:5px">
+        <button id="sbBtnCombined" class="btn btn-sm" onclick="setSBView('combined')">2018+2022</button>
+        <button id="sbBtnWc22" class="btn btn-sm" style="background:var(--sf2);color:var(--tx);border:1px solid var(--bd)" onclick="setSBView('wc22')">Qatar 2022</button>
+        <button id="sbBtnWc18" class="btn btn-sm" style="background:var(--sf2);color:var(--tx);border:1px solid var(--bd)" onclick="setSBView('wc18')">Russia 2018</button>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:.6rem">xG por jogo · dados StatsBomb CC0 · ★ = presente em ambas as copas</div>
+    <div id="sbRanking"></div>
+  </div>
 </section>
 
 <!-- GRUPOS -->
@@ -1246,6 +1258,71 @@ function renderBetfair(){
 
 // Hook renders
 // betfair triggered by nav click
+
+
+// ── STATSBOMB RANKING (Dashboard) ────────────────────────────
+function setSBView(view) {
+  window._sbView = view;
+  var views = ['combined','wc22','wc18'];
+  var ids = ['sbBtnCombined','sbBtnWc22','sbBtnWc18'];
+  views.forEach(function(v, i) {
+    var btn = document.getElementById(ids[i]);
+    if (!btn) return;
+    if (v === view) {
+      btn.className = 'btn btn-sm';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.border = '';
+    } else {
+      btn.style.background = 'var(--sf2)';
+      btn.style.color = 'var(--tx)';
+      btn.style.border = '1px solid var(--bd)';
+    }
+  });
+  renderSBRanking();
+}
+
+function renderSBRanking() {
+  var el = document.getElementById('sbRanking');
+  if (!el) return;
+  var view = window._sbView || 'combined';
+  var ds = view === 'wc22' ? (window.SB_WC22 || {})
+         : view === 'wc18' ? (window.SB_WC18 || {})
+         : (window.SB_COMBINED || {});
+  var entries = Object.entries(ds)
+    .filter(function(e) { return SCOUTS[e[0]] && SCOUTS[e[0]].rating; })
+    .sort(function(a, b) { return b[1].xg_pg - a[1].xg_pg; });
+  if (!entries.length) {
+    el.innerHTML = '<p style="color:var(--tx3);font-size:12px">Sem dados StatsBomb disponíveis.</p>';
+    return;
+  }
+  var maxXG = entries[0][1].xg_pg;
+  el.innerHTML = entries.map(function(e, i) {
+    var code = e[0], s = e[1], t = SCOUTS[code] || {};
+    var both = !!(window.SB_WC22||{})[code] && !!(window.SB_WC18||{})[code];
+    var diff = (s.xg_pg - s.xga_pg).toFixed(2);
+    var diffCol = diff > 0 ? 'var(--gn-tx)' : 'var(--rd-tx)';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd)">'
+      + '<span style="font-size:11px;color:var(--tx3);min-width:20px;text-align:right">' + (i+1) + '</span>'
+      + '<span style="font-size:18px">' + (t.flag||'') + '</span>'
+      + '<span style="font-size:12px;flex:1;font-weight:500">' + (t.name||code) + (both ? ' <span style="color:var(--ac);font-size:9px">★</span>' : '') + '</span>'
+      + '<div style="flex:2;background:var(--bd);border-radius:2px;height:6px;overflow:hidden"><div style="height:100%;width:' + Math.min(100, s.xg_pg/maxXG*100).toFixed(0) + '%;background:var(--bl);border-radius:2px"></div></div>'
+      + '<span style="font-family:Space Grotesk,sans-serif;font-size:12px;font-weight:700;min-width:32px;text-align:right">' + s.xg_pg + '</span>'
+      + '<span style="font-size:11px;color:var(--rd-tx);min-width:30px;text-align:right">-' + s.xga_pg + '</span>'
+      + '<span style="font-size:11px;color:' + diffCol + ';min-width:36px;text-align:right;font-weight:600">' + (diff > 0 ? '+' : '') + diff + '</span>'
+      + '<span style="font-size:10px;color:var(--tx3);min-width:20px;text-align:right">' + s.matches + 'j</span>'
+      + '</div>';
+  }).join('');
+}
+
+// Auto-render SB ranking when dashboard tab opens
+var _origShowSecDash = showSec;
+function showSec(id) {
+  _origShowSecDash(id);
+  if (id === 'dashboard' && typeof renderSBRanking === 'function') {
+    setTimeout(function() { renderSBRanking(); }, 100);
+  }
+}
 
 </script>
 <script>
