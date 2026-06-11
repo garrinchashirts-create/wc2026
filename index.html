@@ -1254,8 +1254,8 @@ populateSelects();
 initCalSelect();
 renderDashboard();
 loadOdds();
-</script>
 
+</script>
 <script>
 // Dynamic data injected by build_index.py
 window.LIVE_DATA = {"updated_at": "2026-06-10T19:56:05.997906+00:00", "updated_at_brt": "10/06/2026 16:56 BRT", "games_count": 0, "games": [], "todays_games": [], "tomorrows_games": [], "weather": {"New York": {"venue": "MetLife Stadium, New Jersey", "temp_c": 27.6, "feels_like": 29.7, "humidity": 65, "wind": 14.0, "rain_prob": 11, "weather_code": 3, "max_tomorrow": 39.3, "extreme_heat": false, "utci_risk": "moderate"}, "Los Angeles": {"venue": "SoFi Stadium, Los Angeles", "temp_c": 25.5, "feels_like": 28.7, "humidity": 64, "wind": 15.7, "rain_prob": 0, "weather_code": 0, "max_tomorrow": 31.1, "extreme_heat": false, "utci_risk": "moderate"}, "Dallas": {"venue": "AT&T Stadium, Arlington", "temp_c": 32.8, "feels_like": 35.3, "humidity": 52, "wind": 24.5, "rain_prob": 0, "weather_code": 0, "max_tomorrow": 35.4, "extreme_heat": false, "utci_risk": "moderate"}, "San Francisco": {"venue": "Levi's Stadium, Santa Clara", "temp_c": 24.4, "feels_like": 25.2, "humidity": 48, "wind": 16.6, "rain_prob": 0, "weather_code": 0, "max_tomorrow": 33.2, "extreme_heat": false, "utci_risk": "moderate"}, "Miami": {"venue": "Hard Rock Stadium, Miami", "temp_c": 30.1, "feels_like": 34.1, "humidity": 64, "wind": 17.3, "rain_prob": 5, "weather_code": 1, "max_tomorrow": 34.9, "extreme_heat": false, "utci_risk": "moderate"}, "Atlanta": {"venue": "Mercedes-Benz Stadium, Atlanta", "temp_c": 31.2, "feels_like": 36.1, "humidity": 51, "wind": 0.5, "rain_prob": 5, "weather_code": 1, "max_tomorrow": 35.7, "extreme_heat": false, "utci_risk": "moderate"}, "Seattle": {"venue": "Lumen Field, Seattle", "temp_c": 15.0, "feels_like": 15.4, "humidity": 69, "wind": 2.8, "rain_prob": 1, "weather_code": 1, "max_tomorrow": 19.5, "extreme_heat": false, "utci_risk": "moderate"}, "Houston": {"venue": "NRG Stadium, Houston", "temp_c": 32.8, "feels_like": 35.3, "humidity": 55, "wind": 19.1, "rain_prob": 3, "weather_code": 1, "max_tomorrow": 38.2, "extreme_heat": false, "utci_risk": "moderate"}, "Kansas City": {"venue": "Arrowhead Stadium, Kansas City", "temp_c": 32.6, "feels_like": 34.4, "humidity": 57, "wind": 29.0, "rain_prob": 9, "weather_code": 95, "max_tomorrow": 33.9, "extreme_heat": false, "utci_risk": "moderate"}, "Philadelphia": {"venue": "Lincoln Financial Field, Philadelphia", "temp_c": 29.0, "feels_like": 32.7, "humidity": 69, "wind": 11.4, "rain_prob": 13, "weather_code": 3, "max_tomorrow": 39.5, "extreme_heat": false, "utci_risk": "moderate"}, "Boston": {"venue": "Gillette Stadium, Boston", "temp_c": 28.4, "feels_like": 28.1, "humidity": 49, "wind": 17.8, "rain_prob": 1, "weather_code": 0, "max_tomorrow": 34.2, "extreme_heat": false, "utci_risk": "moderate"}, "Vancouver": {"venue": "BC Place, Vancouver", "temp_c": 15.9, "feels_like": 15.1, "humidity": 63, "wind": 16.8, "rain_prob": 0, "weather_code": 0, "max_tomorrow": 19.1, "extreme_heat": false, "utci_risk": "moderate"}, "Toronto": {"venue": "BMO Field, Toronto", "temp_c": 28.5, "feels_like": 30.1, "humidity": 58, "wind": 20.8, "rain_prob": 0, "weather_code": 1, "max_tomorrow": 34.2, "extreme_heat": false, "utci_risk": "moderate"}, "Guadalajara": {"venue": "Estadio Akron, Guadalajara", "temp_c": 23.8, "feels_like": 26.7, "humidity": 66, "wind": 6.7, "rain_prob": 83, "weather_code": 51, "max_tomorrow": 29.5, "extreme_heat": false, "utci_risk": "moderate"}, "Mexico City": {"venue": "Estadio Azteca, Mexico City", "error": "unavailable"}, "Monterrey": {"venue": "Estadio BBVA, Monterrey", "temp_c": 32.7, "feels_like": 35.0, "humidity": 46, "wind": 18.4, "rain_prob": 3, "weather_code": 1, "max_tomorrow": 38.5, "extreme_heat": false, "utci_risk": "moderate"}}, "news": []};
@@ -1352,168 +1352,10 @@ function renderBetfair(){
 function setSBView(view){window._sbView=view;['Combined','Wc22','Wc18'].forEach(v=>{const b=document.getElementById('sbBtn'+v);if(b)b.className=v.toLowerCase()===view?'sim-btn':'sim-btn secondary';});renderSBRanking();}
 function renderSBRanking(){const view=window._sbView||'combined';const ds=view==='wc22'?(window.SB_WC22||{}):view==='wc18'?(window.SB_WC18||{}):(window.SB_COMBINED||{});const el=document.getElementById('sbRanking');if(!el)return;const sorted=Object.entries(ds).filter(([c])=>SCOUTS[c]?.rating).sort((a,b)=>b[1].xg_pg-a[1].xg_pg);const maxXG=sorted[0]?.[1]?.xg_pg||1;el.innerHTML=sorted.map(([code,s],i)=>{const t=SCOUTS[code]||{};const both=!!(window.SB_WC22||{})[code]&&!!(window.SB_WC18||{})[code];return`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="font-size:11px;color:var(--tx3);width:20px;text-align:right">${i+1}</span><span style="font-size:18px">${t.flag||'🏳'}</span><span style="font-size:12px;flex:1">${tn(code)}${both?'<span style="color:var(--ac);font-size:9px"> ★</span>':''}</span><div style="flex:2;background:var(--bd);border-radius:2px;height:5px;overflow:hidden"><div style="height:100%;width:${(s.xg_pg/maxXG*100).toFixed(0)}%;background:var(--bl);border-radius:2px"></div></div><span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;min-width:30px;text-align:right">${s.xg_pg}</span><span style="font-size:10px;color:var(--rd-tx);min-width:30px;text-align:right">-${s.xga_pg}</span><span style="font-size:10px;color:var(--tx3);min-width:22px">${s.matches}j</span></div>`;}).join('')||'<p style="color:var(--tx3);font-size:12px">Sem dados.</p>';}
 
-// Hook renders into showSec
-const _origRenders_extra={calendario:renderCalendario,betfair:renderBetfair};
-
 
 // ══════════════════════════════════════════════════════════════
-// CONFRONTO: TODAY'S FIXTURES + H2H INTEGRATION
-// ══════════════════════════════════════════════════════════════
-
-function renderTodayFixtures() {
-  const el = document.getElementById('todayFixtures');
-  if (!el) return;
-  const fixtures = window.WC_FIXTURES || [];
-  const today = new Date().toISOString().split('T')[0];
-  
-  // Also show next 2 days if today has no games
-  let targetDates = [today];
-  const futureDates = [...new Set(fixtures.filter(f => f.date >= today).map(f => f.date))].sort().slice(0, 3);
-  if (!fixtures.some(f => f.date === today)) targetDates = futureDates.slice(0, 2);
-  else targetDates = futureDates.slice(0, 3);
-
-  const todayGames = fixtures.filter(f => targetDates.includes(f.date));
-  if (!todayGames.length) { el.style.display = 'none'; return; }
-
-  el.innerHTML = `
-    <div style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rl);padding:.85rem 1rem">
-      <div style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem">
-        📅 Jogos da Copa — clique para analisar
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px">
-        ${todayGames.map(f => {
-          const ht = SCOUTS[f.home] || {flag:'🏳'};
-          const at = SCOUTS[f.away] || {flag:'🏳'};
-          const isToday = f.date === today;
-          const d = new Date(f.date + 'T12:00:00');
-          const dateLabel = isToday ? 'HOJE' : d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
-          const score = f.played ? `${f.score1}-${f.score2}` : f.time || '';
-          return `<button onclick="selectMatchup('${f.home}','${f.away}')" style="
-            background:${isToday?'var(--ac)':'var(--sf)'};
-            color:${isToday?'#fff':'var(--tx)'};
-            border:1px solid ${isToday?'var(--ac)':'var(--bd)'};
-            border-radius:var(--r);padding:5px 10px;cursor:pointer;
-            font-size:11px;font-family:inherit;
-            display:flex;align-items:center;gap:5px;transition:opacity .15s
-          " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-            <span style="font-size:13px">${ht.flag||'🏳'}</span>
-            <span style="font-weight:600">${tn(f.home)}</span>
-            <span style="font-size:10px;opacity:.7;margin:0 2px">${score||dateLabel}</span>
-            <span style="font-weight:600">${tn(f.away)}</span>
-            <span style="font-size:13px">${at.flag||'🏳'}</span>
-          </button>`;
-        }).join('')}
-      </div>
-    </div>`;
-}
-
-function selectMatchup(homeCode, awayCode) {
-  // Set the select dropdowns
-  const selH = document.getElementById('selHome');
-  const selA = document.getElementById('selAway');
-  if (!selH || !selA) return;
-  
-  // Find options by value
-  for (let opt of selH.options) { if (opt.value === homeCode) { selH.value = homeCode; break; } }
-  for (let opt of selA.options) { if (opt.value === awayCode) { selA.value = awayCode; break; } }
-  
-  // Trigger the matchup calculation
-  if (typeof calcProbs === 'function') calcProbs();
-  else if (typeof renderMatchup === 'function') renderMatchup();
-  
-  // Scroll to analysis
-  document.getElementById('matchup')?.scrollIntoView({behavior:'smooth', block:'start'});
-  
-  // Show H2H
-  showH2HConfronto(homeCode, awayCode);
-}
-
-function showH2HConfronto(h, a) {
-  const panel = document.getElementById('h2hConfrontoPanel');
-  const titleEl = document.getElementById('h2hConfrontoTitle');
-  const bodyEl = document.getElementById('h2hConfrontoBody');
-  if (!panel || !bodyEl) return;
-
-  const ht = SCOUTS[h] || {flag:'🏳'};
-  const at = SCOUTS[a] || {flag:'🏳'};
-  if (titleEl) titleEl.innerHTML = `${ht.flag||''} ${tn(h)} vs ${at.flag||''} ${tn(a)} — Últimos confrontos diretos`;
-
-  const key = [h, a].sort().join('_');
-  const matches = (window.H2H_DATA || {})[key] || [];
-
-  if (!matches.length) {
-    bodyEl.innerHTML = '<p style="color:var(--tx3);font-size:12px">Sem confrontos diretos encontrados (2019–2026).</p>';
-    panel.style.display = 'block';
-    return;
-  }
-
-  let w1 = 0, w2 = 0, dr = 0;
-  const rows = matches.map(m => {
-    const isH = m.home === h;
-    const s1 = isH ? m.score1 : m.score2, s2 = isH ? m.score2 : m.score1;
-    if (s1 > s2) w1++; else if (s2 > s1) w2++; else dr++;
-    const homeT = SCOUTS[m.home] || {flag:'🏳'};
-    const awayT = SCOUTS[m.away] || {flag:'🏳'};
-    const res = s1>s2 ? 'win' : s2>s1 ? 'loss' : 'draw';
-    const resColor = res==='win'?'var(--gn-tx)':res==='loss'?'var(--rd-tx)':'var(--tx2)';
-    const resLabel = res==='win'?'V':res==='loss'?'D':'E';
-    const d = new Date(m.date + 'T12:00:00');
-    const isWC = m.tournament.toLowerCase().includes('world cup');
-    return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)">
-      <span style="color:var(--tx3);font-size:11px;min-width:65px">${d.toLocaleDateString('pt-BR',{month:'short',year:'numeric'})}</span>
-      <span style="width:22px;height:22px;border-radius:50%;background:${res==='win'?'var(--gn-bg)':res==='loss'?'rgba(255,80,80,.12)':'var(--sf2)'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:${resColor};flex-shrink:0">${resLabel}</span>
-      <span style="font-size:18px">${homeT.flag||'🏳'}</span>
-      <span style="font-size:12px;font-weight:${m.home===h?'700':'400'}">${tn(m.home)||m.home}</span>
-      <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;background:var(--sf2);padding:1px 8px;border-radius:6px;flex-shrink:0">${m.score1}–${m.score2}</span>
-      <span style="font-size:12px;font-weight:${m.away===h?'700':'400'}">${tn(m.away)||m.away}</span>
-      <span style="font-size:18px">${awayT.flag||'🏳'}</span>
-      <span style="font-size:10px;color:${isWC?'var(--ac)':'var(--tx3)'};margin-left:auto;flex-shrink:0;max-width:120px;text-align:right;line-height:1.3">${m.tournament}${m.neutral?' · campo neutro':''}</span>
-    </div>`;
-  }).join('');
-
-  bodyEl.innerHTML = `
-    <div style="display:flex;gap:16px;margin-bottom:.75rem;font-size:13px;flex-wrap:wrap">
-      <span>${ht.flag||''} <strong style="color:var(--gn-tx)">${w1}V</strong> ${tn(h)}</span>
-      <span><strong>${dr} E</strong></span>
-      <span>${at.flag||''} <strong style="color:var(--gn-tx)">${w2}V</strong> ${tn(a)}</span>
-      <span style="color:var(--tx3);font-size:11px">${matches.length} jogos · fonte: martj42 (CC0)</span>
-    </div>
-    ${rows}`;
-  panel.style.display = 'block';
-}
-
-// Hook H2H into team selection changes
-(function hookConfronto() {
-  function tryHook() {
-    const selH = document.getElementById('selHome');
-    const selA = document.getElementById('selAway');
-    if (!selH || !selA) { setTimeout(tryHook, 500); return; }
-    
-    function onTeamChange() {
-      const h = selH.value, a = selA.value;
-      if (h && a && h !== a) showH2HConfronto(h, a);
-      else document.getElementById('h2hConfrontoPanel').style.display = 'none';
-    }
-    selH.addEventListener('change', onTeamChange);
-    selA.addEventListener('change', onTeamChange);
-  }
-  setTimeout(tryHook, 800);
-})();
-
-// Init today fixtures when confronto tab opens
-const _origShowSec_cal = showSec;
-function showSec(id) {
-  _origShowSec_cal(id);
-  if (id === 'confronto') renderTodayFixtures();
-}
-
-// Also render on page load since confronto is default
-setTimeout(renderTodayFixtures, 600);
-// ══════════════════════════════════════════════════════════════
-
-
-// ══════════════════════════════════════════════════════════════
-// CONFRONTO INTEGRADO: calendário + H2H + jogos do dia
+// CONFRONTO: calendário + H2H + jogos do dia
+// v3 — single clean definition, no wrappers
 // ══════════════════════════════════════════════════════════════
 
 var _calOpen = false;
@@ -1522,13 +1364,15 @@ function toggleCalendario() {
   _calOpen = !_calOpen;
   const el = document.getElementById('calConfrontoList');
   const btn = document.getElementById('btnToggleCal');
+  if (!el) return;
   if (_calOpen) {
     el.style.display = 'block';
-    btn.textContent = '▲ Fechar';
+    if (btn) btn.textContent = '▲ Fechar calendário';
+    initCalTeamSelect();
     renderCalConfronto();
   } else {
     el.style.display = 'none';
-    btn.textContent = '▼ Ver todos';
+    if (btn) btn.textContent = '▼ Ver calendário completo';
   }
 }
 
@@ -1540,48 +1384,59 @@ function initCalTeamSelect() {
     .sort((a,b) => (a[1].name||a[0]).localeCompare(b[1].name||b[0]));
   teams.forEach(([k,t]) => {
     const o = document.createElement('option');
-    o.value = k; o.textContent = (t.flag||'') + ' ' + (t.name||k);
+    o.value = k;
+    o.textContent = (t.flag||'') + ' ' + (t.name||k);
     sel.appendChild(o);
   });
 }
 
 function renderCalConfronto() {
   const el = document.getElementById('calConfrontoList');
-  if (!el || el.style.display === 'none') return;
+  if (!el) return;
   const gf = (document.getElementById('calGroup')||{}).value || '';
   const tf = (document.getElementById('calTeamFilter')||{}).value || '';
   let fixtures = window.WC_FIXTURES || [];
+  if (!fixtures.length) {
+    el.innerHTML = '<p style="color:var(--tx3);font-size:12px;padding:.5rem">⏳ Carregando calendário...</p>';
+    return;
+  }
   if (gf === 'KO') fixtures = fixtures.filter(f => !f.group);
   else if (gf) fixtures = fixtures.filter(f => f.group === gf);
   if (tf) fixtures = fixtures.filter(f => f.home === tf || f.away === tf);
 
   const byDate = {};
-  fixtures.forEach(f => { if (!byDate[f.date]) byDate[f.date] = []; byDate[f.date].push(f); });
-  const today = new Date().toISOString().split('T')[0];
+  fixtures.forEach(f => {
+    if (!byDate[f.date]) byDate[f.date] = [];
+    byDate[f.date].push(f);
+  });
 
-  let html = '';
+  const today = new Date().toISOString().split('T')[0];
+  let out = '';
   Object.keys(byDate).sort().forEach(date => {
     const d = new Date(date + 'T12:00:00');
     const ds = d.toLocaleDateString('pt-BR', {weekday:'short', day:'2-digit', month:'short'});
     const isToday = date === today;
-    html += `<div style="font-size:10px;font-weight:700;color:${isToday?'var(--ac)':'var(--tx3)'};text-transform:uppercase;letter-spacing:.05em;padding:6px 0 3px;border-top:1px solid var(--bd);margin-top:3px">${ds}${isToday?' · HOJE':''}</div>`;
+    const isPast = date < today;
+    out += `<div style="font-size:10px;font-weight:700;color:${isToday?'var(--ac)':isPast?'var(--tx3)':'var(--tx2)'};text-transform:uppercase;letter-spacing:.05em;padding:6px 0 2px;border-top:1px solid var(--bd);margin-top:2px">${ds}${isToday?' · HOJE':''}</div>`;
     byDate[date].forEach(f => {
       const ht = SCOUTS[f.home] || {flag:'🏳'};
       const at = SCOUTS[f.away] || {flag:'🏳'};
       const grp = f.group ? `Gr.${f.group}` : (f.round||'KO');
-      const score = f.played ? `<strong style="color:var(--ac)">${f.score1}–${f.score2}</strong>` : (f.time||'');
-      html += `<div onclick="selectMatchup('${f.home}','${f.away}')" style="display:flex;align-items:center;gap:7px;padding:4px 2px;cursor:pointer;border-radius:4px;font-size:12px" onmouseover="this.style.background='var(--sf)'" onmouseout="this.style.background='transparent'">
-        <span style="font-size:10px;color:var(--tx3);min-width:30px">${grp}</span>
+      const score = f.played
+        ? `<strong style="color:var(--ac);font-family:'Space Grotesk',sans-serif">${f.score1}–${f.score2}</strong>`
+        : `<span style="color:var(--tx3)">${f.time||'--:--'}</span>`;
+      out += `<div onclick="selectMatchup('${f.home}','${f.away}')" style="display:flex;align-items:center;gap:7px;padding:5px 3px;cursor:pointer;border-radius:5px" onmouseover="this.style.background='var(--sf)'" onmouseout="this.style.background='transparent'">
+        <span style="font-size:10px;color:var(--tx3);min-width:32px">${grp}</span>
         <span style="font-size:15px">${ht.flag||'🏳'}</span>
-        <span style="flex:1;font-weight:600">${tn(f.home)}</span>
-        <span style="font-size:12px;min-width:36px;text-align:center">${score}</span>
-        <span style="flex:1;text-align:right;font-weight:600">${tn(f.away)}</span>
+        <span style="flex:1;font-size:12px;font-weight:600">${tn(f.home)}</span>
+        <span style="font-size:13px;min-width:40px;text-align:center">${score}</span>
+        <span style="flex:1;font-size:12px;font-weight:600;text-align:right">${tn(f.away)}</span>
         <span style="font-size:15px">${at.flag||'🏳'}</span>
-        <span style="font-size:10px;color:var(--tx3);min-width:55px;text-align:right">${f.city||''}</span>
+        <span style="font-size:10px;color:var(--tx3);min-width:60px;text-align:right;display:none" class="city-col">${f.city||''}</span>
       </div>`;
     });
   });
-  el.innerHTML = html || '<p style="color:var(--tx3);font-size:12px;padding:.5rem">Nenhum jogo encontrado.</p>';
+  el.innerHTML = out || '<p style="color:var(--tx3);font-size:12px;padding:.5rem">Nenhum jogo encontrado.</p>';
 }
 
 function renderTodayFixtures() {
@@ -1589,25 +1444,25 @@ function renderTodayFixtures() {
   if (!el) return;
   const fixtures = window.WC_FIXTURES || [];
   const today = new Date().toISOString().split('T')[0];
-  const futureDates = [...new Set(fixtures.filter(f => f.date >= today).map(f => f.date))].sort().slice(0, 3);
-  const targetDates = fixtures.some(f => f.date === today) ? futureDates.slice(0, 3) : futureDates.slice(0, 2);
-  const todayGames = fixtures.filter(f => targetDates.includes(f.date));
-  if (!todayGames.length) { el.style.display = 'none'; return; }
+  const allDates = [...new Set(fixtures.filter(f => f.date >= today).map(f => f.date))].sort();
+  const targets = allDates.slice(0, fixtures.some(f => f.date === today) ? 3 : 2);
+  const games = fixtures.filter(f => targets.includes(f.date));
+  if (!games.length) { el.innerHTML = ''; return; }
 
-  el.innerHTML = `<div style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rl);padding:.75rem 1rem">
-    <div style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem">⚽ Clique para analisar o confronto</div>
+  el.innerHTML = `<div style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rl);padding:.75rem 1rem;margin-bottom:.5rem">
+    <div style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem">⚽ Jogos · clique para analisar</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px">
-      ${todayGames.map(f => {
-        const ht = SCOUTS[f.home] || {flag:'🏳'};
-        const at = SCOUTS[f.away] || {flag:'🏳'};
+      ${games.map(f => {
+        const ht = SCOUTS[f.home]||{flag:'🏳'};
+        const at = SCOUTS[f.away]||{flag:'🏳'};
         const isToday = f.date === today;
-        const d = new Date(f.date + 'T12:00:00');
-        const dateLabel = isToday ? '' : d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}) + ' · ';
-        const score = f.played ? f.score1+'-'+f.score2 : (f.time||'');
-        return `<button onclick="selectMatchup('${f.home}','${f.away}')" style="background:${isToday?'var(--ac)':'var(--sf)'};color:${isToday?'#fff':'var(--tx)'};border:1px solid ${isToday?'var(--ac)':'var(--bd)'};border-radius:var(--r);padding:5px 11px;cursor:pointer;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:5px;transition:opacity .15s" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+        const dd = new Date(f.date+'T12:00:00');
+        const lbl = isToday ? '' : dd.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' · ';
+        const sc = f.played ? f.score1+'-'+f.score2 : (f.time||'');
+        return `<button onclick="selectMatchup('${f.home}','${f.away}')" style="background:${isToday?'var(--ac)':'var(--sf)'};color:${isToday?'#fff':'var(--tx)'};border:1px solid ${isToday?'var(--ac)':'var(--bd)'};border-radius:var(--r);padding:5px 11px;cursor:pointer;font-size:12px;font-family:inherit;display:inline-flex;align-items:center;gap:5px">
           <span style="font-size:14px">${ht.flag||'🏳'}</span>
           <span style="font-weight:600">${tn(f.home)}</span>
-          <span style="font-size:11px;opacity:.75;margin:0 1px">${dateLabel}${score}</span>
+          <span style="opacity:.7;font-size:11px;margin:0 2px">${lbl}${sc}</span>
           <span style="font-weight:600">${tn(f.away)}</span>
           <span style="font-size:14px">${at.flag||'🏳'}</span>
         </button>`;
@@ -1616,97 +1471,87 @@ function renderTodayFixtures() {
   </div>`;
 }
 
-function selectMatchup(homeCode, awayCode) {
+function selectMatchup(h, a) {
   const selH = document.getElementById('selHome');
   const selA = document.getElementById('selAway');
   if (!selH || !selA) return;
-  selH.value = homeCode;
-  selA.value = awayCode;
+  selH.value = h;
+  selA.value = a;
   if (typeof renderMatchup === 'function') renderMatchup();
   setTimeout(() => {
-    document.getElementById('matchup')?.scrollIntoView({behavior:'smooth', block:'start'});
-    showH2HConfronto(homeCode, awayCode);
-  }, 150);
-  // Close calendar if open
+    document.getElementById('matchup')?.scrollIntoView({behavior:'smooth',block:'start'});
+    showH2HConfronto(h, a);
+  }, 200);
   if (_calOpen) toggleCalendario();
 }
 
 function showH2HConfronto(h, a) {
   const panel = document.getElementById('h2hConfrontoPanel');
   const titleEl = document.getElementById('h2hConfrontoTitle');
-  const bodyEl = document.getElementById('h2hConfrontoBody');
-  if (!panel || !bodyEl) return;
-  const ht = SCOUTS[h] || {flag:'🏳'};
-  const at = SCOUTS[a] || {flag:'🏳'};
+  const bodyEl  = document.getElementById('h2hConfrontoBody');
+  if (!panel) return;
+  const ht = SCOUTS[h]||{flag:'🏳'};
+  const at = SCOUTS[a]||{flag:'🏳'};
   if (titleEl) titleEl.innerHTML = `${ht.flag||''} ${tn(h)} vs ${at.flag||''} ${tn(a)} — Histórico direto`;
-  const key = [h, a].sort().join('_');
-  const matches = (window.H2H_DATA || {})[key] || [];
+  const key = [h,a].sort().join('_');
+  const matches = (window.H2H_DATA||{})[key]||[];
+  if (!bodyEl) { panel.style.display='block'; return; }
   if (!matches.length) {
-    bodyEl.innerHTML = '<p style="color:var(--tx3);font-size:12px">Sem confrontos diretos registados (2019–2026).</p>';
-    panel.style.display = 'block'; return;
+    bodyEl.innerHTML = '<p style="color:var(--tx3);font-size:12px;margin:0">Sem confrontos diretos encontrados (2019–2026).</p>';
+    panel.style.display = 'block';
+    return;
   }
   let w1=0, w2=0, dr=0;
   const rows = matches.map(m => {
-    const isH = m.home === h;
-    const s1 = isH ? m.score1 : m.score2, s2 = isH ? m.score2 : m.score1;
-    if (s1>s2) w1++; else if (s2>s1) w2++; else dr++;
-    const homeT = SCOUTS[m.home]||{flag:'🏳'};
-    const awayT = SCOUTS[m.away]||{flag:'🏳'};
-    const res = s1>s2?'win':s2>s1?'loss':'draw';
-    const col = res==='win'?'var(--gn-bg)':res==='loss'?'rgba(255,80,80,.12)':'var(--sf)';
-    const tcol = res==='win'?'var(--gn-tx)':res==='loss'?'#e05555':'var(--tx2)';
-    const lbl = res==='win'?'V':res==='loss'?'D':'E';
-    const dd = new Date(m.date+'T12:00:00');
-    const isWC = m.tournament.toLowerCase().includes('world cup')||m.tournament.toLowerCase().includes('mundial');
+    const isH = m.home===h;
+    const s1=isH?m.score1:m.score2, s2=isH?m.score2:m.score1;
+    if(s1>s2) w1++; else if(s2>s1) w2++; else dr++;
+    const hT=SCOUTS[m.home]||{flag:'🏳'};
+    const aT=SCOUTS[m.away]||{flag:'🏳'};
+    const res=s1>s2?'V':s2>s1?'D':'E';
+    const col=res==='V'?'var(--gn-bg)':res==='D'?'rgba(220,60,60,.12)':'var(--sf)';
+    const tc=res==='V'?'var(--gn-tx)':res==='D'?'#e05555':'var(--tx2)';
+    const dd=new Date(m.date+'T12:00:00');
+    const wc=m.tournament.toLowerCase().includes('world cup')||m.tournament.includes('Mundial');
     return `<div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:12px">
-      <span style="color:var(--tx3);min-width:60px;font-size:11px">${dd.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}</span>
-      <span style="width:20px;height:20px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:${tcol};flex-shrink:0">${lbl}</span>
-      <span style="font-size:15px">${homeT.flag||'🏳'}</span>
-      <span style="flex:1;font-weight:${m.home===h?700:400}">${tn(m.home)||m.home}</span>
+      <span style="color:var(--tx3);min-width:58px;font-size:11px">${dd.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}</span>
+      <span style="width:20px;height:20px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:${tc};flex-shrink:0">${res}</span>
+      <span style="font-size:15px">${hT.flag||'🏳'}</span>
+      <span style="flex:1;font-weight:${m.home===h?700:400}">${tn(m.home)}</span>
       <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;background:var(--sf);padding:1px 8px;border-radius:6px;flex-shrink:0">${m.score1}–${m.score2}</span>
-      <span style="flex:1;text-align:right;font-weight:${m.away===h?700:400}">${tn(m.away)||m.away}</span>
-      <span style="font-size:15px">${awayT.flag||'🏳'}</span>
-      <span style="font-size:10px;color:${isWC?'var(--ac)':'var(--tx3)'};max-width:110px;text-align:right;line-height:1.3;flex-shrink:0">${m.tournament}${m.neutral?' ·neutro':''}</span>
+      <span style="flex:1;text-align:right;font-weight:${m.away===h?700:400}">${tn(m.away)}</span>
+      <span style="font-size:15px">${aT.flag||'🏳'}</span>
+      <span style="font-size:10px;color:${wc?'var(--ac)':'var(--tx3)'};max-width:100px;text-align:right;flex-shrink:0;line-height:1.3">${m.tournament.substring(0,30)}${m.neutral?' ·N':''}</span>
     </div>`;
   }).join('');
-  bodyEl.innerHTML = `<div style="display:flex;gap:18px;margin-bottom:.75rem;font-size:13px;flex-wrap:wrap;align-items:center">
+  bodyEl.innerHTML = `<div style="display:flex;gap:16px;margin-bottom:.7rem;font-size:13px;flex-wrap:wrap">
     <span>${ht.flag||''} <strong style="color:var(--gn-tx)">${w1}V</strong> ${tn(h)}</span>
     <span><strong>${dr}E</strong></span>
     <span>${at.flag||''} <strong style="color:var(--gn-tx)">${w2}V</strong> ${tn(a)}</span>
-    <span style="color:var(--tx3);font-size:11px;margin-left:auto">${matches.length} jogos · martj42 CC0</span>
+    <span style="color:var(--tx3);font-size:11px;margin-left:auto">${matches.length} jogos</span>
   </div>${rows}`;
   panel.style.display = 'block';
 }
 
-// Hook seleção de times → H2H automático
-(function() {
-  function tryHook() {
+// Hook H2H into selHome/selAway changes (once DOM is ready)
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
     const selH = document.getElementById('selHome');
     const selA = document.getElementById('selAway');
-    if (!selH || !selA) { setTimeout(tryHook, 600); return; }
-    function onChange() {
-      const h=selH.value, a=selA.value;
-      if (h && a && h!==a) showH2HConfronto(h, a);
+    if (selH) selH.addEventListener('change', function() {
+      const h=selH.value, a=(document.getElementById('selAway')||{}).value;
+      if(h && a && h!==a) showH2HConfronto(h,a);
       else { const p=document.getElementById('h2hConfrontoPanel'); if(p) p.style.display='none'; }
-    }
-    selH.addEventListener('change', onChange);
-    selA.addEventListener('change', onChange);
-  }
-  setTimeout(tryHook, 900);
-})();
-
-// Init on page load
-setTimeout(function() {
-  initCalTeamSelect();
-  renderTodayFixtures();
-}, 700);
-
-// Re-init when confronto tab opens
-const _origShowSecCal = showSec;
-function showSec(id) {
-  _origShowSecCal(id);
-  if (id === 'confronto') { renderTodayFixtures(); initCalTeamSelect(); }
-}
+    });
+    if (selA) selA.addEventListener('change', function() {
+      const h=(document.getElementById('selHome')||{}).value, a=selA.value;
+      if(h && a && h!==a) showH2HConfronto(h,a);
+      else { const p=document.getElementById('h2hConfrontoPanel'); if(p) p.style.display='none'; }
+    });
+    initCalTeamSelect();
+    renderTodayFixtures();
+  }, 1000);
+});
 // ══════════════════════════════════════════════════════════════
 
 </script>
