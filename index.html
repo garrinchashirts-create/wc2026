@@ -697,13 +697,14 @@ function getSW(code){
 }
 
 // ─── NAV ─────────────────────────────────────────────────
-function showSec(id){
+function _baseShowSec(id,btn){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.currentTarget.classList.add('active');
+  if(btn) btn.classList.add('active');
   const renders={dashboard:renderDashboard,grupos:renderGrupo,scouts:renderScouts,value:renderValue,tendencias:renderTendencias};
   if(renders[id])renders[id]();
+  if(id==='confronto'&&typeof renderTodayFixtures==='function'){renderTodayFixtures();initCalTeamSelect();}
 }
 
 function setLang(l){
@@ -1304,9 +1305,12 @@ function renderSBRanking() {
 // Auto-render SB ranking when dashboard tab opens
 var _origShowSecDash = showSec;
 function showSec(id,btn) {
-  _origShowSecDash(id,btn);
+  _baseShowSec(id,btn);
   if (id === 'dashboard' && typeof renderSBRanking === 'function') {
     setTimeout(function() { renderSBRanking(); }, 100);
+  }
+  if (id === 'betfair' && typeof renderBetfair === 'function') {
+    setTimeout(function() { renderBetfair(); }, 50);
   }
 }
 
