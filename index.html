@@ -1592,128 +1592,224 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <script>
 
-// ── RECKONING: Model vs Real ──────────────────────────────────────────────
-var _reckData = null;
+// ── RECKONING: Model vs Real (live fetch from openfootball + martj42) ──────
+var RECK_NAME_MAP = {
+  'Mexico':'MEX','South Africa':'AFS','South Korea':'COR','Czech Republic':'TCH',
+  'Canada':'CAN','Bosnia & Herzegovina':'BOS','Bosnia and Herzegovina':'BOS',
+  'USA':'EUA','United States':'EUA','Paraguay':'PAR','Qatar':'CAT',
+  'Switzerland':'SUI','Brazil':'BRA','Morocco':'MAR','Haiti':'HAI','Scotland':'ESC',
+  'Australia':'AUS','Turkey':'TUR','Germany':'ALE','Curaçao':'CUR','Curazao':'CUR',
+  'Ivory Coast':'CDM',"Côte d'Ivoire":'CDM','Ecuador':'EQU','Spain':'ESP',
+  'Argentina':'ARG','Algeria':'AGL','France':'FRA','Senegal':'SEN','Iraq':'IRQ',
+  'Norway':'NOR','England':'ING','Croatia':'CRO','Ghana':'GAN','Panama':'PAN',
+  'Portugal':'POR','DR Congo':'RDC','D.R. Congo':'RDC','Uzbekistan':'UZB',
+  'Colombia':'COL','Netherlands':'HOL','Japan':'JAP','Sweden':'SUE','Tunisia':'TUN',
+  'Belgium':'BEL','Egypt':'EGI','Iran':'IRA','New Zealand':'NZE','Uruguay':'URU',
+  'Cape Verde':'CAB','Saudi Arabia':'ARS','Austria':'AUT','Jordan':'JOR',
+  'New Caledonia':'NCL','Bolivia':'BOL','Jamaica':'JAM','Serbia':'SRB',
+  'South Korea':'COR','Czechia':'TCH','Bosnia and Herzegovina':'BOS',
+  'United States':'EUA'
+};
+var _reckCache = null;
+var _reckLoading = false;
+
+function reckCode(name) {
+  return RECK_NAME_MAP[name] || name.substring(0,3).toUpperCase();
+}
+
+// ELO ratings + Dixon-Coles already in SIM engine — reuse them
+function reckMatchProb(codeA, codeB, neutral) {
+  var rA = getElo(codeA), rB = getElo(codeB);
+  var hb = neutral ? 0 : ((SIM_HOME_BONUS[codeA]||0) - (SIM_HOME_BONUS[codeB]||0));
+  var lam = Math.max(0.3, Math.min(3.5, 1.35 + ((rA+hb)-rB)/400));
+  var mu  = Math.max(0.3, Math.min(3.5, 1.35 + (rB-(rA+hb/2))/400));
+  var wA=0,dr=0,wB=0;
+  function pmf(k,l){ if(l<=0)return k===0?1:0; var p=Math.exp(-l); for(var i=1;i<=k;i++)p*=l/i; return p; }
+  function tau(a,b){ if(a===0&&b===0)return 1-lam*mu*(-0.13); if(a===0&&b===1)return 1+lam*(-0.13); if(a===1&&b===0)return 1+mu*(-0.13); if(a===1&&b===1)return 1-(-0.13); return 1; }
+  for(var a=0;a<=8;a++){var pA=pmf(a,lam);for(var b=0;b<=8;b++){var p=pA*pmf(b,mu)*tau(a,b);if(a>b)wA+=p;else if(a<b)wB+=p;else dr+=p;}}
+  var tot=wA+dr+wB;
+  return {winA:wA/tot,draw:dr/tot,winB:wB/tot,xgA:Math.round(lam*100)/100,xgB:Math.round(mu*100)/100,eloA:rA,eloB:rB};
+}
 
 async function loadReckoning() {
-  if (_reckData) { renderReckoning(_reckData); return; }
+  if (_reckLoading) return;
+  if (_reckCache) { renderReckoning(_reckCache); return; }
+  _reckLoading = true;
+  document.getElementById('reckContent').innerHTML =
+    '<p style="color:var(--tx3)">⏳ Buscando resultados ao vivo...</p>';
   try {
-    var r = await fetch('./data/wc2026_tracker.json?t=' + Date.now());
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    _reckData = await r.json();
-    renderReckoning(_reckData);
+    // Fetch openfootball (scores + schedule)
+    var r1 = await fetch('https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json?t='+Date.now());
+    if (!r1.ok) throw new Error('openfootball: HTTP '+r1.status);
+    var ofData = await r1.json();
+    var ofMatches = ofData.matches || [];
+
+    // Fetch martj42 results CSV for confirmed scores
+    var r2 = await fetch('https://raw.githubusercontent.com/martj42/international_results/master/results.csv?t='+Date.now());
+    var csvText = r2.ok ? await r2.text() : '';
+
+    // Parse martj42 CSV
+    var m42map = {};
+    if (csvText) {
+      var lines = csvText.split('\n');
+      var header = lines[0].split(',');
+      var iDate=0,iHome=1,iAway=2,iHS=3,iAS=4,iTour=5,iCity=6,iNeu=8;
+      for (var li=1;li<lines.length;li++) {
+        var row = lines[li].split(',');
+        if (!row[iTour]) continue;
+        if (row[iTour].indexOf('FIFA World Cup')>=0 && row[iTour].indexOf('qualification')<0) {
+          var hs = row[iHS]==='NA'||!row[iHS] ? null : parseInt(row[iHS]);
+          var as = row[iAS]==='NA'||!row[iAS] ? null : parseInt(row[iAS]);
+          var hCode = reckCode(row[iHome]);
+          var aCode = reckCode(row[iAway]);
+          m42map[row[iDate]+'_'+hCode+'_'+aCode] = {score1:hs,score2:as,city:row[iCity]||'',neutral:row[iNeu]==='TRUE'};
+        }
+      }
+    }
+
+    var today = new Date().toISOString().split('T')[0];
+    var matches = [];
+    var correct=0, total=0, sumRps=0;
+
+    ofMatches.forEach(function(m) {
+      var cA = reckCode(m.team1), cB = reckCode(m.team2);
+      var pred = reckMatchProb(cA, cB, true);
+      var ft = m.score && m.score.ft;
+      var key = m.date+'_'+cA+'_'+cB;
+      var m42 = m42map[key] || {};
+      var g1 = ft ? ft[0] : (m42.score1 != null ? m42.score1 : null);
+      var g2 = ft ? ft[1] : (m42.score2 != null ? m42.score2 : null);
+      var played = g1 !== null && g2 !== null;
+      var entry = {
+        date:m.date, time:m.time||'', group:m.group||'', round:m.round||'',
+        home:cA, away:cB, home_name:m.team1, away_name:m.team2,
+        city:m.ground||m42.city||'', played:played, score1:g1, score2:g2, model:pred
+      };
+      if (played) {
+        var actual = g1>g2?'A':g2>g1?'B':'D';
+        var predW = pred.winA>pred.draw&&pred.winA>pred.winB?'A':pred.winB>pred.draw&&pred.winB>pred.winA?'B':'D';
+        var ok = actual===predW;
+        if(ok) correct++;
+        total++;
+        var p=[pred.winA,pred.draw,pred.winB], o=[actual==='A'?1:0,actual==='D'?1:0,actual==='B'?1:0];
+        var rps=0; for(var i=0;i<2;i++) rps+= Math.pow((p[0]+p[1]*(i>0))-(o[0]+o[1]*(i>0)),2); rps/=2;
+        entry.actual=actual; entry.model_correct=ok; entry.rps=Math.round(rps*10000)/10000;
+        sumRps+=rps;
+      }
+      matches.push(entry);
+    });
+
+    matches.sort(function(a,b){return a.date.localeCompare(b.date);});
+    _reckCache = {
+      summary:{played:total,model_correct:correct,accuracy:total?Math.round(correct/total*1000)/10:0,avg_rps:total?Math.round(sumRps/total*10000)/10000:0,coin_flip_rps:0.245},
+      matches:matches,
+      fetched_at: new Date().toISOString()
+    };
+    renderReckoning(_reckCache);
   } catch(e) {
     document.getElementById('reckContent').innerHTML =
-      '<p style="color:var(--rd-tx)">Erro ao carregar dados: ' + e.message + '</p>';
+      '<p style="color:var(--rd-tx)">❌ Erro: '+e.message+'</p><p style="font-size:11px;color:var(--tx3)">Verifique a consola (F12) para detalhes.</p>';
   }
+  _reckLoading = false;
 }
 
 function renderReckoning(data) {
   var sum = data.summary || {};
   var matches = data.matches || [];
-  var played = matches.filter(function(m){ return m.played; });
-  var upcoming = matches.filter(function(m){ return !m.played; });
+  var played  = matches.filter(function(m){ return m.played; });
+  var upcoming = matches.filter(function(m){ return !m.played && m.date >= new Date().toISOString().split('T')[0]; });
 
-  // Summary pills
-  var correct = sum.model_correct || 0;
-  var total = sum.played || 0;
-  var acc = total ? (correct/total*100).toFixed(0) : '—';
-  var rps = sum.avg_rps ? sum.avg_rps.toFixed(3) : '—';
-  var coinRps = sum.coin_flip_rps || 0.245;
-  var rpsBetter = sum.avg_rps && sum.avg_rps < coinRps;
+  var acc  = sum.played ? sum.accuracy+'%' : '—';
+  var rpsBetter = sum.avg_rps && sum.avg_rps < 0.245;
+  var rpsColor  = rpsBetter ? 'var(--gn-bg)' : 'var(--am-bg)';
+  var rpsTColor = rpsBetter ? 'var(--gn-tx)' : 'var(--am-tx)';
+  var rpsLbl    = sum.avg_rps ? sum.avg_rps.toFixed(3) : '—';
+  var fetchedAt = data.fetched_at ? new Date(data.fetched_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '';
 
   document.getElementById('reckSummary').innerHTML =
-    '<div class="vpill" style="background:var(--bl-bg);color:var(--bl-tx)">' + acc + '% acerto (' + correct + '/' + total + ')</div>' +
-    '<div class="vpill" style="background:' + (rpsBetter?'var(--gn-bg)':'var(--am-bg)') + ';color:' + (rpsBetter?'var(--gn-tx)':'var(--am-tx)') + '">RPS ' + rps + ' (coin: 0.245)</div>' +
-    '<div class="vpill" style="background:var(--sf2);color:var(--tx3)">' + upcoming.length + ' jogos restantes</div>';
+    '<div class="vpill" style="background:var(--bl-bg);color:var(--bl-tx)">'+acc+' acerto ('+sum.model_correct+'/'+sum.played+')</div>'+
+    '<div class="vpill" style="background:'+rpsColor+';color:'+rpsTColor+'">RPS '+rpsLbl+' · coin 0.245</div>'+
+    '<div class="vpill" style="background:var(--sf2);color:var(--tx3)">'+upcoming.length+' restantes</div>'+
+    (fetchedAt?'<div class="vpill" style="background:var(--sf2);color:var(--tx3)">⏱ '+fetchedAt+'</div>':'');
 
   var html = '';
 
-  // Played matches
+  // ── Played ──
   if (played.length) {
-    html += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">Jogados (' + played.length + ')</div>';
+    html += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">Jogados ('+played.length+')</div>';
     html += '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem">';
-    played.forEach(function(m) {
-      var hT = SCOUTS[m.home] || {flag:'🏳', name:m.home_name||m.home};
-      var aT = SCOUTS[m.away] || {flag:'🏳', name:m.away_name||m.away};
-      var pred = m.model || {};
-      var winProb = pred.winA || 0;
-      var drawProb = pred.draw || 0;
-      var loseProb = pred.winB || 0;
-      var actual = m.actual; // 'A', 'D', 'B'
-      var correct = m.model_correct;
-      var border = correct ? 'var(--gn)' : 'var(--rd-tx)';
-      var icon = correct ? '✅' : '❌';
-      // Prob of actual outcome
-      var actualProb = actual==='A' ? winProb : actual==='D' ? drawProb : loseProb;
-
-      html += '<div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.75rem 1rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--sh)">';
-      html += '<span style="font-size:20px">' + icon + '</span>';
-      html += '<div style="flex:1;min-width:200px">';
-      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">';
-      html += '<span style="font-size:16px">' + (hT.flag||'') + '</span>';
-      html += '<span style="font-size:13px;font-weight:700">' + (hT.name||m.home_name) + '</span>';
-      html += '<span style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:700;background:var(--sf2);padding:1px 10px;border-radius:6px;border:1px solid ' + border + '">' + m.score1 + '–' + m.score2 + '</span>';
-      html += '<span style="font-size:13px;font-weight:700">' + (aT.name||m.away_name) + '</span>';
-      html += '<span style="font-size:16px">' + (aT.flag||'') + '</span>';
-      html += '</div>';
-      html += '<div style="font-size:11px;color:var(--tx3)">' + m.date + ' · ' + (m.group||m.round) + (m.city?' · '+m.city:'') + '</div>';
-      html += '</div>';
-      // Model probs bar
-      html += '<div style="min-width:220px">';
-      html += '<div style="display:flex;gap:2px;height:6px;border-radius:3px;overflow:hidden;margin-bottom:4px">';
-      html += '<div style="width:' + (winProb*100).toFixed(0) + '%;background:' + (actual==='A'?'var(--gn)':'var(--bl)') + '"></div>';
-      html += '<div style="width:' + (drawProb*100).toFixed(0) + '%;background:' + (actual==='D'?'var(--gn)':'var(--am)') + '"></div>';
-      html += '<div style="width:' + (loseProb*100).toFixed(0) + '%;background:' + (actual==='B'?'var(--gn)':'var(--rd-tx)') + '"></div>';
-      html += '</div>';
-      html += '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3)">';
-      html += '<span>' + (winProb*100).toFixed(0) + '%</span><span>' + (drawProb*100).toFixed(0) + '%</span><span>' + (loseProb*100).toFixed(0) + '%</span>';
-      html += '</div>';
-      html += '<div style="font-size:10px;color:var(--tx3);margin-top:2px">Prob. resultado real: <b style="color:' + (actualProb>0.4?'var(--gn-tx)':actualProb>0.25?'var(--am-tx)':'var(--rd-tx)') + '">' + (actualProb*100).toFixed(0) + '%</b> · xG: ' + (pred.xgA||'?') + '-' + (pred.xgB||'?') + '</div>';
-      html += '</div></div>';
+    played.slice().reverse().forEach(function(m) {
+      var hT=SCOUTS[m.home]||{flag:'🏳',name:m.home_name};
+      var aT=SCOUTS[m.away]||{flag:'🏳',name:m.away_name};
+      var p=m.model; var act=m.actual;
+      var ok=m.model_correct; var icon=ok?'✅':'❌';
+      var actualP=act==='A'?p.winA:act==='D'?p.draw:p.winB;
+      var border=ok?'var(--gn)':'rgba(220,60,60,.4)';
+      html+='<div style="background:var(--sf);border:1px solid var(--bd);border-left:3px solid '+border+';border-radius:var(--r);padding:.7rem 1rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--sh)">';
+      html+='<span style="font-size:18px">'+icon+'</span>';
+      html+='<div style="flex:1;min-width:180px">';
+      html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap">';
+      html+='<span style="font-size:15px">'+(hT.flag||'')+'</span>';
+      html+='<span style="font-size:12px;font-weight:700">'+(hT.name||m.home_name)+'</span>';
+      html+='<span style="font-family:Space Grotesk,sans-serif;font-size:15px;font-weight:700;background:var(--sf2);padding:1px 9px;border-radius:6px;border:1px solid '+border+'">'+m.score1+'–'+m.score2+'</span>';
+      html+='<span style="font-size:12px;font-weight:700">'+(aT.name||m.away_name)+'</span>';
+      html+='<span style="font-size:15px">'+(aT.flag||'')+'</span>';
+      html+='</div>';
+      html+='<div style="font-size:10px;color:var(--tx3)">'+m.date+(m.group?' · Gr.'+m.group:'')+(m.city?' · '+m.city:'')+'</div>';
+      html+='</div>';
+      html+='<div style="min-width:200px">';
+      html+='<div style="display:flex;gap:2px;height:7px;border-radius:4px;overflow:hidden;margin-bottom:3px">';
+      html+='<div style="width:'+(p.winA*100).toFixed(0)+'%;background:'+(act==='A'?'var(--gn)':'var(--bl)')+'"></div>';
+      html+='<div style="width:'+(p.draw*100).toFixed(0)+'%;background:'+(act==='D'?'var(--gn)':'var(--am)')+'"></div>';
+      html+='<div style="width:'+(p.winB*100).toFixed(0)+'%;background:'+(act==='B'?'var(--gn)':'var(--rd-tx)')+'"></div>';
+      html+='</div>';
+      html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-bottom:2px">';
+      html+='<span>'+(p.winA*100).toFixed(0)+'%</span><span>'+(p.draw*100).toFixed(0)+'%</span><span>'+(p.winB*100).toFixed(0)+'%</span>';
+      html+='</div>';
+      var pCol=actualP>0.4?'var(--gn-tx)':actualP>0.25?'var(--am-tx)':'var(--rd-tx)';
+      html+='<div style="font-size:10px;color:var(--tx3)">Prob. resultado: <b style="color:'+pCol+'">'+(actualP*100).toFixed(0)+'%</b> · xG: '+p.xgA+'–'+p.xgB+' · ELO: '+p.eloA+'/'+p.eloB+'</div>';
+      html+='</div></div>';
     });
-    html += '</div>';
+    html+='</div>';
   }
 
-  // Upcoming matches (next 8)
-  var next = upcoming.filter(function(m){ return m.date >= new Date().toISOString().split('T')[0]; }).slice(0,8);
-  if (next.length) {
-    html += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">Próximos jogos — previsão do modelo</div>';
-    html += '<div class="g2">';
-    next.forEach(function(m) {
-      var hT = SCOUTS[m.home] || {flag:'🏳', name:m.home_name||m.home};
-      var aT = SCOUTS[m.away] || {flag:'🏳', name:m.away_name||m.away};
-      var pred = m.model || {};
-      var fav = pred.winA > pred.winB && pred.winA > pred.draw ? m.home :
-                pred.winB > pred.winA && pred.winB > pred.draw ? m.away : 'draw';
-      var favProb = Math.max(pred.winA||0, pred.draw||0, pred.winB||0);
-
-      html += '<div class="card" style="margin-bottom:0">';
-      html += '<div style="font-size:10px;color:var(--tx3);margin-bottom:.5rem">' + m.date + ' · ' + (m.group||m.round) + '</div>';
-      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:.6rem">';
-      html += '<span style="font-size:18px">' + (hT.flag||'') + '</span>';
-      html += '<span style="font-size:12px;font-weight:600;flex:1">' + (hT.name||m.home_name) + '</span>';
-      html += '<span style="font-size:11px;color:var(--tx3)">vs</span>';
-      html += '<span style="font-size:12px;font-weight:600;flex:1;text-align:right">' + (aT.name||m.away_name) + '</span>';
-      html += '<span style="font-size:18px">' + (aT.flag||'') + '</span>';
-      html += '</div>';
-      html += '<div style="display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;margin-bottom:4px">';
-      html += '<div style="width:' + ((pred.winA||0)*100).toFixed(0) + '%;background:var(--bl)"></div>';
-      html += '<div style="width:' + ((pred.draw||0)*100).toFixed(0) + '%;background:var(--am)"></div>';
-      html += '<div style="width:' + ((pred.winB||0)*100).toFixed(0) + '%;background:var(--rd-tx)"></div>';
-      html += '</div>';
-      html += '<div style="display:flex;justify-content:space-between;font-size:11px">';
-      html += '<span style="color:var(--bl-tx)">' + ((pred.winA||0)*100).toFixed(0) + '%</span>';
-      html += '<span style="color:var(--am-tx)">' + ((pred.draw||0)*100).toFixed(0) + '%</span>';
-      html += '<span style="color:var(--rd-tx)">' + ((pred.winB||0)*100).toFixed(0) + '%</span>';
-      html += '</div>';
-      html += '<div style="font-size:10px;color:var(--tx3);margin-top:4px">xG: <b>' + (pred.xgA||'?') + '</b> – <b>' + (pred.xgB||'?') + '</b> · ELO: ' + (pred.eloA||'?') + '/' + (pred.eloB||'?') + '</div>';
-      html += '</div>';
+  // ── Upcoming (next 6) ──
+  var next6 = upcoming.slice(0,6);
+  if (next6.length) {
+    html+='<div class="stitle" style="font-size:13px;margin-bottom:.75rem">Próximos jogos</div>';
+    html+='<div class="g2">';
+    next6.forEach(function(m) {
+      var hT=SCOUTS[m.home]||{flag:'🏳',name:m.home_name};
+      var aT=SCOUTS[m.away]||{flag:'🏳',name:m.away_name};
+      var p=m.model;
+      var favProb=Math.max(p.winA,p.draw,p.winB);
+      html+='<div class="card" style="margin-bottom:0">';
+      html+='<div style="font-size:10px;color:var(--tx3);margin-bottom:.4rem">'+m.date+(m.time?' '+m.time.replace(' UTC-6','').replace(' UTC-7','').replace(' UTC-4',''):'')+(m.group?' · Gr.'+m.group:'')+'</div>';
+      html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:.5rem">';
+      html+='<span style="font-size:16px">'+(hT.flag||'')+'</span>';
+      html+='<span style="font-size:12px;font-weight:700;flex:1">'+(hT.name||m.home_name)+'</span>';
+      html+='<span style="font-size:10px;color:var(--tx3)">vs</span>';
+      html+='<span style="font-size:12px;font-weight:700;flex:1;text-align:right">'+(aT.name||m.away_name)+'</span>';
+      html+='<span style="font-size:16px">'+(aT.flag||'')+'</span>';
+      html+='</div>';
+      html+='<div style="display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;margin-bottom:4px">';
+      html+='<div style="width:'+(p.winA*100).toFixed(0)+'%;background:var(--bl)"></div>';
+      html+='<div style="width:'+(p.draw*100).toFixed(0)+'%;background:var(--am)"></div>';
+      html+='<div style="width:'+(p.winB*100).toFixed(0)+'%;background:var(--rd-tx)"></div>';
+      html+='</div>';
+      html+='<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">';
+      html+='<span style="color:var(--bl-tx);font-weight:600">'+(p.winA*100).toFixed(0)+'%</span>';
+      html+='<span style="color:var(--am-tx)">'+(p.draw*100).toFixed(0)+'%</span>';
+      html+='<span style="color:var(--rd-tx);font-weight:600;text-align:right">'+(p.winB*100).toFixed(0)+'%</span>';
+      html+='</div>';
+      html+='<div style="font-size:10px;color:var(--tx3)">xG: <b>'+p.xgA+'</b>–<b>'+p.xgB+'</b> · ELO '+p.eloA+'/'+p.eloB+'</div>';
+      html+='</div>';
     });
-    html += '</div>';
+    html+='</div>';
   }
 
-  document.getElementById('reckContent').innerHTML = html || '<p style="color:var(--tx3)">Sem dados ainda.</p>';
+  if (!html) html='<p style="color:var(--tx3)">Aguardando primeiros resultados...</p>';
+  document.getElementById('reckContent').innerHTML = html;
 }
 // ── END RECKONING ─────────────────────────────────────────────────────────
 
