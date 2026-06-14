@@ -1226,9 +1226,71 @@ window.AI_DATA = {"generated_at": "2026-06-13T16:05:16.224860+00:00", "generated
 
 // ── SIMULATOR ────────────────────────────────────────────────
 var SIM_GROUPS={A:['MEX','AFS','COR','TCH'],B:['CAN','BOS','CAT','SUI'],C:['BRA','MAR','HAI','ESC'],D:['EUA','PAR','AUS','TUR'],E:['ALE','CUR','CDM','EQU'],F:['HOL','JAP','SUE','TUN'],G:['BEL','EGI','IRA','NZE'],H:['ESP','CAB','ARS','URU'],I:['FRA','SEN','IRQ','NOR'],J:['ARG','AGL','AUT','JOR'],K:['POR','RDC','UZB','COL'],L:['ING','CRO','GAN','PAN']};
-var SIM_HOST={MEX:1.15,EUA:1.10,CAN:1.08};
-function simStr(c){var s=SCOUTS[c],sb=(SB_COMBINED||{})[c];if(!s)return 60;var v=s.rating*0.40;var xg=sb?sb.xg_pg:(s.xG||1.5),xga=sb?sb.xga_pg:(s.xGA||1.5);v+=xg*7-xga*3.5;if(sb&&sb.pressures_pg)v+=(sb.pressures_pg/200)*8;return Math.max(30,v);}
-function simMatch(a,b,draw){var sa=simStr(a)*(SIM_HOST[a]||1),sb=simStr(b)*(SIM_HOST[b]||1),tot=sa+sb;var pA=Math.max(0.08,sa/tot*0.65+0.175),pB=Math.max(0.08,sb/tot*0.65+0.175),pD=draw?Math.max(0.12,1-pA-pB):0;var r=Math.random(),winner,loser,sA,sB,isDraw=false;if(!draw||r>=pA+pD){winner=r<pA||(!draw&&r<pA/(pA+pB))?a:b;loser=winner===a?b:a;sA=winner===a?Math.round(1+Math.random()*2):Math.round(Math.random()*1);sB=winner===b?Math.round(1+Math.random()*2):Math.round(Math.random()*1);}else{isDraw=true;sA=sB=Math.round(Math.random()*2);}return{winner:isDraw?null:winner,loser:isDraw?null:loser,draw:isDraw,sA:sA,sB:sB};}
+var SIM_HOME_BONUS={MEX:100,EUA:100,CAN:80};
+var ELO_RATINGS={ESP:2074,ARG:2064,FRA:2060,BRA:1994,ING:2010,POR:1970,ALE:1927,HOL:1930,BEL:1895,CRO:1880,COL:1875,URU:1870,MEX:1850,SEN:1830,MAR:1825,SUI:1820,AUT:1815,JAP:1810,NOR:1800,TUR:1795,EQU:1785,AUS:1780,ESC:1775,COR:1770,EUA:1760,CAN:1755,DEN:1750,POL:1745,SUE:1740,GAL:1735,RDC:1700,TCH:1710,GAN:1680,HAI:1650,CAT:1720,EGI:1730,IRA:1725,IRQ:1690,JOR:1685,ARS:1715,CAB:1620,CUR:1640,PAR:1660,AGL:1740,AFS:1720,CDM:1700,NZE:1600,PAN:1650,UZB:1670,TUN:1695,BOS:1760};
+
+// ── Dixon-Coles correction for 0-0, 1-1, 0-1, 1-0 ─────────────────────────
+var DC_RHO = -0.13;
+function dcTau(a,b,lam,mu){
+  if(a===0&&b===0) return 1-lam*mu*DC_RHO;
+  if(a===0&&b===1) return 1+lam*DC_RHO;
+  if(a===1&&b===0) return 1+mu*DC_RHO;
+  if(a===1&&b===1) return 1-DC_RHO;
+  return 1;
+}
+function poissonPmf(k,lam){
+  if(lam<=0) return k===0?1:0;
+  var p=Math.exp(-lam);
+  for(var i=1;i<=k;i++) p*=lam/i;
+  return p;
+}
+function poissonSample(lam){
+  var L=Math.exp(-lam),k=0,p=1;
+  do{k++;p*=Math.random();}while(p>L);
+  return k-1;
+}
+// Get ELO rating — prefer calibrated ELO_RATINGS, fallback to SCOUTS rating
+function getElo(code){
+  if(ELO_RATINGS[code]) return ELO_RATINGS[code];
+  var s=SCOUTS[code];
+  if(s&&s.rating) return 1500+(s.rating-50)*8; // map 0-100 rating → ELO range
+  return 1600;
+}
+// Expected goals from rating difference (Hicruben formula)
+function expGoals(ratingA,ratingB,homeBonus){
+  var diff=(ratingA+(homeBonus||0))-ratingB;
+  return Math.max(0.3,Math.min(3.5, 1.35+diff/400));
+}
+// Dixon-Coles 1X2 probabilities
+function matchProb(rA,rB,homeBonus){
+  var lam=expGoals(rA,rB,homeBonus);
+  var mu=expGoals(rB,rA,-(homeBonus||0)/2);
+  var winA=0,draw=0,winB=0;
+  for(var a=0;a<=8;a++){
+    var pA=poissonPmf(a,lam);
+    for(var b=0;b<=8;b++){
+      var tau=dcTau(a,b,lam,mu);
+      var p=pA*poissonPmf(b,mu)*tau;
+      if(a>b) winA+=p; else if(a<b) winB+=p; else draw+=p;
+    }
+  }
+  var tot=winA+draw+winB;
+  return {winA:winA/tot,draw:draw/tot,winB:winB/tot,lamA:lam,lamB:mu};
+}
+// Sample scoreline for Monte Carlo
+function simStr(code){return getElo(code);} // legacy compat — not used anymore
+function simMatch(a,b,allowDraw){
+  var rA=getElo(a), rB=getElo(b);
+  var hb=(SIM_HOME_BONUS[a]||0)-(SIM_HOME_BONUS[b]||0);
+  var lam=expGoals(rA,rB,hb), mu=expGoals(rB,rA,-hb/2);
+  var gA=poissonSample(lam), gB=poissonSample(mu);
+  if(!allowDraw&&gA===gB){
+    var prob=matchProb(rA,rB,hb);
+    if(Math.random()<prob.winA/(prob.winA+prob.winB)) gA+=1; else gB+=1;
+  }
+  var winner=gA>gB?a:gB>gA?b:null;
+  return {winner:winner,loser:winner===a?b:winner===b?a:null,draw:gA===gB,sA:gA,sB:gB};
+}
 function simGroups(rand){var st={},res={};Object.keys(SIM_GROUPS).forEach(function(g){SIM_GROUPS[g].forEach(function(t){st[t]={pts:0,gf:0,ga:0,w:0,d:0,l:0};});res[g]=[];});Object.entries(SIM_GROUPS).forEach(function(ge){var g=ge[0],teams=ge[1];for(var i=0;i<teams.length;i++){for(var j=i+1;j<teams.length;j++){var a=teams[i],b=teams[j];var m=rand?simMatch(a,b,true):(simStr(a)>simStr(b)?{winner:a,loser:b,draw:false,sA:2,sB:1}:simStr(b)>simStr(a)?{winner:b,loser:a,draw:false,sA:1,sB:2}:{winner:null,loser:null,draw:true,sA:1,sB:1});res[g].push({a:a,b:b,winner:m.winner,sA:m.sA,sB:m.sB,draw:m.draw});if(m.draw){st[a].pts+=1;st[a].d++;st[b].pts+=1;st[b].d++;}else{st[m.winner].pts+=3;st[m.winner].w++;st[m.loser].l++;}st[a].gf+=m.sA;st[a].ga+=m.sB;st[b].gf+=m.sB;st[b].ga+=m.sA;}}});var qual={},rank={};Object.entries(SIM_GROUPS).forEach(function(ge){var g=ge[0],teams=ge[1];var s=teams.slice().sort(function(x,y){var sx=st[x],sy=st[y];if(sy.pts!==sx.pts)return sy.pts-sx.pts;return(sy.gf-sy.ga)-(sx.gf-sx.ga);});rank[g]=s;qual[g]={first:s[0],second:s[1]};});return{st:st,qual:qual,rank:rank,res:res};}
 function simKO(qual,rand){var R16=[[qual.A.first,qual.B.second],[qual.C.first,qual.D.second],[qual.E.first,qual.F.second],[qual.G.first,qual.H.second],[qual.B.first,qual.A.second],[qual.D.first,qual.C.second],[qual.F.first,qual.E.second],[qual.H.first,qual.G.second]];var br={r16:[],qf:[],sf:[],final:[],champion:null};var r16w=R16.map(function(p){var m=rand?simMatch(p[0],p[1],false):{winner:simStr(p[0])>simStr(p[1])?p[0]:p[1],sA:1,sB:0};br.r16.push({a:p[0],b:p[1],winner:m.winner,sA:m.sA,sB:m.sB});return m.winner;});var qfw=[];for(var i=0;i<4;i++){var m=rand?simMatch(r16w[i*2],r16w[i*2+1],false):{winner:simStr(r16w[i*2])>simStr(r16w[i*2+1])?r16w[i*2]:r16w[i*2+1],sA:1,sB:0};br.qf.push({a:r16w[i*2],b:r16w[i*2+1],winner:m.winner,sA:m.sA,sB:m.sB});qfw.push(m.winner);}var sfw=[];for(var i=0;i<2;i++){var m=rand?simMatch(qfw[i*2],qfw[i*2+1],false):{winner:simStr(qfw[i*2])>simStr(qfw[i*2+1])?qfw[i*2]:qfw[i*2+1],sA:1,sB:0};br.sf.push({a:qfw[i*2],b:qfw[i*2+1],winner:m.winner,sA:m.sA,sB:m.sB});sfw.push(m.winner);}var fm=rand?simMatch(sfw[0],sfw[1],false):{winner:simStr(sfw[0])>simStr(sfw[1])?sfw[0]:sfw[1],sA:1,sB:0};br.final.push({a:sfw[0],b:sfw[1],winner:fm.winner,sA:fm.sA,sB:fm.sB});br.champion=fm.winner;return br;}
 function showSimTab(id,btn){document.querySelectorAll('.sim-tab').forEach(function(b){b.classList.remove('active');});if(btn)btn.classList.add('active');['champion','bracket','groups','groupresults','montecarlo'].forEach(function(t){var el=document.getElementById('simTab'+t.charAt(0).toUpperCase()+t.slice(1));if(el)el.style.display=t===id?'block':'none';});}
