@@ -218,6 +218,7 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
     <button class="nb" onclick="showSec('simulador',this)"><i class="ti ti-tournament"></i><span>🏆 Simulador</span></button>
     <button class="nb" onclick="showSec('betfair',this)"><i class="ti ti-trophy"></i><span>Betfair Tips</span></button>
     <button class="nb" onclick="showSec('reckoning',this)"><i class="ti ti-target"></i><span>⚡ Modelo vs Real</span></button>
+    <button class="nb" onclick="showSec('tracking',this)"><i class="ti ti-chart-bar"></i><span>📊 Tracking</span></button>
   </nav>
 </div>
 
@@ -556,6 +557,22 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
   <div id="reckSummary" style="display:flex;gap:10px;flex-wrap:wrap"></div>
 </div>
 <div id="reckContent"><p style="color:var(--tx3)">Carregando...</p></div>
+</section>
+
+<section id="tracking" class="sec">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem">
+    <div>
+      <div class="stitle">📊 Tracking — Over/Underperformance WC2026</div>
+      <div style="font-size:11px;color:var(--tx3)">Pontos reais vs esperados pelo modelo ELO · xG real vs xG esperado · atualiza a cada resultado</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="vpill" onclick="setTrackView('pts')" id="btn-track-pts" style="cursor:pointer;background:var(--bl-bg);color:var(--bl-tx)">Δ Pontos</button>
+      <button class="vpill" onclick="setTrackView('xg')" id="btn-track-xg" style="cursor:pointer">Δ xG</button>
+      <button class="vpill" onclick="setTrackView('table')" id="btn-track-table" style="cursor:pointer">Tabela completa</button>
+    </div>
+  </div>
+  <div id="trackSummary" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem"></div>
+  <div id="trackContent"><p style="color:var(--tx3)">⏳ Carregando...</p></div>
 </section>
 </main>
 
@@ -1968,6 +1985,168 @@ function renderReckoning(data) {
 }
 // ── END RECKONING ─────────────────────────────────────────────────────────
 
+
+</script>
+<script>
+
+// ── TRACKING: Over/Underperformance WC2026 ──────────────────────────────
+var _trackData=null, _trackView='pts', _trackLoading=false;
+
+function setTrackView(v){
+  _trackView=v;
+  ['pts','xg','table'].forEach(function(x){
+    var b=document.getElementById('btn-track-'+x);
+    if(b) b.style.background=x===v?'var(--bl-bg)':'var(--sf2)';
+    if(b) b.style.color=x===v?'var(--bl-tx)':'var(--tx2)';
+  });
+  if(_trackData) renderTracking(_trackData);
+}
+
+async function loadTracking(){
+  if(_trackLoading) return;
+  if(_trackData){renderTracking(_trackData);return;}
+  _trackLoading=true;
+  document.getElementById('trackContent').innerHTML='<p style="color:var(--tx3)">⏳ Buscando dados...</p>';
+  try{
+    var r=await fetch('./data/wc2026_perf.json?t='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    _trackData=await r.json();
+    renderTracking(_trackData);
+  }catch(e){
+    document.getElementById('trackContent').innerHTML='<p style="color:var(--rd-tx)">❌ '+e.message+'</p>';
+  }
+  _trackLoading=false;
+}
+
+function renderTracking(data){
+  var teams=(data.teams||[]).filter(function(t){return t.games>0;});
+  var matches=data.matches||[];
+
+  // Summary pills
+  var overperforming=teams.filter(function(t){return t.delta_pts>0.8;});
+  var underperforming=teams.filter(function(t){return t.delta_pts<-0.8;});
+  var totalGames=matches.length;
+  var totalGoals=matches.reduce(function(s,m){return s+m.g1+m.g2;},0);
+  var totalXG=matches.reduce(function(s,m){return s+m.lam+m.mu;},0);
+
+  document.getElementById('trackSummary').innerHTML=
+    '<div class="vpill" style="background:var(--gn-bg);color:var(--gn-tx)">🔥 '+overperforming.length+' overperforming</div>'+
+    '<div class="vpill" style="background:var(--rd-bg,#fef2f2);color:var(--rd-tx)">❄️ '+underperforming.length+' underperforming</div>'+
+    '<div class="vpill" style="background:var(--sf2);color:var(--tx3)">'+totalGames+' jogos · '+totalGoals+' gols (xG: '+totalXG.toFixed(1)+')</div>';
+
+  var html='';
+
+  if(_trackView==='pts'){
+    // Sort by Δ points
+    var sorted=[].concat(teams).sort(function(a,b){return b.delta_pts-a.delta_pts;});
+    html+='<div style="font-size:11px;color:var(--tx3);margin-bottom:.75rem">Ordenado por Δ Pontos = Pontos Reais − Pontos Esperados pelo Modelo</div>';
+    html+='<div style="display:flex;flex-direction:column;gap:6px">';
+    sorted.forEach(function(t){
+      var sc=SCOUTS[t.code]||{flag:'🏳',name:t.name||t.code};
+      var dp=t.delta_pts; var xp=t.xpts||0;
+      var isOver=dp>0.8, isUnder=dp<-0.8;
+      var barColor=isOver?'var(--gn)':isUnder?'var(--rd-tx)':'var(--am)';
+      var bgColor=isOver?'var(--gn-bg)':isUnder?'var(--rd-bg,#fef2f2)':'var(--sf)';
+      var icon=isOver?'🔥':isUnder?'❄️':'≈';
+      var barW=Math.abs(dp)/3*100; // max 3 pts diff = 100%
+      var record=t.wins+'V '+t.draws+'E '+t.losses+'D';
+      html+='<div style="background:'+bgColor+';border:1px solid var(--bd);border-left:3px solid '+barColor+';border-radius:var(--r);padding:.6rem 1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap">';
+      html+='<span style="font-size:20px">'+(sc.flag||'🏳')+'</span>';
+      html+='<div style="flex:1;min-width:120px">';
+      html+='<div style="font-size:13px;font-weight:700">'+(sc.name||t.name)+'</div>';
+      html+='<div style="font-size:10px;color:var(--tx3)">'+record+' · '+t.games+'j · ELO '+( ELO_RATINGS[t.code]||'?')+'</div>';
+      html+='</div>';
+      html+='<div style="min-width:180px">';
+      html+='<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">';
+      html+='<span style="color:var(--tx3)">Real: <b style="color:var(--tx)">'+t.points+'pts</b></span>';
+      html+='<span style="color:var(--tx3)">Esperado: <b>'+xp.toFixed(1)+'pts</b></span>';
+      html+='<span style="font-weight:700;color:'+barColor+'">'+(dp>=0?'+':'')+dp.toFixed(1)+'</span>';
+      html+='</div>';
+      html+='<div style="height:6px;background:var(--sf2);border-radius:3px;overflow:hidden">';
+      html+='<div style="height:100%;width:'+Math.min(100,barW)+'%;background:'+barColor+';'+( dp<0?'margin-left:auto':'')+'"></div>';
+      html+='</div>';
+      html+='<div style="font-size:10px;color:var(--tx3);margin-top:2px">'+icon+' '+(isOver?'Overperforming':isUnder?'Underperforming':'Em linha com o modelo')+'</div>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+
+  }else if(_trackView==='xg'){
+    var sorted2=[].concat(teams).sort(function(a,b){return b.dgf-a.dgf;});
+    html+='<div style="font-size:11px;color:var(--tx3);margin-bottom:.75rem">Δ Gols = Gols Reais − xG do Modelo (ofensivo e defensivo)</div>';
+    html+='<div class="g2">';
+    sorted2.forEach(function(t){
+      var sc=SCOUTS[t.code]||{flag:'🏳',name:t.name||t.code};
+      var dgf=t.dgf, dga=t.dga;
+      var offStatus=dgf>0.5?'👆 acima xG':dgf<-0.5?'👇 abaixo xG':'≈ ok';
+      var defStatus=dga<-0.5?'🛡️ defensiva sólida':dga>0.5?'⚠️ defensiva vazando':'≈ ok';
+      html+='<div class="card" style="margin-bottom:0">';
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">';
+      html+='<span style="font-size:18px">'+(sc.flag||'🏳')+'</span>';
+      html+='<span style="font-size:13px;font-weight:700">'+(sc.name||t.name)+'</span>';
+      html+='</div>';
+      // Offensive bar
+      html+='<div style="margin-bottom:.5rem">';
+      html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-bottom:2px">';
+      html+='<span>Ataque</span><span>Real: <b>'+t.goals_for+'</b> · xG: '+t.xgf+'  <b style="color:'+(dgf>=0?'var(--gn-tx)':'var(--rd-tx)')+'">'+(dgf>=0?'+':'')+dgf.toFixed(2)+'</b></span>';
+      html+='</div>';
+      var offPct=Math.abs(dgf)/3*100;
+      html+='<div style="height:5px;background:var(--sf2);border-radius:3px;overflow:hidden">';
+      html+='<div style="height:100%;width:'+Math.min(100,offPct)+'%;background:'+(dgf>=0?'var(--gn)':'var(--rd-tx)')+';'+(dgf<0?'margin-left:auto':'')+'"></div>';
+      html+='</div>';
+      html+='<div style="font-size:9px;color:var(--tx3);margin-top:1px">'+offStatus+'</div>';
+      html+='</div>';
+      // Defensive bar
+      html+='<div>';
+      html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-bottom:2px">';
+      html+='<span>Defesa (sofridos)</span><span>Real: <b>'+t.goals_against+'</b> · xGA: '+t.xga+'  <b style="color:'+(dga<=0?'var(--gn-tx)':'var(--rd-tx)')+'">'+(dga>=0?'+':'')+dga.toFixed(2)+'</b></span>';
+      html+='</div>';
+      var defPct=Math.abs(dga)/3*100;
+      html+='<div style="height:5px;background:var(--sf2);border-radius:3px;overflow:hidden">';
+      html+='<div style="height:100%;width:'+Math.min(100,defPct)+'%;background:'+(dga<=0?'var(--gn)':'var(--rd-tx)')+';'+(dga>0?'margin-left:auto':'')+'"></div>';
+      html+='</div>';
+      html+='<div style="font-size:9px;color:var(--tx3);margin-top:1px">'+defStatus+'</div>';
+      html+='</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+
+  }else{
+    // Full table view
+    html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
+    html+='<thead><tr style="border-bottom:2px solid var(--bd);color:var(--tx3);text-align:center">';
+    html+='<th style="text-align:left;padding:.4rem .6rem">Seleção</th>';
+    html+='<th>J</th><th>V</th><th>E</th><th>D</th><th>Pts</th><th>xPts</th><th style="color:var(--bl-tx)">ΔPts</th>';
+    html+='<th>GF</th><th>GA</th><th>xGF</th><th>xGA</th><th style="color:var(--bl-tx)">ΔxGF</th><th style="color:var(--rd-tx)">ΔxGA</th>';
+    html+='</tr></thead><tbody>';
+    var sorted3=[].concat(teams).sort(function(a,b){return b.points-a.points||(b.delta_pts-a.delta_pts);});
+    sorted3.forEach(function(t,i){
+      var sc=SCOUTS[t.code]||{flag:'🏳',name:t.name||t.code};
+      var dp=t.delta_pts; var dpCol=dp>0.5?'var(--gn-tx)':dp<-0.5?'var(--rd-tx)':'var(--tx3)';
+      var dgf=t.dgf; var dga=t.dga;
+      html+='<tr style="border-bottom:1px solid var(--bd);'+(i%2===0?'background:var(--sf2,rgba(0,0,0,.02))':'')+'">';
+      html+='<td style="padding:.35rem .6rem;white-space:nowrap"><span style="font-size:14px;margin-right:4px">'+(sc.flag||'')+'</span>'+(sc.name||t.name)+'</td>';
+      html+='<td style="text-align:center">'+t.games+'</td>';
+      html+='<td style="text-align:center">'+t.wins+'</td>';
+      html+='<td style="text-align:center">'+t.draws+'</td>';
+      html+='<td style="text-align:center">'+t.losses+'</td>';
+      html+='<td style="text-align:center;font-weight:700">'+t.points+'</td>';
+      html+='<td style="text-align:center;color:var(--tx3)">'+(t.xpts||0).toFixed(1)+'</td>';
+      html+='<td style="text-align:center;font-weight:700;color:'+dpCol+'">'+(dp>=0?'+':'')+dp.toFixed(1)+'</td>';
+      html+='<td style="text-align:center">'+t.goals_for+'</td>';
+      html+='<td style="text-align:center">'+t.goals_against+'</td>';
+      html+='<td style="text-align:center;color:var(--tx3)">'+t.xgf+'</td>';
+      html+='<td style="text-align:center;color:var(--tx3)">'+t.xga+'</td>';
+      html+='<td style="text-align:center;font-weight:700;color:'+(dgf>=0?'var(--gn-tx)':'var(--rd-tx)')+'">'+(dgf>=0?'+':'')+dgf.toFixed(1)+'</td>';
+      html+='<td style="text-align:center;font-weight:700;color:'+(dga<=0?'var(--gn-tx)':'var(--rd-tx)')+'">'+(dga>=0?'+':'')+dga.toFixed(1)+'</td>';
+      html+='</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+
+  document.getElementById('trackContent').innerHTML=html||'<p style="color:var(--tx3)">Sem dados.</p>';
+  setTrackView(_trackView);
+}
+// ── END TRACKING ──────────────────────────────────────────────────────────
 
 </script>
 </body>
