@@ -1546,6 +1546,7 @@ function renderSBRanking() {
 function showSec(id,btn) {
   _baseShowSec(id,btn);
   if (id === 'reckoning' && typeof loadReckoning === 'function') { setTimeout(loadReckoning, 50); }
+  if (id === 'tracking'  && typeof loadTracking  === 'function') { setTimeout(loadTracking,  50); }
   if (id === 'dashboard' && typeof renderSBRanking === 'function') {
     setTimeout(function() { renderSBRanking(); }, 100);
   }
