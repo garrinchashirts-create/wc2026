@@ -219,6 +219,7 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
     <button class="nb" onclick="showSec('betfair',this)"><i class="ti ti-trophy"></i><span>Betfair Tips</span></button>
     <button class="nb" onclick="showSec('reckoning',this)"><i class="ti ti-target"></i><span>⚡ Modelo vs Real</span></button>
     <button class="nb" onclick="showSec('tracking',this)"><i class="ti ti-chart-bar"></i><span>📊 Tracking</span></button>
+    <button class="nb" onclick="showSec('historico',this)"><i class="ti ti-history"></i><span>🏛️ Histórico</span></button>
   </nav>
 </div>
 
@@ -567,6 +568,14 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
   </div>
   <div id="trackSummary" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem"></div>
   <div id="trackContent"><p style="color:var(--tx3)">⏳ Carregando...</p></div>
+</section>
+
+<section id="historico" class="sec">
+  <div style="margin-bottom:1.25rem">
+    <div class="stitle">🏛️ Histórico — WC2018 vs WC2022 vs WC2026</div>
+    <div style="font-size:11px;color:var(--tx3)">Dados StatsBomb Open Data (CC0) · xG oficial evento-a-evento · 64 jogos por edição</div>
+  </div>
+  <div id="histContent"><p style="color:var(--tx3)">⏳ Carregando dados históricos...</p></div>
 </section>
 </main>
 
@@ -2291,6 +2300,170 @@ function renderTracking(data){
 // ── END TRACKING ──────────────────────────────────────────────────────────
 
 
+</script>
+<script>
+
+// ── HISTÓRICO: WC2018 vs WC2022 vs WC2026 comparativo ──────────────────────
+var _histData = null, _histLoading = false;
+
+async function loadHistorico() {
+  if (_histLoading) return;
+  if (_histData) { renderHistorico(_histData); return; }
+  _histLoading = true;
+  var el = document.getElementById('histContent');
+  if (el) el.innerHTML = '<p style="color:var(--tx3)">⏳ Carregando dados StatsBomb...</p>';
+  try {
+    var r = await fetch('./data/wc_history.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    _histData = await r.json();
+    renderHistorico(_histData);
+  } catch(e) {
+    if (el) el.innerHTML = '<p style="color:var(--rd-tx)">❌ Erro: ' + e.message + '</p>';
+  }
+  _histLoading = false;
+}
+
+function renderHistorico(data) {
+  var el = document.getElementById('histContent');
+  if (!el) return;
+
+  var s18 = data.summary.wc18, s22 = data.summary.wc22;
+  var ev18 = data.model_eval ? data.model_eval.wc18 : null;
+  var ev22 = data.model_eval ? data.model_eval.wc22 : null;
+  var recurring = data.recurring_teams || [];
+
+  var h = '';
+
+  // ── SECTION 1: Tournament comparison cards ──
+  h += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">📊 Estatísticas por edição</div>';
+  h += '<div class="g3" style="margin-bottom:1.5rem">';
+
+  [
+    {label:'WC2018 🇷🇺', s:s18, color:'var(--tx3)'},
+    {label:'WC2022 🇶🇦', s:s22, color:'var(--am-tx)'},
+  ].forEach(function(item) {
+    var s = item.s;
+    h += '<div class="card" style="margin-bottom:0">';
+    h += '<div style="font-size:14px;font-weight:700;margin-bottom:.75rem">'+item.label+'</div>';
+    h += '<div style="display:flex;flex-direction:column;gap:6px;font-size:12px">';
+    h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Gols/jogo</span><b>'+s.goals_pg+'</b></div>';
+    h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">xG/jogo</span><b>'+s.xg_pg+'</b></div>';
+    h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Conversão</span><b>'+s.conversion_rate+'%</b></div>';
+    h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Empates</span><b>'+s.draw_pct+'%</b></div>';
+    h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Vitória casa</span><b>'+s.home_win_pct+'%</b></div>';
+    h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Chutes/jogo</span><b>'+s.shots_pg+'</b></div>';
+    h += '</div></div>';
+  });
+
+  // WC2026 live card (from current tracking data if available)
+  h += '<div class="card" style="margin-bottom:0;border-color:var(--bl)">';
+  h += '<div style="font-size:14px;font-weight:700;margin-bottom:.75rem">WC2026 🇲🇽🇺🇸🇨🇦 <span style="font-size:9px;background:var(--gn-bg);color:var(--gn-tx);padding:1px 6px;border-radius:8px;vertical-align:middle">EM ANDAMENTO</span></div>';
+  h += '<div id="hist26Live" style="font-size:12px;color:var(--tx3)">⏳ calculando...</div>';
+  h += '</div>';
+  h += '</div>';
+
+  // ── SECTION 2: Trend chart (goals/xG evolution) ──
+  h += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">📈 Evolução entre edições</div>';
+  h += '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem">';
+  [
+    {label:'Gols por jogo', v18:s18.goals_pg, v22:s22.goals_pg, max:4, fmt:function(v){return v.toFixed(2);}},
+    {label:'Taxa de empates', v18:s18.draw_pct, v22:s22.draw_pct, max:30, fmt:function(v){return v.toFixed(0)+'%';}},
+    {label:'Conversão de chutes', v18:s18.conversion_rate, v22:s22.conversion_rate, max:15, fmt:function(v){return v.toFixed(1)+'%';}},
+  ].forEach(function(metric) {
+    h += '<div>';
+    h += '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:4px">';
+    h += '<span>'+metric.label+'</span>';
+    h += '<span>2018: <b style="color:var(--tx)">'+metric.fmt(metric.v18)+'</b> → 2022: <b style="color:var(--bl-tx)">'+metric.fmt(metric.v22)+'</b></span>';
+    h += '</div>';
+    h += '<div style="display:flex;gap:4px;height:8px">';
+    h += '<div style="flex:'+(metric.v18/metric.max*100)+';background:var(--sf2);border-radius:4px;position:relative"><div style="position:absolute;inset:0;background:var(--tx3);border-radius:4px;width:100%"></div></div>';
+    h += '<div style="flex:'+(metric.v22/metric.max*100)+';background:var(--sf2);border-radius:4px;position:relative"><div style="position:absolute;inset:0;background:var(--bl);border-radius:4px;width:100%"></div></div>';
+    h += '<div style="flex:'+((metric.max-Math.max(metric.v18,metric.v22))/metric.max*100)+'"></div>';
+    h += '</div></div>';
+  });
+  h += '</div>';
+
+  // ── SECTION 3: Model accuracy on historical data ──
+  if (ev18 && ev22) {
+    h += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">🎯 Acerto do modelo ELO+Dixon-Coles (retroativo)</div>';
+    h += '<div style="font-size:10px;color:var(--tx3);margin-bottom:.75rem">Aplicando os ratings ELO atuais (calibrados p/ WC2026) contra os resultados reais de 2018 e 2022. Apenas jogos com seleções presentes na Copa 2026 (algumas seleções de 2018/22 não estão no ELO atual).</div>';
+    h += '<div class="g2" style="margin-bottom:1.5rem">';
+    [
+      {label:'WC2018', ev:ev18},
+      {label:'WC2022', ev:ev22},
+    ].forEach(function(item) {
+      var rpsBetter = item.ev.avg_rps < 0.245;
+      h += '<div class="card" style="margin-bottom:0">';
+      h += '<div style="font-size:13px;font-weight:700;margin-bottom:.5rem">'+item.label+' <span style="font-size:10px;color:var(--tx3)">('+item.ev.n+' jogos avaliados)</span></div>';
+      h += '<div style="display:flex;gap:10px">';
+      h += '<div class="vpill" style="background:var(--bl-bg);color:var(--bl-tx)">'+item.ev.accuracy+'% acerto</div>';
+      h += '<div class="vpill" style="background:'+(rpsBetter?'var(--gn-bg)':'var(--am-bg)')+';color:'+(rpsBetter?'var(--gn-tx)':'var(--am-tx)')+'">RPS '+item.ev.avg_rps+' (coin: 0.245)</div>';
+      h += '</div></div>';
+    });
+    h += '</div>';
+  }
+
+  // ── SECTION 4: Recurring teams (2018+2022+2026) ──
+  h += '<div class="stitle" style="font-size:13px;margin-bottom:.75rem">🔁 Seleções nas 3 últimas edições ('+recurring.length+')</div>';
+  h += '<div style="font-size:10px;color:var(--tx3);margin-bottom:.75rem">Comparação de desempenho (V-E-D) e eficiência (Δ gols vs xG real) entre 2018 e 2022.</div>';
+  h += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px">';
+  h += '<thead><tr style="border-bottom:2px solid var(--bd);color:var(--tx3);text-align:center">';
+  h += '<th style="text-align:left;padding:.35rem .6rem">Seleção</th>';
+  h += '<th colspan="2" style="border-left:1px solid var(--bd)">WC2018</th>';
+  h += '<th colspan="2" style="border-left:1px solid var(--bd)">WC2022</th>';
+  h += '</tr><tr style="border-bottom:1px solid var(--bd);color:var(--tx3);text-align:center;font-size:9px">';
+  h += '<th></th><th style="border-left:1px solid var(--bd)">V-E-D</th><th>ΔxG</th><th style="border-left:1px solid var(--bd)">V-E-D</th><th>ΔxG</th>';
+  h += '</tr></thead><tbody>';
+
+  recurring.forEach(function(code, i) {
+    var t18 = data.teams_wc18[code] || data.teams_wc18[Object.keys(data.teams_wc18).find(function(k){return k===code})];
+    var t22 = data.teams_wc22[code];
+    // find by code properly — teams are keyed by original name in some cases, try direct
+    var sc = SCOUTS[code] || {flag:'🏳', name:code};
+    if (!t18 || !t22) return;
+    var dgf18 = t18.dgf || 0, dgf22 = t22.dgf || 0;
+    h += '<tr style="border-bottom:1px solid var(--bd);'+(i%2===0?'background:var(--sf2,rgba(0,0,0,.02))':'')+'">';
+    h += '<td style="padding:.3rem .6rem;white-space:nowrap"><span style="font-size:13px;margin-right:4px">'+(sc.flag||'')+'</span>'+(sc.name||code)+'</td>';
+    h += '<td style="text-align:center;border-left:1px solid var(--bd)">'+t18.wins+'-'+t18.draws+'-'+t18.losses+'</td>';
+    h += '<td style="text-align:center;font-weight:700;color:'+(dgf18>=0?'var(--gn-tx)':'var(--rd-tx)')+'">'+(dgf18>=0?'+':'')+dgf18.toFixed(1)+'</td>';
+    h += '<td style="text-align:center;border-left:1px solid var(--bd)">'+t22.wins+'-'+t22.draws+'-'+t22.losses+'</td>';
+    h += '<td style="text-align:center;font-weight:700;color:'+(dgf22>=0?'var(--gn-tx)':'var(--rd-tx)')+'">'+(dgf22>=0?'+':'')+dgf22.toFixed(1)+'</td>';
+    h += '</tr>';
+  });
+  h += '</tbody></table></div>';
+  h += '<div style="font-size:9px;color:var(--tx3);margin-top:.5rem">Fonte: StatsBomb Open Data (CC0) · ΔxG = Gols reais − xG oficial StatsBomb</div>';
+
+  el.innerHTML = h;
+
+  // Fill WC2026 live card from tracking data if available
+  if (window._trackData) {
+    var t26 = window._trackData.teams || [];
+    var totalGoals = t26.reduce(function(s,t){return s+t.goals_for;},0);
+    var totalGames = t26.length ? Math.round(t26.reduce(function(s,t){return s+t.games;},0)/2) : 0;
+    var live = document.getElementById('hist26Live');
+    if (live && totalGames) {
+      live.innerHTML = '<div style="display:flex;flex-direction:column;gap:6px">' +
+        '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Jogos até agora</span><b>'+totalGames+'</b></div>' +
+        '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Gols/jogo</span><b>'+(totalGoals/totalGames/2).toFixed(2)+'</b></div>' +
+        '<div style="font-size:10px;color:var(--tx3);margin-top:4px">Veja a aba 📊 Tracking para detalhes completos</div></div>';
+    }
+  } else {
+    // Try fetching tracking data for the live card
+    fetch('./data/wc2026_perf.json?t='+Date.now()).then(function(r){return r.json();}).then(function(perfData){
+      var t26 = perfData.teams || [];
+      var totalGoals = t26.reduce(function(s,t){return s+t.goals_for;},0);
+      var totalGames = t26.length ? Math.round(t26.reduce(function(s,t){return s+t.games;},0)/2) : 0;
+      var live = document.getElementById('hist26Live');
+      if (live && totalGames) {
+        live.innerHTML = '<div style="display:flex;flex-direction:column;gap:6px">' +
+          '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Jogos até agora</span><b>'+totalGames+'</b></div>' +
+          '<div style="display:flex;justify-content:space-between"><span style="color:var(--tx3)">Gols/jogo</span><b>'+(totalGoals/totalGames/2).toFixed(2)+'</b></div>' +
+          '<div style="font-size:10px;color:var(--tx3);margin-top:4px">Veja a aba 📊 Tracking para detalhes completos</div></div>';
+      }
+    }).catch(function(){});
+  }
+}
+// ── END HISTÓRICO ─────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
