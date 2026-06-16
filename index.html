@@ -1541,33 +1541,95 @@ function parseRSSXML(xml) {
 function renderBetfairFeed(data) {
   var el = document.getElementById('betfairFeedContent');
   if (!el) return;
+
+  // Support both our structured format and rss2json format
   var items = (data.items || []);
-  if (!items.length) { el.innerHTML = '<p style="color:var(--tx3)">Sem artigos.</p>'; return; }
+  if (!items.length) {
+    el.innerHTML = '<p style="color:var(--tx3)">Sem artigos disponíveis.</p>';
+    return;
+  }
 
-  var wc = items.filter(function(it){ return /world.cup|wc.?2026|copa/i.test((it.title||'')+(it.link||'')); });
-  var other = items.filter(function(it){ return !wc.includes(it); });
-  var all = wc.concat(other).slice(0, 15);
+  var updatedAt = data.updated_at || '';
+  var h = '';
 
-  var h = '<div style="display:flex;flex-direction:column;gap:8px">';
-  all.forEach(function(item) {
-    var title = (item.title||'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<[^>]+>/g,'').trim();
-    var link  = item.link || '#';
-    var date  = item.pubDate ? new Date(item.pubDate).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
-    var desc  = (item.description||'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').trim().slice(0,150);
-    var isWC  = /world.cup|wc.?2026|copa/i.test(title+link);
-    var icon  = isWC ? '🏆' : '⚽';
-    var tag   = isWC ? '<span style="background:var(--gn-bg);color:var(--gn-tx);font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;margin-left:6px">WC2026</span>' : '';
-    h += '<a href="'+link+'" target="_blank" rel="noopener" style="text-decoration:none">';
-    h += '<div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.7rem 1rem">';
-    h += '<div style="display:flex;gap:8px;align-items:flex-start">';
-    h += '<span style="font-size:16px;flex-shrink:0">'+icon+'</span>';
-    h += '<div><div style="font-size:13px;font-weight:600;color:var(--tx);line-height:1.4">'+title+tag+'</div>';
-    if (desc) h += '<div style="font-size:11px;color:var(--tx3);margin-top:3px;line-height:1.4">'+desc+(desc.length>=150?'…':'')+'</div>';
-    h += '<div style="font-size:10px;color:var(--tx3);margin-top:4px">'+(date?'📅 '+date+' · ':'')+'<span style="color:var(--bl-tx)">betting.betfair.com ↗</span></div>';
-    h += '</div></div></div></a>';
-  });
-  h += '</div>';
-  el.innerHTML = h;
+  // Check if items are structured (have bets array) or raw RSS
+  var isStructured = items[0] && Array.isArray(items[0].bets);
+
+  if (isStructured) {
+    // Rich card view with bet tracking
+    items.forEach(function(art) {
+      var dateStr = art.date ? new Date(art.date).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'2-digit'}) : '';
+      var bets = art.bets || [];
+      var wonBets  = bets.filter(function(b){ return b.result==='won'; }).length;
+      var lostBets = bets.filter(function(b){ return b.result==='lost'; }).length;
+      var pendBets = bets.filter(function(b){ return b.result==='pending'; }).length;
+      var statusBar = '';
+      if (bets.length) {
+        statusBar = '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:.5rem">';
+        if (wonBets)  statusBar += '<span style="background:var(--gn-bg);color:var(--gn-tx);font-size:9px;padding:2px 7px;border-radius:10px">✅ '+wonBets+' acertou</span>';
+        if (lostBets) statusBar += '<span style="background:var(--rd-bg,#fef2f2);color:var(--rd-tx);font-size:9px;padding:2px 7px;border-radius:10px">❌ '+lostBets+' errou</span>';
+        if (pendBets) statusBar += '<span style="background:var(--am-bg);color:var(--am-tx);font-size:9px;padding:2px 7px;border-radius:10px">⏳ '+pendBets+' pendente</span>';
+        statusBar += '</div>';
+      }
+
+      h += '<div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.75rem">';
+      // Header
+      h += '<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:.5rem">';
+      h += '<span style="font-size:18px">🏆</span>';
+      h += '<div style="flex:1">';
+      h += '<a href="'+(art.url||'#')+'" target="_blank" style="text-decoration:none">';
+      h += '<div style="font-size:13px;font-weight:700;color:var(--tx);line-height:1.3;margin-bottom:2px">'+art.title+'</div>';
+      h += '</a>';
+      h += '<div style="font-size:10px;color:var(--tx3)">';
+      h += (art.author?'✍️ '+art.author+' · ':'')+(dateStr?'📅 '+dateStr:'');
+      if (art.matches && art.matches.length) h += ' · ⚽ '+art.matches.join(', ');
+      h += '</div>';
+      h += '</div></div>';
+      // Status bar
+      if (statusBar) h += statusBar;
+      // Summary
+      if (art.summary) h += '<div style="font-size:11px;color:var(--tx3);margin-bottom:.6rem;line-height:1.4">'+art.summary+'</div>';
+      // Bets
+      if (bets.length) {
+        h += '<div style="display:flex;flex-direction:column;gap:5px">';
+        bets.forEach(function(bet) {
+          var resultColor = bet.result==='won'?'var(--gn)':bet.result==='lost'?'var(--rd-tx)':'var(--am)';
+          var resultIcon  = bet.result==='won'?'✅':bet.result==='lost'?'❌':'⏳';
+          h += '<div style="background:var(--sf2);border-left:3px solid '+resultColor+';border-radius:0 6px 6px 0;padding:.35rem .6rem;display:flex;align-items:center;justify-content:space-between;gap:8px">';
+          h += '<span style="font-size:11px;color:var(--tx);flex:1">'+bet.selection+'</span>';
+          h += '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">';
+          if (bet.odds) h += '<span style="font-size:11px;font-weight:700;color:var(--bl-tx);background:var(--bl-bg);padding:1px 7px;border-radius:10px">'+bet.odds+'</span>';
+          h += '<span style="font-size:12px">'+resultIcon+'</span>';
+          h += '</div></div>';
+        });
+        h += '</div>';
+      }
+      h += '</div>';
+    });
+
+  } else {
+    // Simple RSS card view
+    var wc = items.filter(function(it){ return /world.cup|wc.?2026|copa/i.test((it.title||'')+(it.link||'')); });
+    var other = items.filter(function(it){ return !wc.includes(it); });
+    [].concat(wc, other).slice(0,12).forEach(function(item) {
+      var title = (item.title||'').replace(/&amp;/g,'&').replace(/<[^>]+>/g,'').trim();
+      var link  = item.link || item.url || '#';
+      var date  = item.pubDate ? new Date(item.pubDate).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}) : '';
+      var desc  = (item.description||'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').trim().slice(0,140);
+      var isWC  = /world.cup|wc.?2026|copa/i.test(title+link);
+      h += '<a href="'+link+'" target="_blank" rel="noopener" style="text-decoration:none;display:block;margin-bottom:.6rem">';
+      h += '<div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.7rem 1rem">';
+      h += '<div style="display:flex;gap:8px;align-items:flex-start">';
+      h += '<span style="font-size:16px;flex-shrink:0">'+(isWC?'🏆':'⚽')+'</span>';
+      h += '<div><div style="font-size:13px;font-weight:600;color:var(--tx)">'+title+'</div>';
+      if (desc) h += '<div style="font-size:11px;color:var(--tx3);margin-top:2px">'+desc+(desc.length>=140?'…':'')+'</div>';
+      h += '<div style="font-size:10px;color:var(--tx3);margin-top:3px">'+(date?'📅 '+date+' · ':'')+'<span style="color:var(--bl-tx)">betfair.com ↗</span></div>';
+      h += '</div></div></div></a>';
+    });
+  }
+
+  if (updatedAt) h += '<div style="font-size:10px;color:var(--tx3);text-align:center;margin-top:.5rem">🔄 Atualizado: '+updatedAt+'</div>';
+  el.innerHTML = h || '<p style="color:var(--tx3)">Sem artigos.</p>';
 }
 
 function renderBetfair() {
