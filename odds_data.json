@@ -1,7 +1,0 @@
-{
-  "updated_at": "2026-06-09T08:00:00+00:00",
-  "sport_key": "soccer_fifa_world_cup",
-  "games_count": 0,
-  "games": [],
-  "_note": "This file is updated daily by GitHub Actions. Run fetch_odds.py manually or trigger the workflow to populate."
-}
