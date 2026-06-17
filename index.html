@@ -2217,6 +2217,36 @@ function renderTracking(data){
     });
     html+='</div>';
 
+  }else if(_trackView==='efi'){
+    var withEfi=teams.filter(function(t){return t.efi;});
+    if(!withEfi.length){
+      html+='<div style="padding:1rem;background:var(--am-bg);border-radius:var(--r);color:var(--am-tx);font-size:12px">🏃 Dados FIFA EFI ainda não disponíveis. Fonte: <a href="https://github.com/Bustami/efi-fifa-data-wc-2026" target="_blank" style="color:var(--bl-tx)">Bustami/efi-fifa-data-wc-2026</a> (métricas oficiais FIFA).</div>';
+    }else{
+      html+='<div style="font-size:11px;color:var(--tx3);margin-bottom:.75rem">🏃 Métricas físicas e de pressão oficiais da FIFA (EFI — Enhanced Football Intelligence), extraídas da plataforma oficial via <a href="https://github.com/Bustami/efi-fifa-data-wc-2026" target="_blank" style="color:var(--bl-tx)">pipeline Bustami</a>. '+withEfi.length+' seleções disponíveis.</div>';
+      var sortedEfi=[].concat(withEfi).sort(function(a,b){return (b.efi.pass_accuracy||0)-(a.efi.pass_accuracy||0);});
+      html+='<div class="g2">';
+      sortedEfi.forEach(function(t){
+        var sc=SCOUTS[t.code]||{flag:'🏳',name:t.name||t.code};
+        var e=t.efi;
+        var dgfEfi=t.dgf_efi||0;
+        html+='<div class="card" style="margin-bottom:0">';
+        html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:.6rem">';
+        html+='<span style="font-size:18px">'+(sc.flag||'🏳')+'</span>';
+        html+='<span style="font-size:13px;font-weight:700">'+(sc.name||t.name)+'</span>';
+        html+='</div>';
+        html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px">';
+        html+='<div><div style="color:var(--tx3);font-size:9px">xG oficial FIFA</div><div style="font-weight:700">'+e.xg_official+' <span style="font-size:9px;color:'+(dgfEfi>=0?'var(--gn-tx)':'var(--rd-tx)')+'">('+(dgfEfi>=0?'+':'')+dgfEfi.toFixed(2)+')</span></div></div>';
+        html+='<div><div style="color:var(--tx3);font-size:9px">Precisão de passe</div><div style="font-weight:700">'+e.pass_accuracy+'%</div></div>';
+        html+='<div><div style="color:var(--tx3);font-size:9px">Distância/jogo</div><div style="font-weight:700">'+e.avg_distance_km+' km</div></div>';
+        html+='<div><div style="color:var(--tx3);font-size:9px">Sprints</div><div style="font-weight:700">'+e.sprints+'</div></div>';
+        html+='<div><div style="color:var(--tx3);font-size:9px">Desarmes forçados</div><div style="font-weight:700">'+e.forced_turnovers+'</div></div>';
+        html+='<div><div style="color:var(--tx3);font-size:9px">Linhas rompidas</div><div style="font-weight:700">'+e.linebreaks_completed+'/'+e.linebreaks_attempted+'</div></div>';
+        if(e.top_speed) html+='<div><div style="color:var(--tx3);font-size:9px">Vel. máxima</div><div style="font-weight:700">'+e.top_speed+' km/h</div></div>';
+        if(e.shot_accuracy) html+='<div><div style="color:var(--tx3);font-size:9px">Precisão de chute</div><div style="font-weight:700">'+e.shot_accuracy+'%</div></div>';
+        html+='</div></div>';
+      });
+      html+='</div>';
+    }
   }else{
     // Full table view
     html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
