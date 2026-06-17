@@ -1,17 +1,1082 @@
 {
-  "updated_at": "2026-06-17T13:36:27.162375+00:00",
-  "updated_at_brt": "17/06/2026 10:36 BRT",
-  "games_count": 0,
-  "games": [],
-  "todays_games": [],
-  "tomorrows_games": [],
+  "updated_at": "2026-06-17T13:49:13.383960+00:00",
+  "updated_at_brt": "17/06/2026 10:49 BRT",
+  "games_count": 52,
+  "games": [
+    {
+      "id": "6cc871c121a1869b4612d3fb22fa9d55",
+      "home_team": "Portugal",
+      "away_team": "DR Congo",
+      "commence_time": "2026-06-17T17:00:00Z",
+      "h2h": {
+        "away": 14.5,
+        "home": 1.31,
+        "draw": 6.2
+      },
+      "totals": {
+        "over25": 2.95,
+        "under25": 2.16
+      },
+      "btts_yes": null,
+      "bookmakers_count": 39,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "689096c8cd7e2753b9fec95321943c5d",
+      "home_team": "England",
+      "away_team": "Croatia",
+      "commence_time": "2026-06-17T20:00:00Z",
+      "h2h": {
+        "away": 5.6,
+        "home": 1.76,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 3.05,
+        "under25": 2.07
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "87afdb85c977b451e1c00f5e3e632601",
+      "home_team": "Ghana",
+      "away_team": "Panama",
+      "commence_time": "2026-06-17T23:00:00Z",
+      "h2h": {
+        "home": 2.44,
+        "away": 3.4,
+        "draw": 3.33
+      },
+      "totals": {
+        "over25": 2.52,
+        "under25": 2.85
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "22083e7a8e5362c711bc05c1e1319a1f",
+      "home_team": "Uzbekistan",
+      "away_team": "Colombia",
+      "commence_time": "2026-06-18T02:00:00Z",
+      "h2h": {
+        "away": 1.42,
+        "home": 10.5,
+        "draw": 5.1
+      },
+      "totals": {
+        "over25": 1.99,
+        "under25": 2.75
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "66ebb9e3f949caded535d97ce686ca09",
+      "home_team": "Czech Republic",
+      "away_team": "South Africa",
+      "commence_time": "2026-06-18T16:00:00Z",
+      "h2h": {
+        "home": 1.85,
+        "away": 5.0,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 3.0,
+        "under25": 2.07
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "289bc2e9f5adad8ae4d9a75a7c5461ad",
+      "home_team": "Switzerland",
+      "away_team": "Bosnia & Herzegovina",
+      "commence_time": "2026-06-18T19:00:00Z",
+      "h2h": {
+        "away": 7.0,
+        "home": 1.62,
+        "draw": 4.31
+      },
+      "totals": {
+        "over25": 2.9,
+        "under25": 2.08
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "fa9502285b257b03e62968d50d9229fc",
+      "home_team": "Canada",
+      "away_team": "Qatar",
+      "commence_time": "2026-06-18T22:00:00Z",
+      "h2h": {
+        "home": 1.32,
+        "away": 13.0,
+        "draw": 6.1
+      },
+      "totals": {
+        "over25": 2.9,
+        "under25": 2.2
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "0f2aeae6ac8e77223848d23a4ca86b0d",
+      "home_team": "Mexico",
+      "away_team": "South Korea",
+      "commence_time": "2026-06-19T01:00:00Z",
+      "h2h": {
+        "home": 2.1,
+        "away": 4.2,
+        "draw": 3.45
+      },
+      "totals": {
+        "over25": 2.46,
+        "under25": 2.8
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "065b3573e875f8d23803357f73e5b99e",
+      "home_team": "USA",
+      "away_team": "Australia",
+      "commence_time": "2026-06-19T19:00:00Z",
+      "h2h": {
+        "away": 5.8,
+        "home": 1.65,
+        "draw": 4.7
+      },
+      "totals": {
+        "over25": 2.8,
+        "under25": 1.94
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "4cd769aa7bae0ad9762bd69b80ef2903",
+      "home_team": "Scotland",
+      "away_team": "Morocco",
+      "commence_time": "2026-06-19T22:00:00Z",
+      "h2h": {
+        "away": 1.81,
+        "home": 5.8,
+        "draw": 3.75
+      },
+      "totals": {
+        "over25": 2.3,
+        "under25": 2.31
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "ef0f74a991d3e35798ae5af77667bce1",
+      "home_team": "Brazil",
+      "away_team": "Haiti",
+      "commence_time": "2026-06-20T01:00:00Z",
+      "h2h": {
+        "home": 1.13,
+        "away": 29.0,
+        "draw": 13.0
+      },
+      "totals": {
+        "over25": 1.94,
+        "under25": 3.2
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "f955d4b3395ce6e3b5ac1031ca52ca4e",
+      "home_team": "Turkey",
+      "away_team": "Paraguay",
+      "commence_time": "2026-06-20T03:00:00Z",
+      "h2h": {
+        "away": 4.25,
+        "home": 2.1,
+        "draw": 3.5
+      },
+      "totals": {
+        "over25": 2.22,
+        "under25": 2.45
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "4f0c518545b0096c68326daf25bffc1e",
+      "home_team": "Netherlands",
+      "away_team": "Sweden",
+      "commence_time": "2026-06-20T17:00:00Z",
+      "h2h": {
+        "home": 1.76,
+        "away": 5.4,
+        "draw": 4.1
+      },
+      "totals": {
+        "over25": 1.95,
+        "under25": 2.9
+      },
+      "btts_yes": null,
+      "bookmakers_count": 39,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "f1ab0f69832972a329243522ceaa7804",
+      "home_team": "Germany",
+      "away_team": "Ivory Coast",
+      "commence_time": "2026-06-20T20:00:00Z",
+      "h2h": {
+        "home": 1.59,
+        "away": 6.4,
+        "draw": 4.8
+      },
+      "totals": {
+        "over25": 2.7,
+        "under25": 2.38
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "681895f294b670b4c7b14495dfb583bc",
+      "home_team": "Ecuador",
+      "away_team": "Curaçao",
+      "commence_time": "2026-06-21T00:00:00Z",
+      "h2h": {
+        "away": 38.0,
+        "home": 1.14,
+        "draw": 12.3
+      },
+      "totals": {
+        "over25": 2.28,
+        "under25": 2.75
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "dfc5202cf1b8ae002cf952cd04f235b9",
+      "home_team": "Tunisia",
+      "away_team": "Japan",
+      "commence_time": "2026-06-21T04:00:00Z",
+      "h2h": {
+        "away": 1.61,
+        "home": 7.8,
+        "draw": 4.25
+      },
+      "totals": {
+        "over25": 3.05,
+        "under25": 2.04
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "73529a242e319a86bf3d00ddb4accc37",
+      "home_team": "Spain",
+      "away_team": "Saudi Arabia",
+      "commence_time": "2026-06-21T16:00:00Z",
+      "h2h": {
+        "away": 34.0,
+        "home": 1.14,
+        "draw": 12.0
+      },
+      "totals": {
+        "over25": 2.23,
+        "under25": 2.75
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "5f92f257386ec5bf7c6e2498a21f3a61",
+      "home_team": "Belgium",
+      "away_team": "Iran",
+      "commence_time": "2026-06-21T19:00:00Z",
+      "h2h": {
+        "home": 1.47,
+        "away": 8.75,
+        "draw": 4.8
+      },
+      "totals": {
+        "over25": 1.95,
+        "under25": 2.9
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "852a3abe6d46820720febc0fedebff9a",
+      "home_team": "Uruguay",
+      "away_team": "Cape Verde",
+      "commence_time": "2026-06-21T22:00:00Z",
+      "h2h": {
+        "away": 8.8,
+        "home": 1.54,
+        "draw": 4.4
+      },
+      "totals": {
+        "over25": 2.34,
+        "under25": 2.15
+      },
+      "btts_yes": null,
+      "bookmakers_count": 40,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "c1ec9a65f4b4cf74477b368a7d6282de",
+      "home_team": "New Zealand",
+      "away_team": "Egypt",
+      "commence_time": "2026-06-22T01:00:00Z",
+      "h2h": {
+        "away": 1.67,
+        "home": 6.0,
+        "draw": 4.3
+      },
+      "totals": {
+        "over25": 2.25,
+        "under25": 1.95
+      },
+      "btts_yes": null,
+      "bookmakers_count": 39,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "be6c63f416c67bca1300a98f5b89c3af",
+      "home_team": "Argentina",
+      "away_team": "Austria",
+      "commence_time": "2026-06-22T17:00:00Z",
+      "h2h": {
+        "home": 1.62,
+        "away": 6.8,
+        "draw": 4.2
+      },
+      "totals": {
+        "over25": 2.7,
+        "under25": 1.94
+      },
+      "btts_yes": null,
+      "bookmakers_count": 37,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "7ad7a0ce2ef2618bb59b066da5642f70",
+      "home_team": "France",
+      "away_team": "Iraq",
+      "commence_time": "2026-06-22T21:00:00Z",
+      "h2h": {
+        "home": 1.12,
+        "away": 39.0,
+        "draw": 12.5
+      },
+      "totals": {
+        "over25": 2.7,
+        "under25": 2.9
+      },
+      "btts_yes": null,
+      "bookmakers_count": 37,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "3f48473742ca0fd2a85930554720c75e",
+      "home_team": "Norway",
+      "away_team": "Senegal",
+      "commence_time": "2026-06-23T00:00:00Z",
+      "h2h": {
+        "home": 2.46,
+        "away": 3.15,
+        "draw": 3.6
+      },
+      "totals": {
+        "over25": 2.7,
+        "under25": 1.96
+      },
+      "btts_yes": null,
+      "bookmakers_count": 37,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "fd8533b650e655030f6a7946f8795db2",
+      "home_team": "Jordan",
+      "away_team": "Algeria",
+      "commence_time": "2026-06-23T03:00:00Z",
+      "h2h": {
+        "away": 1.63,
+        "home": 6.6,
+        "draw": 4.4
+      },
+      "totals": {
+        "over25": 2.75,
+        "under25": 1.9
+      },
+      "btts_yes": null,
+      "bookmakers_count": 37,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "8ba93d190f1f934e33862a97a6353a6e",
+      "home_team": "Portugal",
+      "away_team": "Uzbekistan",
+      "commence_time": "2026-06-23T17:00:00Z",
+      "h2h": {
+        "home": 1.26,
+        "away": 15.5,
+        "draw": 7.2
+      },
+      "totals": {
+        "over25": 2.47,
+        "under25": 2.4
+      },
+      "btts_yes": null,
+      "bookmakers_count": 36,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "2f49dd8deae3079dc4eb2d634d18a99c",
+      "home_team": "England",
+      "away_team": "Ghana",
+      "commence_time": "2026-06-23T20:00:00Z",
+      "h2h": {
+        "home": 1.34,
+        "away": 11.3,
+        "draw": 5.9
+      },
+      "totals": {
+        "over25": 1.88,
+        "under25": 2.28
+      },
+      "btts_yes": null,
+      "bookmakers_count": 36,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "c1bc8c26480cd42b89a0de5329581314",
+      "home_team": "Panama",
+      "away_team": "Croatia",
+      "commence_time": "2026-06-23T23:00:00Z",
+      "h2h": {
+        "away": 1.61,
+        "home": 7.2,
+        "draw": 4.0
+      },
+      "totals": {
+        "over25": 2.12,
+        "under25": 1.99
+      },
+      "btts_yes": null,
+      "bookmakers_count": 36,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "68bfc965eb267508e04d8e8d75c1a0ae",
+      "home_team": "Colombia",
+      "away_team": "DR Congo",
+      "commence_time": "2026-06-24T02:00:00Z",
+      "h2h": {
+        "home": 1.51,
+        "away": 8.0,
+        "draw": 4.5
+      },
+      "totals": {
+        "over25": 2.26,
+        "under25": 1.87
+      },
+      "btts_yes": null,
+      "bookmakers_count": 35,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "512ac18beb5aa936a59f7ea3e497ada2",
+      "home_team": "Bosnia & Herzegovina",
+      "away_team": "Qatar",
+      "commence_time": "2026-06-24T19:00:00Z",
+      "h2h": {
+        "home": 1.62,
+        "away": 6.5,
+        "draw": 4.3
+      },
+      "totals": {
+        "over25": 2.1,
+        "under25": 2.0
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "c9ef5822ee64fd5275f7c73251bb56c7",
+      "home_team": "Switzerland",
+      "away_team": "Canada",
+      "commence_time": "2026-06-24T19:00:00Z",
+      "h2h": {
+        "away": 3.64,
+        "home": 2.26,
+        "draw": 3.5
+      },
+      "totals": {
+        "over25": 2.14,
+        "under25": 1.99
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "885ba95805db310a7bcc3fb1a7a6dd28",
+      "home_team": "Scotland",
+      "away_team": "Brazil",
+      "commence_time": "2026-06-24T22:00:00Z",
+      "h2h": {
+        "away": 1.48,
+        "home": 8.5,
+        "draw": 5.4
+      },
+      "totals": {
+        "over25": 1.9,
+        "under25": 2.0
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "d1279ce7f33136a33e99ad442fc855e8",
+      "home_team": "Morocco",
+      "away_team": "Haiti",
+      "commence_time": "2026-06-24T22:00:00Z",
+      "h2h": {
+        "away": 12.0,
+        "home": 1.32,
+        "draw": 5.8
+      },
+      "totals": {
+        "over25": 2.05,
+        "under25": 2.23
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "5993bd5196ca09f83990f0c3261e442e",
+      "home_team": "Czech Republic",
+      "away_team": "Mexico",
+      "commence_time": "2026-06-25T01:00:00Z",
+      "h2h": {
+        "home": 4.75,
+        "away": 1.9,
+        "draw": 3.6
+      },
+      "totals": {
+        "over25": 2.12,
+        "under25": 1.93
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "c0355dfc6e26ec327e379b6ef5824a5f",
+      "home_team": "South Africa",
+      "away_team": "South Korea",
+      "commence_time": "2026-06-25T01:00:00Z",
+      "h2h": {
+        "home": 6.25,
+        "away": 1.63,
+        "draw": 4.3
+      },
+      "totals": {
+        "over25": 2.03,
+        "under25": 1.98
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "a5a0b544a984ab16e564264f3e859b43",
+      "home_team": "Curaçao",
+      "away_team": "Ivory Coast",
+      "commence_time": "2026-06-25T20:00:00Z",
+      "h2h": {
+        "home": 23.0,
+        "away": 1.17,
+        "draw": 9.6
+      },
+      "totals": {
+        "over25": 2.23,
+        "under25": 2.62
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "0ec28b84ec399bd4dffbe8d1bc72b3c4",
+      "home_team": "Ecuador",
+      "away_team": "Germany",
+      "commence_time": "2026-06-25T20:00:00Z",
+      "h2h": {
+        "home": 5.0,
+        "away": 1.78,
+        "draw": 4.04
+      },
+      "totals": {
+        "over25": 1.96,
+        "under25": 1.93
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "0ed0233bddc4eafc8507f86a9c17b998",
+      "home_team": "Japan",
+      "away_team": "Sweden",
+      "commence_time": "2026-06-25T23:00:00Z",
+      "h2h": {
+        "home": 2.18,
+        "away": 3.6,
+        "draw": 3.53
+      },
+      "totals": {
+        "over25": 2.14,
+        "under25": 2.04
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "f3c4657daa143a0c5bd62cb370d01ce4",
+      "home_team": "Tunisia",
+      "away_team": "Netherlands",
+      "commence_time": "2026-06-25T23:00:00Z",
+      "h2h": {
+        "away": 1.37,
+        "home": 10.5,
+        "draw": 5.7
+      },
+      "totals": {
+        "over25": 2.09,
+        "under25": 2.25
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "22f6ac06dfcc88a847920f62633e6459",
+      "home_team": "Paraguay",
+      "away_team": "Australia",
+      "commence_time": "2026-06-26T02:00:00Z",
+      "h2h": {
+        "away": 3.6,
+        "home": 2.24,
+        "draw": 3.4
+      },
+      "totals": {
+        "over25": 2.28,
+        "under25": 2.12
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "f41aeac9a8343a84b4950f15ea25fba2",
+      "home_team": "Turkey",
+      "away_team": "USA",
+      "commence_time": "2026-06-26T02:00:00Z",
+      "h2h": {
+        "home": 2.9,
+        "away": 2.46,
+        "draw": 3.75
+      },
+      "totals": {
+        "over25": 1.85,
+        "under25": 2.04
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "b86b4d60f773e9e3c46c00e9a6496e79",
+      "home_team": "Norway",
+      "away_team": "France",
+      "commence_time": "2026-06-26T19:00:00Z",
+      "h2h": {
+        "away": 1.85,
+        "home": 4.4,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 1.87,
+        "under25": 2.14
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "7e6aee294ea1a4792c59558791084528",
+      "home_team": "Senegal",
+      "away_team": "Iraq",
+      "commence_time": "2026-06-26T19:00:00Z",
+      "h2h": {
+        "away": 11.0,
+        "home": 1.39,
+        "draw": 5.5
+      },
+      "totals": {
+        "over25": 1.89,
+        "under25": 2.04
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "e07b1926be5a4d515c7eb108dbcee9c5",
+      "home_team": "Cape Verde",
+      "away_team": "Saudi Arabia",
+      "commence_time": "2026-06-27T00:00:00Z",
+      "h2h": {
+        "home": 2.94,
+        "away": 2.5,
+        "draw": 3.84
+      },
+      "totals": {
+        "over25": 2.12,
+        "under25": 1.98
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "dcff2e31c0bce001a4db5caaf4fa8822",
+      "home_team": "Uruguay",
+      "away_team": "Spain",
+      "commence_time": "2026-06-27T00:00:00Z",
+      "h2h": {
+        "away": 1.6,
+        "home": 6.5,
+        "draw": 4.47
+      },
+      "totals": {
+        "over25": 1.93,
+        "under25": 1.97
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "581691da05dcd75b5c6d3be91ee9d2ab",
+      "home_team": "New Zealand",
+      "away_team": "Belgium",
+      "commence_time": "2026-06-27T03:00:00Z",
+      "h2h": {
+        "away": 1.3,
+        "home": 14.0,
+        "draw": 6.5
+      },
+      "totals": {
+        "over25": 2.02,
+        "under25": 2.33
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "3e3b5fa2b3c963e74cf044c60db0b573",
+      "home_team": "Egypt",
+      "away_team": "Iran",
+      "commence_time": "2026-06-27T03:00:00Z",
+      "h2h": {
+        "home": 2.15,
+        "away": 4.0,
+        "draw": 3.3
+      },
+      "totals": {
+        "over25": 2.54,
+        "under25": 2.6
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "537c0997cd899394f47f16545b7068b2",
+      "home_team": "Croatia",
+      "away_team": "Ghana",
+      "commence_time": "2026-06-27T21:00:00Z",
+      "h2h": {
+        "home": 1.67,
+        "away": 6.0,
+        "draw": 4.0
+      },
+      "totals": {
+        "over25": 2.1,
+        "under25": 2.02
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "4be17c8e1ccfecb0f2a5ef79e045c415",
+      "home_team": "Panama",
+      "away_team": "England",
+      "commence_time": "2026-06-27T21:00:00Z",
+      "h2h": {
+        "away": 1.32,
+        "home": 12.0,
+        "draw": 7.0
+      },
+      "totals": {
+        "over25": 2.02,
+        "under25": 2.33
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "67ae5751c401a98409b8566ae4897069",
+      "home_team": "Colombia",
+      "away_team": "Portugal",
+      "commence_time": "2026-06-27T23:30:00Z",
+      "h2h": {
+        "home": 3.65,
+        "away": 2.2,
+        "draw": 3.55
+      },
+      "totals": {
+        "over25": 2.1,
+        "under25": 1.99
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "13eab94a136b9c264ba974cf437a5f71",
+      "home_team": "DR Congo",
+      "away_team": "Uzbekistan",
+      "commence_time": "2026-06-27T23:30:00Z",
+      "h2h": {
+        "home": 2.4,
+        "away": 3.3,
+        "draw": 3.35
+      },
+      "totals": {
+        "over25": 2.25,
+        "under25": 2.12
+      },
+      "btts_yes": null,
+      "bookmakers_count": 32,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "8756200e539155e571557c4f2e0d7f05",
+      "home_team": "Algeria",
+      "away_team": "Austria",
+      "commence_time": "2026-06-28T02:00:00Z",
+      "h2h": {
+        "home": 3.4,
+        "away": 2.6,
+        "draw": 3.3
+      },
+      "totals": {
+        "over25": 2.17,
+        "under25": 1.94
+      },
+      "btts_yes": null,
+      "bookmakers_count": 29,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "54697f453437ab26276d773be1d72e9b",
+      "home_team": "Jordan",
+      "away_team": "Argentina",
+      "commence_time": "2026-06-28T02:00:00Z",
+      "h2h": {
+        "away": 1.23,
+        "home": 15.0,
+        "draw": 7.25
+      },
+      "totals": {
+        "over25": 2.04,
+        "under25": 2.48
+      },
+      "btts_yes": null,
+      "bookmakers_count": 29,
+      "sport_key": "soccer_fifa_world_cup"
+    }
+  ],
+  "todays_games": [
+    {
+      "id": "6cc871c121a1869b4612d3fb22fa9d55",
+      "home_team": "Portugal",
+      "away_team": "DR Congo",
+      "commence_time": "2026-06-17T17:00:00Z",
+      "h2h": {
+        "away": 14.5,
+        "home": 1.31,
+        "draw": 6.2
+      },
+      "totals": {
+        "over25": 2.95,
+        "under25": 2.16
+      },
+      "btts_yes": null,
+      "bookmakers_count": 39,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "689096c8cd7e2753b9fec95321943c5d",
+      "home_team": "England",
+      "away_team": "Croatia",
+      "commence_time": "2026-06-17T20:00:00Z",
+      "h2h": {
+        "away": 5.6,
+        "home": 1.76,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 3.05,
+        "under25": 2.07
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "87afdb85c977b451e1c00f5e3e632601",
+      "home_team": "Ghana",
+      "away_team": "Panama",
+      "commence_time": "2026-06-17T23:00:00Z",
+      "h2h": {
+        "home": 2.44,
+        "away": 3.4,
+        "draw": 3.33
+      },
+      "totals": {
+        "over25": 2.52,
+        "under25": 2.85
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    }
+  ],
+  "tomorrows_games": [
+    {
+      "id": "22083e7a8e5362c711bc05c1e1319a1f",
+      "home_team": "Uzbekistan",
+      "away_team": "Colombia",
+      "commence_time": "2026-06-18T02:00:00Z",
+      "h2h": {
+        "away": 1.42,
+        "home": 10.5,
+        "draw": 5.1
+      },
+      "totals": {
+        "over25": 1.99,
+        "under25": 2.75
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "66ebb9e3f949caded535d97ce686ca09",
+      "home_team": "Czech Republic",
+      "away_team": "South Africa",
+      "commence_time": "2026-06-18T16:00:00Z",
+      "h2h": {
+        "home": 1.85,
+        "away": 5.0,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 3.0,
+        "under25": 2.07
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "289bc2e9f5adad8ae4d9a75a7c5461ad",
+      "home_team": "Switzerland",
+      "away_team": "Bosnia & Herzegovina",
+      "commence_time": "2026-06-18T19:00:00Z",
+      "h2h": {
+        "away": 7.0,
+        "home": 1.62,
+        "draw": 4.31
+      },
+      "totals": {
+        "over25": 2.9,
+        "under25": 2.08
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    },
+    {
+      "id": "fa9502285b257b03e62968d50d9229fc",
+      "home_team": "Canada",
+      "away_team": "Qatar",
+      "commence_time": "2026-06-18T22:00:00Z",
+      "h2h": {
+        "home": 1.32,
+        "away": 13.0,
+        "draw": 6.1
+      },
+      "totals": {
+        "over25": 2.9,
+        "under25": 2.2
+      },
+      "btts_yes": null,
+      "bookmakers_count": 41,
+      "sport_key": "soccer_fifa_world_cup"
+    }
+  ],
   "weather": {
     "New York": {
       "venue": "MetLife Stadium, New Jersey",
-      "temp_c": 22.7,
-      "feels_like": 23.1,
-      "humidity": 58,
-      "wind": 9.4,
+      "temp_c": 23.1,
+      "feels_like": 23.8,
+      "humidity": 57,
+      "wind": 9.9,
       "rain_prob": 0,
       "weather_code": 0,
       "max_tomorrow": 33.5,
@@ -20,22 +1085,22 @@
     },
     "Los Angeles": {
       "venue": "SoFi Stadium, Los Angeles",
-      "temp_c": 16.3,
-      "feels_like": 18.1,
+      "temp_c": 16.5,
+      "feels_like": 18.4,
       "humidity": 98,
-      "wind": 1.8,
+      "wind": 1.4,
       "rain_prob": 0,
-      "weather_code": 45,
+      "weather_code": 3,
       "max_tomorrow": 22.0,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Dallas": {
       "venue": "AT&T Stadium, Arlington",
-      "temp_c": 26.5,
-      "feels_like": 28.2,
-      "humidity": 73,
-      "wind": 19.2,
+      "temp_c": 26.8,
+      "feels_like": 28.1,
+      "humidity": 71,
+      "wind": 21.6,
       "rain_prob": 0,
       "weather_code": 0,
       "max_tomorrow": 39.7,
@@ -44,10 +1109,10 @@
     },
     "San Francisco": {
       "venue": "Levi's Stadium, Santa Clara",
-      "temp_c": 15.1,
-      "feels_like": 15.9,
-      "humidity": 86,
-      "wind": 0.8,
+      "temp_c": 15.0,
+      "feels_like": 15.2,
+      "humidity": 87,
+      "wind": 4.6,
       "rain_prob": 0,
       "weather_code": 1,
       "max_tomorrow": 28.7,
@@ -56,11 +1121,11 @@
     },
     "Miami": {
       "venue": "Hard Rock Stadium, Miami",
-      "temp_c": 30.1,
-      "feels_like": 34.4,
-      "humidity": 70,
-      "wind": 11.8,
-      "rain_prob": 3,
+      "temp_c": 30.3,
+      "feels_like": 34.2,
+      "humidity": 68,
+      "wind": 13.8,
+      "rain_prob": 4,
       "weather_code": 0,
       "max_tomorrow": 38.0,
       "extreme_heat": false,
@@ -68,10 +1133,10 @@
     },
     "Atlanta": {
       "venue": "Mercedes-Benz Stadium, Atlanta",
-      "temp_c": 21.8,
-      "feels_like": 24.9,
+      "temp_c": 21.9,
+      "feels_like": 25.0,
       "humidity": 89,
-      "wind": 5.5,
+      "wind": 5.3,
       "rain_prob": 1,
       "weather_code": 3,
       "max_tomorrow": 30.4,
@@ -80,10 +1145,10 @@
     },
     "Seattle": {
       "venue": "Lumen Field, Seattle",
-      "temp_c": 12.3,
-      "feels_like": 11.8,
-      "humidity": 88,
-      "wind": 4.2,
+      "temp_c": 12.8,
+      "feels_like": 12.2,
+      "humidity": 86,
+      "wind": 5.1,
       "rain_prob": 0,
       "weather_code": 0,
       "max_tomorrow": 25.3,
@@ -92,11 +1157,11 @@
     },
     "Houston": {
       "venue": "NRG Stadium, Houston",
-      "temp_c": 25.7,
-      "feels_like": 30.0,
-      "humidity": 93,
-      "wind": 15.2,
-      "rain_prob": 54,
+      "temp_c": 24.7,
+      "feels_like": 27.9,
+      "humidity": 92,
+      "wind": 17.0,
+      "rain_prob": 51,
       "weather_code": 2,
       "max_tomorrow": 38.3,
       "extreme_heat": false,
@@ -104,10 +1169,10 @@
     },
     "Kansas City": {
       "venue": "Arrowhead Stadium, Kansas City",
-      "temp_c": 26.6,
-      "feels_like": 24.9,
+      "temp_c": 27.2,
+      "feels_like": 25.6,
       "humidity": 67,
-      "wind": 38.0,
+      "wind": 39.0,
       "rain_prob": 1,
       "weather_code": 0,
       "max_tomorrow": 24.8,
@@ -116,10 +1181,10 @@
     },
     "Philadelphia": {
       "venue": "Lincoln Financial Field, Philadelphia",
-      "temp_c": 22.6,
-      "feels_like": 24.3,
-      "humidity": 69,
-      "wind": 7.0,
+      "temp_c": 22.9,
+      "feels_like": 24.5,
+      "humidity": 67,
+      "wind": 9.4,
       "rain_prob": 0,
       "weather_code": 0,
       "max_tomorrow": 34.7,
@@ -128,22 +1193,22 @@
     },
     "Boston": {
       "venue": "Gillette Stadium, Boston",
-      "temp_c": 21.3,
-      "feels_like": 22.0,
-      "humidity": 56,
-      "wind": 5.9,
+      "temp_c": 22.7,
+      "feels_like": 24.3,
+      "humidity": 54,
+      "wind": 2.9,
       "rain_prob": 0,
-      "weather_code": 1,
+      "weather_code": 2,
       "max_tomorrow": 23.9,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Vancouver": {
       "venue": "BC Place, Vancouver",
-      "temp_c": 13.6,
-      "feels_like": 13.4,
+      "temp_c": 14.2,
+      "feels_like": 14.3,
       "humidity": 87,
-      "wind": 4.2,
+      "wind": 3.6,
       "rain_prob": 0,
       "weather_code": 0,
       "max_tomorrow": 21.8,
@@ -152,10 +1217,10 @@
     },
     "Toronto": {
       "venue": "BMO Field, Toronto",
-      "temp_c": 16.0,
-      "feels_like": 16.2,
-      "humidity": 90,
-      "wind": 8.9,
+      "temp_c": 16.5,
+      "feels_like": 17.0,
+      "humidity": 88,
+      "wind": 7.4,
       "rain_prob": 12,
       "weather_code": 1,
       "max_tomorrow": 19.6,
@@ -164,26 +1229,26 @@
     },
     "Guadalajara": {
       "venue": "Estadio Akron, Guadalajara",
-      "temp_c": 18.2,
-      "feels_like": 20.3,
-      "humidity": 93,
-      "wind": 2.3,
-      "rain_prob": 10,
-      "weather_code": 3,
-      "max_tomorrow": 30.2,
-      "extreme_heat": false,
-      "utci_risk": "moderate"
+      "error": "unavailable"
     },
     "Mexico City": {
       "venue": "Estadio Azteca, Mexico City",
-      "error": "unavailable"
+      "temp_c": 16.5,
+      "feels_like": 18.1,
+      "humidity": 91,
+      "wind": 0.6,
+      "rain_prob": 0,
+      "weather_code": 3,
+      "max_tomorrow": 24.4,
+      "extreme_heat": false,
+      "utci_risk": "moderate"
     },
     "Monterrey": {
       "venue": "Estadio BBVA, Monterrey",
-      "temp_c": 25.2,
-      "feels_like": 29.8,
-      "humidity": 82,
-      "wind": 1.6,
+      "temp_c": 25.7,
+      "feels_like": 30.6,
+      "humidity": 81,
+      "wind": 0.7,
       "rain_prob": 1,
       "weather_code": 0,
       "max_tomorrow": 44.7,

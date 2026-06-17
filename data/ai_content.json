@@ -1,11 +1,156 @@
 {
-  "generated_at": "2026-06-17T13:36:49.323596+00:00",
-  "generated_at_brt": "17/06/2026 10:36 BRT",
+  "generated_at": "2026-06-17T13:49:40.159186+00:00",
+  "generated_at_brt": "17/06/2026 10:49 BRT",
   "value_bets_today": {
-    "summary": "Nenhum jogo da Copa encontrado para hoje/amanhã.",
+    "summary": "Erro na geração: HTTP Error 404: Not Found",
     "bets": [],
     "tip_of_day": null
   },
-  "match_previews": [],
+  "match_previews": [
+    {
+      "game_id": "6cc871c121a1869b4612d3fb22fa9d55",
+      "home": "Portugal",
+      "away": "DR Congo",
+      "time": "2026-06-17T17:00:00Z",
+      "h2h": {
+        "away": 14.5,
+        "home": 1.31,
+        "draw": 6.2
+      },
+      "totals": {
+        "over25": 2.95,
+        "under25": 2.16
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    },
+    {
+      "game_id": "689096c8cd7e2753b9fec95321943c5d",
+      "home": "England",
+      "away": "Croatia",
+      "time": "2026-06-17T20:00:00Z",
+      "h2h": {
+        "away": 5.6,
+        "home": 1.76,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 3.05,
+        "under25": 2.07
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    },
+    {
+      "game_id": "87afdb85c977b451e1c00f5e3e632601",
+      "home": "Ghana",
+      "away": "Panama",
+      "time": "2026-06-17T23:00:00Z",
+      "h2h": {
+        "home": 2.44,
+        "away": 3.4,
+        "draw": 3.33
+      },
+      "totals": {
+        "over25": 2.52,
+        "under25": 2.85
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    },
+    {
+      "game_id": "22083e7a8e5362c711bc05c1e1319a1f",
+      "home": "Uzbekistan",
+      "away": "Colombia",
+      "time": "2026-06-18T02:00:00Z",
+      "h2h": {
+        "away": 1.42,
+        "home": 10.5,
+        "draw": 5.1
+      },
+      "totals": {
+        "over25": 1.99,
+        "under25": 2.75
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    },
+    {
+      "game_id": "66ebb9e3f949caded535d97ce686ca09",
+      "home": "Czech Republic",
+      "away": "South Africa",
+      "time": "2026-06-18T16:00:00Z",
+      "h2h": {
+        "home": 1.85,
+        "away": 5.0,
+        "draw": 3.9
+      },
+      "totals": {
+        "over25": 3.0,
+        "under25": 2.07
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    },
+    {
+      "game_id": "289bc2e9f5adad8ae4d9a75a7c5461ad",
+      "home": "Switzerland",
+      "away": "Bosnia & Herzegovina",
+      "time": "2026-06-18T19:00:00Z",
+      "h2h": {
+        "away": 7.0,
+        "home": 1.62,
+        "draw": 4.31
+      },
+      "totals": {
+        "over25": 2.9,
+        "under25": 2.08
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    }
+  ],
   "tactical_notes": {}
 }
