@@ -46,7 +46,7 @@ def fetch_odds():
     sport_used = None
     for key in sport_keys:
         url = (f"https://api.the-odds-api.com/v4/sports/{key}/odds"
-               f"?apiKey={ODDS_API_KEY}&regions=eu,uk&markets=h2h,totals,btts"
+               f"?apiKey={ODDS_API_KEY}&regions=eu,uk&markets=h2h,totals"
                f"&oddsFormat=decimal&dateFormat=iso")
         data = fetch_url(url)
         if data and isinstance(data, list) and len(data) > 0:
