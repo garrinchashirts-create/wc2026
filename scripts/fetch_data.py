@@ -298,7 +298,7 @@ def main():
         "wc_results": wc_results,
     }
 
-with open("data/live_data.json","w") as f:
+    with open("data/live_data.json","w") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
     print(f"\n✅ Saved data/live_data.json ({len(odds)} games, {len(weather)} venues)")
 
