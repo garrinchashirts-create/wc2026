@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-19T20:02:24.838260+00:00",
-  "generated_at_brt": "19/06/2026 17:02 BRT",
+  "generated_at": "2026-06-19T20:21:20.781147+00:00",
+  "generated_at_brt": "19/06/2026 17:21 BRT",
   "value_bets_today": {
     "summary": "Erro na geração: HTTP Error 404: Not Found",
     "bets": [],
@@ -13,13 +13,13 @@
       "away": "Australia",
       "time": "2026-06-19T19:00:00Z",
       "h2h": {
-        "away": 151.0,
-        "home": 1.04,
-        "draw": 31.0
+        "away": 181.0,
+        "home": 1.03,
+        "draw": 50.0
       },
       "totals": {
-        "over25": 2.25,
-        "under25": 4.4
+        "over25": 2.55,
+        "under25": 3.7
       },
       "btts_yes": null,
       "preview": {
@@ -63,7 +63,7 @@
       "h2h": {
         "home": 1.13,
         "away": 27.0,
-        "draw": 12.5
+        "draw": 12.0
       },
       "totals": {
         "over25": 2.0,
@@ -91,7 +91,7 @@
       },
       "totals": {
         "over25": 2.9,
-        "under25": 1.85
+        "under25": 2.09
       },
       "btts_yes": null,
       "preview": {
@@ -111,7 +111,7 @@
       "h2h": {
         "home": 1.79,
         "away": 5.0,
-        "draw": 4.11
+        "draw": 4.2
       },
       "totals": {
         "over25": 2.75,
@@ -134,7 +134,7 @@
       "time": "2026-06-20T20:00:00Z",
       "h2h": {
         "home": 1.58,
-        "away": 6.2,
+        "away": 6.1,
         "draw": 4.8
       },
       "totals": {

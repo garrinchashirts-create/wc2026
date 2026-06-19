@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-19T20:01:54.799580+00:00",
-  "updated_at_brt": "19/06/2026 17:01 BRT",
+  "updated_at": "2026-06-19T20:20:50.851531+00:00",
+  "updated_at_brt": "19/06/2026 17:20 BRT",
   "games_count": 44,
   "games": [
     {
@@ -9,13 +9,13 @@
       "away_team": "Australia",
       "commence_time": "2026-06-19T19:00:00Z",
       "h2h": {
-        "away": 151.0,
-        "home": 1.04,
-        "draw": 31.0
+        "away": 181.0,
+        "home": 1.03,
+        "draw": 50.0
       },
       "totals": {
-        "over25": 2.25,
-        "under25": 4.4
+        "over25": 2.55,
+        "under25": 3.7
       },
       "btts_yes": null,
       "bookmakers_count": 28,
@@ -47,7 +47,7 @@
       "h2h": {
         "home": 1.13,
         "away": 27.0,
-        "draw": 12.5
+        "draw": 12.0
       },
       "totals": {
         "over25": 2.0,
@@ -69,7 +69,7 @@
       },
       "totals": {
         "over25": 2.9,
-        "under25": 1.85
+        "under25": 2.09
       },
       "btts_yes": null,
       "bookmakers_count": 40,
@@ -83,7 +83,7 @@
       "h2h": {
         "home": 1.79,
         "away": 5.0,
-        "draw": 4.11
+        "draw": 4.2
       },
       "totals": {
         "over25": 2.75,
@@ -100,7 +100,7 @@
       "commence_time": "2026-06-20T20:00:00Z",
       "h2h": {
         "home": 1.58,
-        "away": 6.2,
+        "away": 6.1,
         "draw": 4.8
       },
       "totals": {
@@ -117,7 +117,7 @@
       "away_team": "Curaçao",
       "commence_time": "2026-06-21T00:00:00Z",
       "h2h": {
-        "away": 35.0,
+        "away": 33.0,
         "home": 1.14,
         "draw": 11.5
       },
@@ -153,9 +153,9 @@
       "away_team": "Saudi Arabia",
       "commence_time": "2026-06-21T16:00:00Z",
       "h2h": {
-        "away": 37.0,
+        "away": 34.0,
         "home": 1.14,
-        "draw": 11.5
+        "draw": 11.9
       },
       "totals": {
         "over25": 2.28,
@@ -207,9 +207,9 @@
       "away_team": "Egypt",
       "commence_time": "2026-06-22T01:00:00Z",
       "h2h": {
-        "away": 1.66,
+        "away": 1.67,
         "home": 6.0,
-        "draw": 4.24
+        "draw": 4.25
       },
       "totals": {
         "over25": 2.22,
@@ -375,7 +375,7 @@
       },
       "totals": {
         "over25": 2.08,
-        "under25": 2.24
+        "under25": 2.28
       },
       "btts_yes": null,
       "bookmakers_count": 37,
@@ -411,7 +411,7 @@
       },
       "totals": {
         "over25": 1.9,
-        "under25": 2.08
+        "under25": 2.1
       },
       "btts_yes": null,
       "bookmakers_count": 34,
@@ -477,7 +477,7 @@
       "away_team": "Ivory Coast",
       "commence_time": "2026-06-25T20:00:00Z",
       "h2h": {
-        "home": 23.0,
+        "home": 29.0,
         "away": 1.17,
         "draw": 9.8
       },
@@ -486,7 +486,7 @@
         "under25": 2.7
       },
       "btts_yes": null,
-      "bookmakers_count": 34,
+      "bookmakers_count": 35,
       "sport_key": "soccer_fifa_world_cup"
     },
     {
@@ -500,8 +500,8 @@
         "draw": 4.04
       },
       "totals": {
-        "over25": 1.96,
-        "under25": 1.98
+        "over25": 1.97,
+        "under25": 1.97
       },
       "btts_yes": null,
       "bookmakers_count": 34,
@@ -513,7 +513,7 @@
       "away_team": "Sweden",
       "commence_time": "2026-06-25T23:00:00Z",
       "h2h": {
-        "home": 2.3,
+        "home": 2.32,
         "away": 3.55,
         "draw": 3.55
       },
@@ -567,13 +567,13 @@
       "away_team": "USA",
       "commence_time": "2026-06-26T02:00:00Z",
       "h2h": {
-        "home": 2.71,
-        "away": 2.7,
-        "draw": 4.2
+        "home": 2.62,
+        "away": 2.65,
+        "draw": 4.5
       },
       "totals": {
         "over25": 2.01,
-        "under25": 2.1
+        "under25": 2.12
       },
       "btts_yes": null,
       "bookmakers_count": 26,
@@ -803,13 +803,13 @@
       "away_team": "Australia",
       "commence_time": "2026-06-19T19:00:00Z",
       "h2h": {
-        "away": 151.0,
-        "home": 1.04,
-        "draw": 31.0
+        "away": 181.0,
+        "home": 1.03,
+        "draw": 50.0
       },
       "totals": {
-        "over25": 2.25,
-        "under25": 4.4
+        "over25": 2.55,
+        "under25": 3.7
       },
       "btts_yes": null,
       "bookmakers_count": 28,
@@ -843,7 +843,7 @@
       "h2h": {
         "home": 1.13,
         "away": 27.0,
-        "draw": 12.5
+        "draw": 12.0
       },
       "totals": {
         "over25": 2.0,
@@ -865,7 +865,7 @@
       },
       "totals": {
         "over25": 2.9,
-        "under25": 1.85
+        "under25": 2.09
       },
       "btts_yes": null,
       "bookmakers_count": 40,
@@ -879,7 +879,7 @@
       "h2h": {
         "home": 1.79,
         "away": 5.0,
-        "draw": 4.11
+        "draw": 4.2
       },
       "totals": {
         "over25": 2.75,
@@ -896,7 +896,7 @@
       "commence_time": "2026-06-20T20:00:00Z",
       "h2h": {
         "home": 1.58,
-        "away": 6.2,
+        "away": 6.1,
         "draw": 4.8
       },
       "totals": {
@@ -912,158 +912,158 @@
     "New York": {
       "venue": "MetLife Stadium, New Jersey",
       "temp_c": 28.8,
-      "feels_like": 25.9,
+      "feels_like": 25.7,
       "humidity": 29,
-      "wind": 21.7,
+      "wind": 21.6,
       "rain_prob": 0,
       "weather_code": 1,
-      "max_tomorrow": 25.7,
+      "max_tomorrow": 26.3,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Los Angeles": {
       "venue": "SoFi Stadium, Los Angeles",
-      "temp_c": 19.5,
-      "feels_like": 19.4,
+      "temp_c": 19.4,
+      "feels_like": 19.3,
       "humidity": 75,
-      "wind": 12.4,
+      "wind": 12.3,
       "rain_prob": 0,
-      "weather_code": 2,
-      "max_tomorrow": 22.3,
+      "weather_code": 3,
+      "max_tomorrow": 22.0,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Dallas": {
       "venue": "AT&T Stadium, Arlington",
-      "temp_c": 28.2,
-      "feels_like": 33.0,
-      "humidity": 63,
-      "wind": 5.5,
-      "rain_prob": 44,
+      "temp_c": 28.4,
+      "feels_like": 32.4,
+      "humidity": 67,
+      "wind": 6.9,
+      "rain_prob": 42,
       "weather_code": 3,
-      "max_tomorrow": 39.2,
+      "max_tomorrow": 34.7,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "San Francisco": {
       "venue": "Levi's Stadium, Santa Clara",
-      "temp_c": 21.9,
-      "feels_like": 24.0,
-      "humidity": 57,
-      "wind": 9.0,
+      "temp_c": 22.0,
+      "feels_like": 24.1,
+      "humidity": 58,
+      "wind": 10.8,
       "rain_prob": 0,
       "weather_code": 0,
-      "max_tomorrow": 20.8,
+      "max_tomorrow": 20.4,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Miami": {
       "venue": "Hard Rock Stadium, Miami",
-      "temp_c": 33.5,
-      "feels_like": 38.2,
-      "humidity": 56,
+      "temp_c": 33.4,
+      "feels_like": 37.3,
+      "humidity": 53,
       "wind": 17.4,
-      "rain_prob": 3,
-      "weather_code": 95,
-      "max_tomorrow": 40.1,
-      "extreme_heat": true,
-      "utci_risk": "high"
+      "rain_prob": 4,
+      "weather_code": 0,
+      "max_tomorrow": 39.1,
+      "extreme_heat": false,
+      "utci_risk": "moderate"
     },
     "Atlanta": {
       "venue": "Mercedes-Benz Stadium, Atlanta",
-      "temp_c": 28.7,
-      "feels_like": 32.7,
-      "humidity": 66,
-      "wind": 13.5,
+      "temp_c": 28.8,
+      "feels_like": 32.1,
+      "humidity": 64,
+      "wind": 16.0,
       "rain_prob": 2,
       "weather_code": 0,
-      "max_tomorrow": 33.9,
+      "max_tomorrow": 32.0,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Seattle": {
       "venue": "Lumen Field, Seattle",
-      "temp_c": 24.3,
-      "feels_like": 26.2,
-      "humidity": 54,
-      "wind": 11.2,
+      "temp_c": 24.5,
+      "feels_like": 25.8,
+      "humidity": 50,
+      "wind": 12.7,
       "rain_prob": 0,
-      "weather_code": 0,
-      "max_tomorrow": 24.5,
+      "weather_code": 1,
+      "max_tomorrow": 24.8,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Houston": {
       "venue": "NRG Stadium, Houston",
-      "temp_c": 32.9,
-      "feels_like": 35.1,
-      "humidity": 56,
-      "wind": 23.5,
+      "temp_c": 32.6,
+      "feels_like": 37.6,
+      "humidity": 69,
+      "wind": 17.0,
       "rain_prob": 6,
       "weather_code": 95,
-      "max_tomorrow": 38.8,
+      "max_tomorrow": 37.3,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Kansas City": {
       "venue": "Arrowhead Stadium, Kansas City",
-      "temp_c": 29.6,
-      "feels_like": 31.1,
-      "humidity": 30,
-      "wind": 5.9,
+      "temp_c": 29.9,
+      "feels_like": 32.1,
+      "humidity": 35,
+      "wind": 5.2,
       "rain_prob": 0,
       "weather_code": 3,
-      "max_tomorrow": 31.6,
+      "max_tomorrow": 32.5,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Philadelphia": {
       "venue": "Lincoln Financial Field, Philadelphia",
-      "temp_c": 27.5,
-      "feels_like": 25.8,
-      "humidity": 35,
-      "wind": 16.4,
+      "temp_c": 27.8,
+      "feels_like": 26.8,
+      "humidity": 38,
+      "wind": 16.7,
       "rain_prob": 0,
-      "weather_code": 3,
-      "max_tomorrow": 26.9,
+      "weather_code": 2,
+      "max_tomorrow": 27.1,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Boston": {
       "venue": "Gillette Stadium, Boston",
-      "temp_c": 24.7,
-      "feels_like": 22.4,
-      "humidity": 44,
-      "wind": 22.3,
-      "rain_prob": 0,
-      "weather_code": 0,
-      "max_tomorrow": 22.6,
-      "extreme_heat": false,
-      "utci_risk": "moderate"
+      "error": "unavailable"
     },
     "Vancouver": {
       "venue": "BC Place, Vancouver",
-      "error": "unavailable"
+      "temp_c": 20.7,
+      "feels_like": 21.0,
+      "humidity": 58,
+      "wind": 16.1,
+      "rain_prob": 0,
+      "weather_code": 0,
+      "max_tomorrow": 23.7,
+      "extreme_heat": false,
+      "utci_risk": "moderate"
     },
     "Toronto": {
       "venue": "BMO Field, Toronto",
-      "temp_c": 22.4,
-      "feels_like": 19.8,
-      "humidity": 49,
-      "wind": 28.0,
+      "temp_c": 22.2,
+      "feels_like": 19.1,
+      "humidity": 47,
+      "wind": 28.9,
       "rain_prob": 0,
       "weather_code": 0,
-      "max_tomorrow": 22.8,
+      "max_tomorrow": 21.8,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Guadalajara": {
       "venue": "Estadio Akron, Guadalajara",
-      "temp_c": 27.1,
+      "temp_c": 27.3,
       "feels_like": 31.0,
-      "humidity": 51,
-      "wind": 4.2,
-      "rain_prob": 32,
+      "humidity": 50,
+      "wind": 4.5,
+      "rain_prob": 36,
       "weather_code": 2,
       "max_tomorrow": 26.6,
       "extreme_heat": false,
@@ -1071,25 +1071,25 @@
     },
     "Mexico City": {
       "venue": "Estadio Azteca, Mexico City",
-      "temp_c": 24.4,
-      "feels_like": 27.5,
-      "humidity": 54,
-      "wind": 3.8,
+      "temp_c": 23.5,
+      "feels_like": 26.2,
+      "humidity": 58,
+      "wind": 3.3,
       "rain_prob": 99,
-      "weather_code": 3,
+      "weather_code": 96,
       "max_tomorrow": 26.4,
       "extreme_heat": false,
       "utci_risk": "moderate"
     },
     "Monterrey": {
       "venue": "Estadio BBVA, Monterrey",
-      "temp_c": 37.9,
-      "feels_like": 42.5,
+      "temp_c": 38.0,
+      "feels_like": 41.6,
       "humidity": 41,
-      "wind": 18.4,
-      "rain_prob": 15,
+      "wind": 20.2,
+      "rain_prob": 18,
       "weather_code": 95,
-      "max_tomorrow": 36.4,
+      "max_tomorrow": 38.2,
       "extreme_heat": true,
       "utci_risk": "high"
     }
@@ -3348,6 +3348,6 @@
         "penalties": 1
       }
     ],
-    "updated_at": "2026-06-19T20:02:24.743401+00:00"
+    "updated_at": "2026-06-19T20:21:20.691334+00:00"
   }
 }
