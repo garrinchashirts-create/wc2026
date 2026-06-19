@@ -2,10 +2,8 @@ name: Update WC 2026 Dashboard
 
 on:
   schedule:
-    # 11:00 UTC = 08:00 BRT
-    - cron: '0 11 * * *'
-    # 23:00 UTC = 20:00 BRT
-    - cron: '0 23 * * *'
+    # Every 2 hours during WC 2026 (Jun-Jul 2026)
+    - cron: '0 */2 * * *'
   workflow_dispatch:
     inputs:
       skip_ai:
@@ -28,9 +26,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Step 1 — Fetch live data (odds + weather + news)
+      - name: Step 1 — Fetch live data (odds + weather + results)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
         run: python scripts/fetch_data.py
 
       - name: Step 2 — Generate AI content (Claude)
@@ -54,6 +53,6 @@ jobs:
         run: |
           echo "## ✅ Update Complete" >> $GITHUB_STEP_SUMMARY
           echo "- Odds: $(python -c 'import json; d=json.load(open("data/live_data.json")); print(d["games_count"], "games")')" >> $GITHUB_STEP_SUMMARY
-          echo "- Weather: 16 venues" >> $GITHUB_STEP_SUMMARY
+          echo "- WC Results: $(python -c 'import json; d=json.load(open("data/live_data.json")); r=d.get("wc_results") or {}; print(len(r.get("matches",[])), "matches")')" >> $GITHUB_STEP_SUMMARY
           echo "- Updated: $(python -c 'import json; d=json.load(open("data/live_data.json")); print(d["updated_at_brt"])')" >> $GITHUB_STEP_SUMMARY
           echo "- 🔗 [View dashboard](https://garrinchashirts-create.github.io/wc2026)" >> $GITHUB_STEP_SUMMARY
