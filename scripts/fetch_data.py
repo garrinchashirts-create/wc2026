@@ -140,6 +140,136 @@ def fetch_news_headlines():
     print(f"  ✓ {len(headlines)} headlines")
     return headlines[:12]
 
+
+
+FOOTBALL_DATA_KEY = os.environ.get("FOOTBALL_DATA_KEY", "")
+
+def fetch_wc_results():
+    """Fetch WC 2026 match results + standings from football-data.org."""
+    print("⚽ Fetching WC 2026 results from football-data.org...")
+    if not FOOTBALL_DATA_KEY:
+        print("  ⚠ FOOTBALL_DATA_KEY not set — skipping")
+        return None
+
+    def fd_get(path):
+        try:
+            req = urllib.request.Request(
+                f"https://api.football-data.org/v4/{path}",
+                headers={"X-Auth-Token": FOOTBALL_DATA_KEY, "Accept": "application/json"}
+            )
+            r = urllib.request.urlopen(req, timeout=15, context=SSL_CTX)
+            return json.loads(r.read().decode())
+        except Exception as e:
+            print(f"  ⚠ football-data error {path}: {e}")
+            return None
+
+    # Code map: football-data team names → dashboard codes
+    NAME_TO_CODE = {
+        "Spain":"ESP","Argentina":"ARG","France":"FRA","England":"ING","Brazil":"BRA",
+        "Portugal":"POR","Colombia":"COL","Netherlands":"HOL","Ecuador":"EQU","Germany":"ALE",
+        "Norway":"NOR","Croatia":"CRO","Japan":"JAP","Turkey":"TUR","Switzerland":"SUI",
+        "Uruguay":"URU","Belgium":"BEL","Senegal":"SEN","Paraguay":"PAR","Austria":"AUT",
+        "Morocco":"MAR","Australia":"AUS","Scotland":"ESC","Iran":"IRA","Algeria":"AGL",
+        "South Korea":"COR","Czech Republic":"TCH","Panama":"PAN","Uzbekistan":"UZB",
+        "Sweden":"SUE","Egypt":"EGI","Jordan":"JOR","Ivory Coast":"CDM","DR Congo":"RDC",
+        "Tunisia":"TUN","Iraq":"IRQ","Bosnia and Herzegovina":"BOS","Cape Verde":"CAB",
+        "Saudi Arabia":"ARS","New Zealand":"NZE","Haiti":"HAI","South Africa":"AFS",
+        "Ghana":"GAN","Curaçao":"CUR","Qatar":"CAT","Canada":"CAN","Mexico":"MEX",
+        "United States":"EUA","Curacao":"CUR","Côte d'Ivoire":"CDM",
+        "Democratic Republic of Congo":"RDC","USA":"EUA","Korea Republic":"COR",
+        "Czechia":"TCH","Bosnia & Herzegovina":"BOS",
+    }
+
+    result = {"matches": [], "standings": [], "scorers": [], "updated_at": ""}
+
+    # 1. Matches with scores
+    data = fd_get("competitions/WC/matches?status=FINISHED")
+    if data and "matches" in data:
+        for m in data["matches"]:
+            ht = m.get("homeTeam", {}).get("name", "")
+            at = m.get("awayTeam", {}).get("name", "")
+            score = m.get("score", {})
+            ft = score.get("fullTime", {})
+            result["matches"].append({
+                "date": m.get("utcDate", "")[:10],
+                "matchday": m.get("matchday"),
+                "stage": m.get("stage"),
+                "group": m.get("group"),
+                "home": ht,
+                "away": at,
+                "home_code": NAME_TO_CODE.get(ht, ""),
+                "away_code": NAME_TO_CODE.get(at, ""),
+                "home_score": ft.get("home"),
+                "away_score": ft.get("away"),
+                "status": m.get("status"),
+            })
+        print(f"  ✓ {len(result['matches'])} finished matches")
+
+    # 2. All scheduled matches (for upcoming)
+    upcoming = fd_get("competitions/WC/matches?status=SCHEDULED")
+    if upcoming and "matches" in upcoming:
+        for m in upcoming["matches"]:
+            ht = m.get("homeTeam", {}).get("name", "")
+            at = m.get("awayTeam", {}).get("name", "")
+            result["matches"].append({
+                "date": m.get("utcDate", "")[:10],
+                "time_utc": m.get("utcDate", "")[11:16],
+                "matchday": m.get("matchday"),
+                "stage": m.get("stage"),
+                "group": m.get("group"),
+                "home": ht,
+                "away": at,
+                "home_code": NAME_TO_CODE.get(ht, ""),
+                "away_code": NAME_TO_CODE.get(at, ""),
+                "home_score": None,
+                "away_score": None,
+                "status": "SCHEDULED",
+            })
+        print(f"  ✓ {len(upcoming['matches'])} upcoming matches")
+
+    # 3. Standings
+    standings_data = fd_get("competitions/WC/standings")
+    if standings_data and "standings" in standings_data:
+        for group in standings_data["standings"]:
+            group_name = group.get("group", "")
+            for entry in group.get("table", []):
+                team = entry.get("team", {})
+                tn = team.get("name", "")
+                result["standings"].append({
+                    "group": group_name,
+                    "position": entry.get("position"),
+                    "team": tn,
+                    "code": NAME_TO_CODE.get(tn, ""),
+                    "played": entry.get("playedGames"),
+                    "won": entry.get("won"),
+                    "draw": entry.get("draw"),
+                    "lost": entry.get("lost"),
+                    "goals_for": entry.get("goalsFor"),
+                    "goals_against": entry.get("goalsAgainst"),
+                    "goal_diff": entry.get("goalDifference"),
+                    "points": entry.get("points"),
+                })
+        print(f"  ✓ {len(result['standings'])} team standings")
+
+    # 4. Top scorers
+    scorers_data = fd_get("competitions/WC/scorers?limit=20")
+    if scorers_data and "scorers" in scorers_data:
+        for s in scorers_data["scorers"]:
+            player = s.get("player", {})
+            team = s.get("team", {})
+            result["scorers"].append({
+                "name": player.get("name"),
+                "team": team.get("name"),
+                "code": NAME_TO_CODE.get(team.get("name",""), ""),
+                "goals": s.get("goals"),
+                "assists": s.get("assists"),
+                "penalties": s.get("penalties"),
+            })
+        print(f"  ✓ {len(result['scorers'])} top scorers")
+
+    result["updated_at"] = datetime.now(timezone.utc).isoformat()
+    return result
+
 def main():
     now = datetime.now(timezone.utc)
     print(f"\n🚀 WC 2026 Data Fetch — {now.isoformat()}\n")
@@ -164,7 +294,10 @@ def main():
         "tomorrows_games": tomorrows_games,
         "weather": weather,
         "news": news,
+        "wc_results": wc_results,
     }
+
+    wc_results = fetch_wc_results()
 
     with open("data/live_data.json","w") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
