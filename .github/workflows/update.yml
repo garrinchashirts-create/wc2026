@@ -26,11 +26,18 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Step 1 — Fetch live data (odds + weather + results)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
         run: python scripts/fetch_data.py
+
+      - name: Step 1b — Fetch WC2026 tracker (model vs real performance)
+        run: python scripts/fetch_wc2026.py
+        continue-on-error: true
 
       - name: Step 2 — Generate AI content (Claude)
         if: ${{ github.event.inputs.skip_ai != 'true' }}
