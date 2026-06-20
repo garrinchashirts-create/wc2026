@@ -1,10 +1,10 @@
 {
   "summary": {
-    "updated_at": "2026-06-14T03:31:56.223072+00:00",
-    "played": 6,
-    "model_correct": 3,
-    "accuracy": 50.0,
-    "avg_rps": 0.1598,
+    "updated_at": "2026-06-20T15:57:06.997773+00:00",
+    "played": 32,
+    "model_correct": 18,
+    "accuracy": 56.2,
+    "avg_rps": 0.1843,
     "coin_flip_rps": 0.245
   },
   "matches": [
@@ -174,9 +174,9 @@
       "home_name": "Haiti",
       "away_name": "Scotland",
       "city": "Boston (Foxborough)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 0,
+      "score2": 1,
       "model": {
         "winA": 0.2213,
         "draw": 0.274,
@@ -185,7 +185,10 @@
         "xgB": 1.66,
         "eloA": 1650,
         "eloB": 1775
-      }
+      },
+      "actual": "B",
+      "model_correct": true,
+      "rps": 0.1471
     },
     {
       "date": "2026-06-13",
@@ -197,9 +200,9 @@
       "home_name": "Australia",
       "away_name": "Turkey",
       "city": "Vancouver",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 2,
+      "score2": 0,
       "model": {
         "winA": 0.3378,
         "draw": 0.2898,
@@ -208,7 +211,10 @@
         "xgB": 1.39,
         "eloA": 1780,
         "eloB": 1795
-      }
+      },
+      "actual": "A",
+      "model_correct": false,
+      "rps": 0.2886
     },
     {
       "date": "2026-06-14",
@@ -220,9 +226,9 @@
       "home_name": "Germany",
       "away_name": "Curaçao",
       "city": "Houston",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 7,
+      "score2": 1,
       "model": {
         "winA": 0.6982,
         "draw": 0.2113,
@@ -231,7 +237,10 @@
         "xgB": 0.63,
         "eloA": 1927,
         "eloB": 1640
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.0496
     },
     {
       "date": "2026-06-14",
@@ -243,9 +252,9 @@
       "home_name": "Ivory Coast",
       "away_name": "Ecuador",
       "city": "Philadelphia",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 0,
       "model": {
         "winA": 0.2615,
         "draw": 0.2825,
@@ -254,7 +263,10 @@
         "xgB": 1.56,
         "eloA": 1700,
         "eloB": 1785
-      }
+      },
+      "actual": "A",
+      "model_correct": false,
+      "rps": 0.3767
     },
     {
       "date": "2026-06-14",
@@ -266,9 +278,9 @@
       "home_name": "Netherlands",
       "away_name": "Japan",
       "city": "Dallas (Arlington)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 2,
+      "score2": 2,
       "model": {
         "winA": 0.4986,
         "draw": 0.2752,
@@ -277,7 +289,10 @@
         "xgB": 1.05,
         "eloA": 1930,
         "eloB": 1810
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.1499
     },
     {
       "date": "2026-06-14",
@@ -289,9 +304,9 @@
       "home_name": "Sweden",
       "away_name": "Tunisia",
       "city": "Monterrey (Guadalupe)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 5,
+      "score2": 1,
       "model": {
         "winA": 0.4078,
         "draw": 0.2879,
@@ -300,7 +315,10 @@
         "xgB": 1.24,
         "eloA": 1740,
         "eloB": 1695
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.2216
     },
     {
       "date": "2026-06-15",
@@ -312,9 +330,9 @@
       "home_name": "Belgium",
       "away_name": "Egypt",
       "city": "Seattle",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 1,
       "model": {
         "winA": 0.5536,
         "draw": 0.2624,
@@ -323,7 +341,10 @@
         "xgB": 0.94,
         "eloA": 1895,
         "eloB": 1730
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.1702
     },
     {
       "date": "2026-06-15",
@@ -335,9 +356,9 @@
       "home_name": "Iran",
       "away_name": "New Zealand",
       "city": "Los Angeles (Inglewood)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 2,
+      "score2": 2,
       "model": {
         "winA": 0.5047,
         "draw": 0.274,
@@ -346,7 +367,10 @@
         "xgB": 1.04,
         "eloA": 1725,
         "eloB": 1600
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.1518
     },
     {
       "date": "2026-06-15",
@@ -358,9 +382,9 @@
       "home_name": "Spain",
       "away_name": "Cape Verde",
       "city": "Atlanta",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 0,
+      "score2": 0,
       "model": {
         "winA": 0.8466,
         "draw": 0.1292,
@@ -369,7 +393,10 @@
         "xgB": 0.3,
         "eloA": 2074,
         "eloB": 1620
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.3587
     },
     {
       "date": "2026-06-15",
@@ -381,9 +408,9 @@
       "home_name": "Saudi Arabia",
       "away_name": "Uruguay",
       "city": "Miami (Miami Gardens)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 1,
       "model": {
         "winA": 0.1931,
         "draw": 0.2655,
@@ -392,7 +419,10 @@
         "xgB": 1.74,
         "eloA": 1715,
         "eloB": 1870
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.1652
     },
     {
       "date": "2026-06-16",
@@ -404,9 +434,9 @@
       "home_name": "France",
       "away_name": "Senegal",
       "city": "New York/New Jersey (East Rutherford)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 3,
+      "score2": 1,
       "model": {
         "winA": 0.632,
         "draw": 0.2378,
@@ -415,7 +445,10 @@
         "xgB": 0.78,
         "eloA": 2060,
         "eloB": 1830
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.0762
     },
     {
       "date": "2026-06-16",
@@ -427,9 +460,9 @@
       "home_name": "Iraq",
       "away_name": "Norway",
       "city": "Boston (Foxborough)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 4,
       "model": {
         "winA": 0.2361,
         "draw": 0.2775,
@@ -438,7 +471,10 @@
         "xgB": 1.62,
         "eloA": 1690,
         "eloB": 1800
-      }
+      },
+      "actual": "B",
+      "model_correct": true,
+      "rps": 0.1598
     },
     {
       "date": "2026-06-16",
@@ -450,9 +486,9 @@
       "home_name": "Argentina",
       "away_name": "Algeria",
       "city": "Kansas City",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 3,
+      "score2": 0,
       "model": {
         "winA": 0.7392,
         "draw": 0.1921,
@@ -461,7 +497,10 @@
         "xgB": 0.54,
         "eloA": 2064,
         "eloB": 1740
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.0364
     },
     {
       "date": "2026-06-16",
@@ -473,9 +512,9 @@
       "home_name": "Austria",
       "away_name": "Jordan",
       "city": "San Francisco Bay Area (Santa Clara)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 3,
+      "score2": 1,
       "model": {
         "winA": 0.5108,
         "draw": 0.2727,
@@ -484,7 +523,10 @@
         "xgB": 1.03,
         "eloA": 1815,
         "eloB": 1685
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.1431
     },
     {
       "date": "2026-06-17",
@@ -496,9 +538,9 @@
       "home_name": "Portugal",
       "away_name": "DR Congo",
       "city": "Houston",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 1,
       "model": {
         "winA": 0.6788,
         "draw": 0.2196,
@@ -507,7 +549,10 @@
         "xgB": 0.68,
         "eloA": 1970,
         "eloB": 1700
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.2355
     },
     {
       "date": "2026-06-17",
@@ -519,9 +564,9 @@
       "home_name": "Uzbekistan",
       "away_name": "Colombia",
       "city": "Mexico City",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 3,
       "model": {
         "winA": 0.1499,
         "draw": 0.248,
@@ -530,7 +575,10 @@
         "xgB": 1.86,
         "eloA": 1670,
         "eloB": 1875
-      }
+      },
+      "actual": "B",
+      "model_correct": true,
+      "rps": 0.0904
     },
     {
       "date": "2026-06-17",
@@ -542,9 +590,9 @@
       "home_name": "England",
       "away_name": "Croatia",
       "city": "Dallas (Arlington)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 4,
+      "score2": 2,
       "model": {
         "winA": 0.5108,
         "draw": 0.2727,
@@ -553,7 +601,10 @@
         "xgB": 1.03,
         "eloA": 2010,
         "eloB": 1880
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.1431
     },
     {
       "date": "2026-06-17",
@@ -565,9 +616,9 @@
       "home_name": "Ghana",
       "away_name": "Panama",
       "city": "Toronto",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 0,
       "model": {
         "winA": 0.39,
         "draw": 0.2891,
@@ -576,7 +627,10 @@
         "xgB": 1.28,
         "eloA": 1680,
         "eloB": 1650
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.2375
     },
     {
       "date": "2026-06-18",
@@ -588,9 +642,9 @@
       "home_name": "Czech Republic",
       "away_name": "South Africa",
       "city": "Atlanta",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 1,
       "model": {
         "winA": 0.3435,
         "draw": 0.2899,
@@ -599,7 +653,10 @@
         "xgB": 1.38,
         "eloA": 1710,
         "eloB": 1720
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.1262
     },
     {
       "date": "2026-06-18",
@@ -611,9 +668,9 @@
       "home_name": "Mexico",
       "away_name": "South Korea",
       "city": "Guadalajara (Zapopan)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 1,
+      "score2": 0,
       "model": {
         "winA": 0.4499,
         "draw": 0.2834,
@@ -622,7 +679,10 @@
         "xgB": 1.15,
         "eloA": 1850,
         "eloB": 1770
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.1869
     },
     {
       "date": "2026-06-18",
@@ -634,9 +694,9 @@
       "home_name": "Switzerland",
       "away_name": "Bosnia & Herzegovina",
       "city": "Los Angeles (Inglewood)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 4,
+      "score2": 1,
       "model": {
         "winA": 0.4257,
         "draw": 0.2863,
@@ -645,7 +705,10 @@
         "xgB": 1.2,
         "eloA": 1820,
         "eloB": 1760
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.2064
     },
     {
       "date": "2026-06-18",
@@ -657,9 +720,9 @@
       "home_name": "Canada",
       "away_name": "Qatar",
       "city": "Vancouver",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 6,
+      "score2": 0,
       "model": {
         "winA": 0.3959,
         "draw": 0.2888,
@@ -668,7 +731,10 @@
         "xgB": 1.26,
         "eloA": 1755,
         "eloB": 1720
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.2322
     },
     {
       "date": "2026-06-19",
@@ -680,9 +746,9 @@
       "home_name": "Scotland",
       "away_name": "Morocco",
       "city": "Boston (Foxborough)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 0,
+      "score2": 1,
       "model": {
         "winA": 0.2988,
         "draw": 0.2874,
@@ -691,7 +757,10 @@
         "xgB": 1.48,
         "eloA": 1775,
         "eloB": 1825
-      }
+      },
+      "actual": "B",
+      "model_correct": true,
+      "rps": 0.2165
     },
     {
       "date": "2026-06-19",
@@ -703,9 +772,9 @@
       "home_name": "Brazil",
       "away_name": "Haiti",
       "city": "Philadelphia",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 3,
+      "score2": 0,
       "model": {
         "winA": 0.7606,
         "draw": 0.1812,
@@ -714,7 +783,10 @@
         "xgB": 0.49,
         "eloA": 1994,
         "eloB": 1650
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.0303
     },
     {
       "date": "2026-06-19",
@@ -726,9 +798,9 @@
       "home_name": "USA",
       "away_name": "Australia",
       "city": "Seattle",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 2,
+      "score2": 0,
       "model": {
         "winA": 0.3322,
         "draw": 0.2896,
@@ -737,7 +809,10 @@
         "xgB": 1.4,
         "eloA": 1760,
         "eloB": 1780
-      }
+      },
+      "actual": "A",
+      "model_correct": false,
+      "rps": 0.2945
     },
     {
       "date": "2026-06-19",
@@ -749,9 +824,9 @@
       "home_name": "Turkey",
       "away_name": "Paraguay",
       "city": "San Francisco Bay Area (Santa Clara)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 0,
+      "score2": 1,
       "model": {
         "winA": 0.5169,
         "draw": 0.2713,
@@ -760,7 +835,10 @@
         "xgB": 1.01,
         "eloA": 1795,
         "eloB": 1660
-      }
+      },
+      "actual": "B",
+      "model_correct": false,
+      "rps": 0.4442
     },
     {
       "date": "2026-06-20",
