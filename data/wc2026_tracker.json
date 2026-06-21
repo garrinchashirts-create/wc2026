@@ -1,10 +1,10 @@
 {
   "summary": {
-    "updated_at": "2026-06-20T20:52:38.085677+00:00",
-    "played": 33,
-    "model_correct": 19,
-    "accuracy": 57.6,
-    "avg_rps": 0.1817,
+    "updated_at": "2026-06-21T10:55:29.978599+00:00",
+    "played": 36,
+    "model_correct": 21,
+    "accuracy": 58.3,
+    "avg_rps": 0.1775,
     "coin_flip_rps": 0.245
   },
   "matches": [
@@ -850,9 +850,9 @@
       "home_name": "Germany",
       "away_name": "Ivory Coast",
       "city": "Toronto",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 2,
+      "score2": 1,
       "model": {
         "winA": 0.6284,
         "draw": 0.2391,
@@ -861,7 +861,10 @@
         "xgB": 0.78,
         "eloA": 1927,
         "eloB": 1700
-      }
+      },
+      "actual": "A",
+      "model_correct": true,
+      "rps": 0.0778
     },
     {
       "date": "2026-06-20",
@@ -873,9 +876,9 @@
       "home_name": "Ecuador",
       "away_name": "Curaçao",
       "city": "Kansas City",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 0,
+      "score2": 0,
       "model": {
         "winA": 0.5292,
         "draw": 0.2685,
@@ -884,7 +887,10 @@
         "xgB": 0.99,
         "eloA": 1785,
         "eloB": 1640
-      }
+      },
+      "actual": "D",
+      "model_correct": false,
+      "rps": 0.1605
     },
     {
       "date": "2026-06-20",
@@ -922,9 +928,9 @@
       "home_name": "Tunisia",
       "away_name": "Japan",
       "city": "Monterrey (Guadalupe)",
-      "played": false,
-      "score1": null,
-      "score2": null,
+      "played": true,
+      "score1": 0,
+      "score2": 4,
       "model": {
         "winA": 0.2311,
         "draw": 0.2764,
@@ -933,7 +939,10 @@
         "xgB": 1.64,
         "eloA": 1695,
         "eloB": 1810
-      }
+      },
+      "actual": "B",
+      "model_correct": true,
+      "rps": 0.1555
     },
     {
       "date": "2026-06-21",
