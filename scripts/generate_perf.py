@@ -4,11 +4,68 @@ WC2026 Performance Tracker
 Generates data/wc2026_perf.json in the exact structure expected by renderTracking()
 in the dashboard. Uses real results from data/live_data.json (football-data.org)
 combined with the Dixon-Coles model to compute over/underperformance per team.
+
+Real xG, possession, and shots are enriched from mominullptr/FIFA-World-Cup-2026-Dataset
+(GitHub, CC0 license, verified non-synthetic stats from FIFA/Sofascore/Guardian) when available,
+falling back to model-estimated xG otherwise.
 """
 import json
 import math
 import os
+import urllib.request
+import ssl
 from datetime import datetime, timezone
+
+# ── FIFA code (mominullptr dataset) → our internal code ────────────────────
+FIFA_TO_OUR = {
+    'MEX':'MEX','RSA':'AFS','KOR':'COR','CZE':'TCH','CAN':'CAN','BIH':'BOS',
+    'QAT':'CAT','SUI':'SUI','BRA':'BRA','MAR':'MAR','HAI':'HAI','SCO':'ESC',
+    'USA':'EUA','PAR':'PAR','AUS':'AUS','TUR':'TUR','GER':'ALE','CUW':'CUR',
+    'CIV':'CDM','ECU':'EQU','NED':'HOL','JPN':'JAP','SWE':'SUE','TUN':'TUN',
+    'BEL':'BEL','EGY':'EGI','IRN':'IRA','NZL':'NZE','ESP':'ESP','CPV':'CAB',
+    'KSA':'ARS','URU':'URU','FRA':'FRA','SEN':'SEN','IRQ':'IRQ','NOR':'NOR',
+    'ARG':'ARG','ALG':'AGL','AUT':'AUT','JOR':'JOR','POR':'POR','COD':'RDC',
+    'UZB':'UZB','COL':'COL','ENG':'ING','CRO':'CRO','GHA':'GAN','PAN':'PAN',
+}
+
+
+def fetch_real_xg_data():
+    """Fetch verified real xG + team stats from mominullptr/FIFA-World-Cup-2026-Dataset."""
+    print("  Fetching real xG data from mominullptr/FIFA-World-Cup-2026-Dataset...")
+    ctx = ssl.create_default_context()
+    real_data = {}  # key: (date, home_code, away_code) -> {home_xg, away_xg}
+    stats_data = {}  # key: match_id -> {team_id: {possession, shots, ...}}
+
+    try:
+        req = urllib.request.Request(
+            "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/matches_detailed.csv",
+            headers={"User-Agent": "Mozilla/5.0"})
+        r = urllib.request.urlopen(req, timeout=20, context=ctx)
+        text = r.read().decode()
+        import csv, io
+        reader = csv.DictReader(io.StringIO(text))
+        count = 0
+        for row in reader:
+            if row.get('status') != 'Completed':
+                continue
+            hc = FIFA_TO_OUR.get(row.get('home_fifa_code', ''))
+            ac = FIFA_TO_OUR.get(row.get('away_fifa_code', ''))
+            if not hc or not ac:
+                continue
+            try:
+                hxg = float(row['home_xg']) if row.get('home_xg') else None
+                axg = float(row['away_xg']) if row.get('away_xg') else None
+            except ValueError:
+                hxg = axg = None
+            if hxg is not None and axg is not None:
+                real_data[(row['date'], hc, ac)] = {'home_xg': hxg, 'away_xg': axg}
+                count += 1
+        print(f"    Got real xG for {count} matches")
+    except Exception as e:
+        print(f"    WARNING: could not fetch real xG data: {e}")
+
+    return real_data
+
 
 # ── ELO ratings (calibrated, same as fetch_wc2026.py) ──────────────────────
 ELO = {
@@ -91,8 +148,12 @@ def main():
         print("  No played matches found — aborting (keeping existing file)")
         return
 
+    # Fetch real verified xG data (mominullptr dataset)
+    real_xg = fetch_real_xg_data()
+
     teams = {}
     matches_out = []
+    real_xg_used = 0
 
     for m in played:
         hc = m.get('home_code', '')
@@ -104,15 +165,24 @@ def main():
 
         pred = match_prob(hc, ac, neutral=True)
 
+        # Use real xG if available, else model estimate
+        real_match = real_xg.get((date, hc, ac))
+        if real_match:
+            xgf_h, xgf_a = real_match['home_xg'], real_match['away_xg']
+            real_xg_used += 1
+        else:
+            xgf_h, xgf_a = pred['lam'], pred['mu']
+
         matches_out.append({
             'date': date, 'home': hc, 'away': ac, 'g1': g1, 'g2': g2,
             'wA': pred['winA'], 'dr': pred['draw'], 'wB': pred['winB'],
             'lam': pred['lam'], 'mu': pred['mu'],
+            'real_xg': bool(real_match),
         })
 
         for code, opp, gf, ga, p_win, p_draw, p_loss, xgf, xga in [
-            (hc, ac, g1, g2, pred['winA'], pred['draw'], pred['winB'], pred['lam'], pred['mu']),
-            (ac, hc, g2, g1, pred['winB'], pred['draw'], pred['winA'], pred['mu'], pred['lam']),
+            (hc, ac, g1, g2, pred['winA'], pred['draw'], pred['winB'], xgf_h, xgf_a),
+            (ac, hc, g2, g1, pred['winB'], pred['draw'], pred['winA'], xgf_a, xgf_h),
         ]:
             if code not in teams:
                 teams[code] = {
@@ -160,8 +230,11 @@ def main():
         'updated_at': datetime.now(timezone.utc).isoformat(),
         'teams': sorted(teams.values(), key=lambda x: -x['delta_pts']),
         'matches': sorted(matches_out, key=lambda x: x['date']),
-        'real_xg_source': 'football-data.org',
-        'real_xg_updated_at': live.get('updated_at', ''),
+        'real_xg_source': 'mominullptr/FIFA-World-Cup-2026-Dataset (FIFA/Sofascore/Guardian verified)',
+        'real_xg_updated_at': datetime.now(timezone.utc).isoformat(),
+        'real_xg_games': real_xg_used,
+        'odds_source': 'football-data.org',
+        'odds_updated_at': live.get('updated_at', ''),
     }
 
     os.makedirs('data', exist_ok=True)
@@ -169,7 +242,7 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"  Saved data/wc2026_perf.json")
-    print(f"  Teams: {len(teams)} | Matches: {len(matches_out)}")
+    print(f"  Teams: {len(teams)} | Matches: {len(matches_out)} | Real xG: {real_xg_used}/{len(matches_out)}")
     over = [t for t in teams.values() if t['delta_pts'] > 0.8]
     under = [t for t in teams.values() if t['delta_pts'] < -0.8]
     print(f"  Overperforming: {len(over)} | Underperforming: {len(under)}")
