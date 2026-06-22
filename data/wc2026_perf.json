@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-22T17:59:14.129788+00:00",
+  "updated_at": "2026-06-22T23:07:06.793610+00:00",
   "teams": [
     {
       "code": "EUA",
@@ -137,6 +137,46 @@
       "xga": 1.33,
       "real_possession_avg": 43.0,
       "real_shots_avg": 14.0
+    },
+    {
+      "code": "ARG",
+      "name": "Argentina",
+      "games": 2,
+      "goals_for": 5,
+      "goals_against": 0,
+      "xg_for": 4.025,
+      "xg_against": 1.375,
+      "wins": 2,
+      "draws": 0,
+      "losses": 0,
+      "points": 6,
+      "expected_points": 4.481778414801036,
+      "matches": [
+        {
+          "vs": "AGL",
+          "date": "2026-06-17",
+          "gf": 3,
+          "ga": 0,
+          "xgf": 2.03,
+          "xga": 0.67,
+          "result": "W",
+          "p_win": 0.681
+        },
+        {
+          "vs": "AUT",
+          "date": "2026-06-22",
+          "gf": 2,
+          "ga": 0,
+          "xgf": 2.0,
+          "xga": 0.71,
+          "result": "W",
+          "p_win": 0.665
+        }
+      ],
+      "xpts": 4.48,
+      "delta_pts": 1.52,
+      "xgf": 2.01,
+      "xga": 0.69
     },
     {
       "code": "GAN",
@@ -377,36 +417,6 @@
       "real_shots_avg": 11.0
     },
     {
-      "code": "AUT",
-      "name": "Austria",
-      "games": 1,
-      "goals_for": 3,
-      "goals_against": 1,
-      "xg_for": 1.7750000000000001,
-      "xg_against": 0.925,
-      "wins": 1,
-      "draws": 0,
-      "losses": 0,
-      "points": 3,
-      "expected_points": 1.9398383379418735,
-      "matches": [
-        {
-          "vs": "JOR",
-          "date": "2026-06-17",
-          "gf": 3,
-          "ga": 1,
-          "xgf": 1.78,
-          "xga": 0.93,
-          "result": "W",
-          "p_win": 0.56
-        }
-      ],
-      "xpts": 1.94,
-      "delta_pts": 1.06,
-      "xgf": 1.78,
-      "xga": 0.93
-    },
-    {
       "code": "JAP",
       "name": "Japan",
       "games": 2,
@@ -565,36 +575,6 @@
       "delta_pts": 0.82,
       "xgf": 1.96,
       "xga": 0.74
-    },
-    {
-      "code": "ARG",
-      "name": "Argentina",
-      "games": 1,
-      "goals_for": 3,
-      "goals_against": 0,
-      "xg_for": 2.0300000000000002,
-      "xg_against": 0.67,
-      "wins": 1,
-      "draws": 0,
-      "losses": 0,
-      "points": 3,
-      "expected_points": 2.261836195435002,
-      "matches": [
-        {
-          "vs": "AGL",
-          "date": "2026-06-17",
-          "gf": 3,
-          "ga": 0,
-          "xgf": 2.03,
-          "xga": 0.67,
-          "result": "W",
-          "p_win": 0.681
-        }
-      ],
-      "xpts": 2.26,
-      "delta_pts": 0.74,
-      "xgf": 2.03,
-      "xga": 0.67
     },
     {
       "code": "NOR",
@@ -807,6 +787,46 @@
       "delta_pts": 0.51,
       "xgf": 1.26,
       "xga": 1.44
+    },
+    {
+      "code": "AUT",
+      "name": "Austria",
+      "games": 2,
+      "goals_for": 3,
+      "goals_against": 3,
+      "xg_for": 2.4800000000000004,
+      "xg_against": 2.92,
+      "wins": 1,
+      "draws": 0,
+      "losses": 1,
+      "points": 3,
+      "expected_points": 2.4946259763940404,
+      "matches": [
+        {
+          "vs": "JOR",
+          "date": "2026-06-17",
+          "gf": 3,
+          "ga": 1,
+          "xgf": 1.78,
+          "xga": 0.93,
+          "result": "W",
+          "p_win": 0.56
+        },
+        {
+          "vs": "ARG",
+          "date": "2026-06-22",
+          "gf": 0,
+          "ga": 2,
+          "xgf": 0.71,
+          "xga": 2.0,
+          "result": "L",
+          "p_win": 0.11
+        }
+      ],
+      "xpts": 2.49,
+      "delta_pts": 0.51,
+      "xgf": 1.24,
+      "xga": 1.46
     },
     {
       "code": "ESP",
@@ -3143,9 +3163,39 @@
       "stadium": "",
       "city": "",
       "referee": ""
+    },
+    {
+      "date": "2026-06-22",
+      "home": "ARG",
+      "away": "AUT",
+      "g1": 2,
+      "g2": 0,
+      "pH": 0.665,
+      "pD": 0.225,
+      "pA": 0.11,
+      "lam": 2.0,
+      "mu": 0.71,
+      "home_xg": 2.0,
+      "away_xg": 0.71,
+      "real_xg": false,
+      "goals": [],
+      "reds": [],
+      "home_poss": null,
+      "away_poss": null,
+      "home_shots": null,
+      "away_shots": null,
+      "home_sot": null,
+      "away_sot": null,
+      "has_stats": false,
+      "narrative": [
+        "✅ **Result matched prediction** (66% confidence). Final: 2–0."
+      ],
+      "stadium": "Monterrey Stadium (Estadio BBVA)",
+      "city": "Guadalupe",
+      "referee": "Mustapha Ghorbal"
     }
   ],
   "real_xg_games": 16,
-  "narratives_built": 35,
+  "narratives_built": 36,
   "source": "football-data.org + mominullptr/FIFA-World-Cup-2026-Dataset"
 }
