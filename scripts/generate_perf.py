@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
 """
-WC2026 Performance Tracker
-Generates data/wc2026_perf.json in the exact structure expected by renderTracking()
-in the dashboard. Uses real results from data/live_data.json (football-data.org)
-combined with the Dixon-Coles model to compute over/underperformance per team.
+WC2026 Performance Tracker + Match Narratives
+Generates data/wc2026_perf.json with per-match stats summaries and
+model deviation analysis (why a game went well or badly vs prediction).
 
-Real xG, possession, and shots are enriched from mominullptr/FIFA-World-Cup-2026-Dataset
-(GitHub, CC0 license, verified non-synthetic stats from FIFA/Sofascore/Guardian) when available,
-falling back to model-estimated xG otherwise.
+Data sources:
+- results + standings: football-data.org (via live_data.json)
+- xG, match events, player names, possession/shots: mominullptr/FIFA-World-Cup-2026-Dataset
 """
-import json
-import math
-import os
-import urllib.request
-import ssl
+import json, math, os, urllib.request, ssl, csv, io
 from datetime import datetime, timezone
 
-# ── FIFA code (mominullptr dataset) → our internal code ────────────────────
 FIFA_TO_OUR = {
     'MEX':'MEX','RSA':'AFS','KOR':'COR','CZE':'TCH','CAN':'CAN','BIH':'BOS',
     'QAT':'CAT','SUI':'SUI','BRA':'BRA','MAR':'MAR','HAI':'HAI','SCO':'ESC',
@@ -28,327 +22,316 @@ FIFA_TO_OUR = {
     'UZB':'UZB','COL':'COL','ENG':'ING','CRO':'CRO','GHA':'GAN','PAN':'PAN',
 }
 
-
-def fetch_real_xg_data():
-    """Fetch verified real xG + team stats from mominullptr/FIFA-World-Cup-2026-Dataset."""
-    print("  Fetching real xG data from mominullptr/FIFA-World-Cup-2026-Dataset...")
-    ctx = ssl.create_default_context()
-    real_data = {}  # key: (date, home_code, away_code) -> {home_xg, away_xg}
-    stats_data = {}  # key: match_id -> {team_id: {possession, shots, ...}}
-
-    try:
-        req = urllib.request.Request(
-            "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/matches_detailed.csv",
-            headers={"User-Agent": "Mozilla/5.0"})
-        r = urllib.request.urlopen(req, timeout=20, context=ctx)
-        text = r.read().decode()
-        import csv, io
-        reader = csv.DictReader(io.StringIO(text))
-        count = 0
-        for row in reader:
-            if row.get('status') != 'Completed':
-                continue
-            hc = FIFA_TO_OUR.get(row.get('home_fifa_code', ''))
-            ac = FIFA_TO_OUR.get(row.get('away_fifa_code', ''))
-            if not hc or not ac:
-                continue
-            try:
-                hxg = float(row['home_xg']) if row.get('home_xg') else None
-                axg = float(row['away_xg']) if row.get('away_xg') else None
-            except ValueError:
-                hxg = axg = None
-            if hxg is not None and axg is not None:
-                real_data[(row['date'], hc, ac)] = {'home_xg': hxg, 'away_xg': axg}
-                count += 1
-        print(f"    Got real xG for {count} matches")
-    except Exception as e:
-        print(f"    WARNING: could not fetch real xG data: {e}")
-
-    return real_data
-
-
-def fetch_real_team_stats():
-    """Fetch real possession/shots/corners stats from mominullptr dataset.
-    Returns dict: (date, our_code) -> {possession_pct, total_shots, shots_on_target, corners, fouls, offsides, saves}
-    """
-    print("  Fetching real team stats (possession/shots/corners)...")
-    ctx = ssl.create_default_context()
-    import csv, io
-
-    try:
-        # 1. teams.csv: team_id -> fifa_code -> our_code
-        req1 = urllib.request.Request(
-            "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/teams.csv",
-            headers={"User-Agent": "Mozilla/5.0"})
-        teams_text = urllib.request.urlopen(req1, timeout=20, context=ctx).read().decode()
-        teams_reader = list(csv.DictReader(io.StringIO(teams_text)))
-        id_to_ourcode = {}
-        for row in teams_reader:
-            fifa_code = row.get('fifa_code', '')
-            our_code = FIFA_TO_OUR.get(fifa_code)
-            if our_code:
-                id_to_ourcode[row['team_id']] = our_code
-
-        # 2. matches.csv: match_id -> date, home_team_id, away_team_id
-        req2 = urllib.request.Request(
-            "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/matches.csv",
-            headers={"User-Agent": "Mozilla/5.0"})
-        matches_text = urllib.request.urlopen(req2, timeout=20, context=ctx).read().decode()
-        matches_reader = list(csv.DictReader(io.StringIO(matches_text)))
-        match_info = {m['match_id']: m for m in matches_reader}
-
-        # 3. match_team_stats.csv: match_id, team_id, possession_pct, total_shots, ...
-        req3 = urllib.request.Request(
-            "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/match_team_stats.csv",
-            headers={"User-Agent": "Mozilla/5.0"})
-        stats_text = urllib.request.urlopen(req3, timeout=20, context=ctx).read().decode()
-        stats_reader = list(csv.DictReader(io.StringIO(stats_text)))
-
-        result = {}
-        count = 0
-        for row in stats_reader:
-            mid = row.get('match_id', '')
-            tid = row.get('team_id', '')
-            m = match_info.get(mid)
-            code = id_to_ourcode.get(tid)
-            if not m or not code:
-                continue
-            date = m.get('date', '')
-
-            def to_num(v):
-                try:
-                    return float(v) if v not in ('', None) else None
-                except ValueError:
-                    return None
-
-            result[(date, code)] = {
-                'possession_pct': to_num(row.get('possession_pct')),
-                'total_shots': to_num(row.get('total_shots')),
-                'shots_on_target': to_num(row.get('shots_on_target')),
-                'corners': to_num(row.get('corners')),
-                'fouls': to_num(row.get('fouls')),
-                'offsides': to_num(row.get('offsides')),
-                'saves': to_num(row.get('saves')),
-                'data_source': row.get('data_source', ''),
-            }
-            count += 1
-        print(f"    Got real team stats for {count} team-match rows")
-        return result
-    except Exception as e:
-        print(f"    WARNING: could not fetch real team stats: {e}")
-        return {}
-
-
-# ── ELO ratings (calibrated, same as fetch_wc2026.py) ──────────────────────
 ELO = {
-    'ESP':2074,'ARG':2064,'FRA':2060,'BRA':1994,'ING':2010,'POR':1970,
-    'ALE':1927,'HOL':1930,'BEL':1895,'CRO':1880,'COL':1875,'URU':1870,
-    'MEX':1850,'SEN':1830,'MAR':1825,'SUI':1820,'AUT':1815,'JAP':1810,
-    'NOR':1800,'TUR':1795,'EQU':1785,'AUS':1780,'ESC':1775,'COR':1770,
-    'EUA':1760,'CAN':1755,'SUE':1740,'AGL':1740,'EGI':1730,'CAT':1720,
-    'ARS':1715,'TCH':1710,'IRA':1725,'RDC':1700,'CDM':1700,'IRQ':1690,
-    'JOR':1685,'PAN':1650,'BOS':1760,'GAN':1680,'HAI':1650,'CAB':1620,
-    'CUR':1640,'PAR':1660,'AFS':1720,'NZE':1600,'TUN':1695,'UZB':1670,
+    'ESP':2010,'FRA':2009,'ING':1993,'ARG':1976,'BRA':1955,'POR':1945,'ALE':1926,
+    'HOL':1894,'NOR':1880,'BEL':1878,'COL':1878,'MAR':1874,'CRO':1852,'SEN':1848,
+    'MEX':1834,'URU':1831,'EQU':1829,'EUA':1826,'JAP':1825,'SUI':1812,'AUS':1772,
+    'COR':1760,'SUE':1752,'IRA':1747,'CAN':1740,'CDM':1732,'TUR':1731,'AUT':1718,
+    'AGL':1704,'EGI':1695,'PAR':1681,'TUN':1680,'ESC':1663,'GAN':1659,'ARS':1657,
+    'TCH':1651,'RDC':1650,'UZB':1633,'PAN':1615,'BOS':1602,'IRQ':1599,'CAB':1599,
+    'CAT':1592,'AFS':1591,'NZE':1591,'JOR':1548,'CUR':1548,'HAI':1537,
 }
 HOME_BONUS = {'MEX': 100, 'EUA': 100, 'CAN': 80}
 DC_RHO = -0.13
 
-# ── Team names (PT) ──────────────────────────────────────────────────────
 TEAM_NAMES = {
-    'ESP':'Espanha','ARG':'Argentina','FRA':'França','ING':'Inglaterra','BRA':'Brasil',
-    'POR':'Portugal','COL':'Colômbia','HOL':'Holanda','EQU':'Equador','ALE':'Alemanha',
-    'NOR':'Noruega','CRO':'Croácia','JAP':'Japão','TUR':'Turquia','SUI':'Suíça',
-    'URU':'Uruguai','BEL':'Bélgica','SEN':'Senegal','PAR':'Paraguai','AUT':'Áustria',
-    'MAR':'Marrocos','AUS':'Austrália','ESC':'Escócia','IRA':'Irã','AGL':'Argélia',
-    'COR':'Coreia do Sul','TCH':'República Tcheca','PAN':'Panamá','UZB':'Uzbequistão',
-    'SUE':'Suécia','EGI':'Egito','JOR':'Jordânia','CDM':'Costa do Marfim','RDC':'RD Congo',
-    'TUN':'Tunísia','IRQ':'Iraque','BOS':'Bósnia e Herzegovina','CAB':'Cabo Verde',
-    'ARS':'Arábia Saudita','NZE':'Nova Zelândia','HAI':'Haiti','AFS':'África do Sul',
-    'GAN':'Gana','CUR':'Curaçao','CAT':'Catar','CAN':'Canadá','MEX':'México','EUA':'Estados Unidos',
+    'ESP':'Spain','ARG':'Argentina','FRA':'France','ING':'England','BRA':'Brazil',
+    'POR':'Portugal','COL':'Colombia','HOL':'Netherlands','EQU':'Ecuador','ALE':'Germany',
+    'NOR':'Norway','CRO':'Croatia','JAP':'Japan','TUR':'Turkey','SUI':'Switzerland',
+    'URU':'Uruguay','BEL':'Belgium','SEN':'Senegal','PAR':'Paraguay','AUT':'Austria',
+    'MAR':'Morocco','AUS':'Australia','ESC':'Scotland','IRA':'Iran','AGL':'Algeria',
+    'COR':'South Korea','TCH':'Czechia','PAN':'Panama','UZB':'Uzbekistan','SUE':'Sweden',
+    'EGI':'Egypt','JOR':'Jordan','CDM':'Ivory Coast','RDC':'DR Congo','TUN':'Tunisia',
+    'IRQ':'Iraq','BOS':'Bosnia & Herzegovina','CAB':'Cape Verde','ARS':'Saudi Arabia',
+    'NZE':'New Zealand','HAI':'Haiti','AFS':'South Africa','GAN':'Ghana','CUR':'Curaçao',
+    'CAT':'Qatar','MEX':'Mexico','CAN':'Canada','EUA':'USA',
 }
 
+SSL_CTX = ssl.create_default_context()
+
+def fetch_csv(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    r = urllib.request.urlopen(req, timeout=20, context=SSL_CTX)
+    return list(csv.DictReader(io.StringIO(r.read().decode())))
+
+def fetch_json(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    r = urllib.request.urlopen(req, timeout=20, context=SSL_CTX)
+    return json.loads(r.read().decode())
 
 def poisson_pmf(k, lam):
-    if lam <= 0:
-        return 1.0 if k == 0 else 0.0
+    if lam <= 0: return 1.0 if k == 0 else 0.0
     p = math.exp(-lam)
-    for i in range(1, k + 1):
-        p *= lam / i
+    for i in range(1, k+1): p *= lam / i
     return p
 
-
 def dc_tau(a, b, lam, mu):
-    if a == 0 and b == 0: return 1 - lam * mu * DC_RHO
-    if a == 0 and b == 1: return 1 + lam * DC_RHO
-    if a == 1 and b == 0: return 1 + mu * DC_RHO
-    if a == 1 and b == 1: return 1 - DC_RHO
+    if a==0 and b==0: return 1 - lam*mu*DC_RHO
+    if a==0 and b==1: return 1 + lam*DC_RHO
+    if a==1 and b==0: return 1 + mu*DC_RHO
+    if a==1 and b==1: return 1 - DC_RHO
     return 1.0
 
-
-def match_prob(code_a, code_b, neutral=True):
-    rA = ELO.get(code_a, 1650)
-    rB = ELO.get(code_b, 1650)
-    hb = 0 if neutral else (HOME_BONUS.get(code_a, 0) - HOME_BONUS.get(code_b, 0))
-    lam = max(0.3, min(3.5, 1.35 + ((rA + hb) - rB) / 400))
-    mu = max(0.3, min(3.5, 1.35 + (rB - (rA + hb / 2)) / 400))
-    wA = dr = wB = 0.0
+def match_prob(hC, aC):
+    rH = ELO.get(hC, 1650); rA = ELO.get(aC, 1650)
+    hb = HOME_BONUS.get(hC, 0) - HOME_BONUS.get(aC, 0)
+    lam = max(0.3, min(3.5, 1.35 + ((rH+hb) - rA) / 400))
+    mu  = max(0.3, min(3.5, 1.35 + (rA - (rH+hb/2)) / 400))
+    pH = pD = pA = 0.0
     for a in range(9):
-        pA = poisson_pmf(a, lam)
+        pa = poisson_pmf(a, lam)
         for b in range(9):
-            tau = dc_tau(a, b, lam, mu)
-            p = pA * poisson_pmf(b, mu) * tau
-            if a > b: wA += p
-            elif a < b: wB += p
-            else: dr += p
-    tot = wA + dr + wB
-    return {'winA': wA / tot, 'draw': dr / tot, 'winB': wB / tot, 'lam': lam, 'mu': mu}
+            p = pa * poisson_pmf(b, mu) * dc_tau(a, b, lam, mu)
+            if a > b: pH += p
+            elif a < b: pA += p
+            else: pD += p
+    t = pH + pD + pA
+    return pH/t, pD/t, pA/t, lam, mu
 
+def build_narrative(hC, aC, g1, g2, pH, pD, pA, lam, mu,
+                    hxg, axg, goals, reds, pens,
+                    hposs, aposs, hshots, ashots, hsot, asot,
+                    has_stats):
+    """Build a concise structured narrative explaining the match result vs model."""
+    n = TEAM_NAMES
+    h, a = n.get(hC, hC), n.get(aC, aC)
+
+    pred = 'H' if pH >= pD and pH >= pA else ('A' if pA >= pH and pA >= pD else 'D')
+    real = 'H' if g1 > g2 else ('A' if g2 > g1 else 'D')
+    surprise = pred != real
+
+    lines = []
+
+    # 1. Match result vs model verdict
+    pred_label = {'H': f'{h} win', 'D': 'draw', 'A': f'{a} win'}
+    real_label  = {'H': f'{h} {g1}–{g2} {a}', 'D': f'{h} {g1}–{g2} {a} (draw)', 'A': f'{a} won {g2}–{g1}'}
+
+    if surprise:
+        conf = pH if pred=='H' else (pA if pred=='A' else pD)
+        lines.append(f"🚨 **Upset**: model predicted {pred_label[pred]} ({conf*100:.0f}% confidence) but ended {g1}–{g2}.")
+    else:
+        conf = pH if real=='H' else (pA if real=='A' else pD)
+        lines.append(f"✅ **Result matched prediction** ({conf*100:.0f}% confidence). Final: {g1}–{g2}.")
+
+    # 2. xG story
+    if hxg > 0 or axg > 0:
+        if g1 > hxg + 0.8:
+            lines.append(f"⚡ {h} outscored their xG significantly ({g1} goals vs {hxg:.1f} xG) — clinical finishing.")
+        elif g1 < hxg - 0.8:
+            lines.append(f"🧱 {h} underperformed xG ({g1} goals vs {hxg:.1f} xG) — poor finishing or great goalkeeping.")
+        if g2 > axg + 0.8:
+            lines.append(f"⚡ {a} outscored their xG ({g2} goals vs {axg:.1f} xG) — clinical finishing.")
+        elif g2 < axg - 0.8:
+            lines.append(f"🧱 {a} underperformed xG ({g2} goals vs {axg:.1f} xG) — poor finishing or great goalkeeping.")
+        if abs(g1-g2) <= 1 and abs(hxg-axg) > 1.2:
+            dom = h if hxg > axg else a
+            lines.append(f"📊 xG suggests {dom} dominated but score doesn't reflect it.")
+
+    # 3. Red cards
+    if reds:
+        for min_, team, player in reds:
+            side = h if team==hC else a
+            lines.append(f"🟥 {side} reduced to 10 men ({player}, {min_}') — impacted the game dynamics.")
+
+    # 4. Possession/shots
+    if has_stats and hposs and aposs:
+        dom = h if float(hposs) > float(aposs) else a
+        dom_poss = max(float(hposs), float(aposs))
+        if dom_poss > 60:
+            lines.append(f"🎯 {dom} controlled possession ({dom_poss:.0f}%) but {['efficiency was the difference','could not convert'][int(dom==h and g1<g2 or dom==a and g2<g1)]}.")
+
+    # 5. Shots efficiency
+    if has_stats and hshots and ashots:
+        if float(hshots or 0) > 0 and float(ashots or 0) > 0:
+            h_conv = g1 / float(hshots) if float(hshots) > 0 else 0
+            a_conv = g2 / float(ashots) if float(ashots) > 0 else 0
+            if h_conv > 0.25:
+                lines.append(f"💥 {h} were clinical: {g1} goals from {hshots} shots ({h_conv*100:.0f}% conversion).")
+            if a_conv > 0.25:
+                lines.append(f"💥 {a} were clinical: {g2} goals from {ashots} shots ({a_conv*100:.0f}% conversion).")
+
+    # 6. Scoreline vs model xG
+    model_diff = lam - mu
+    actual_diff = g1 - g2
+    if abs(actual_diff) > 3:
+        lines.append(f"📉 Scoreline ({g1}–{g2}) was far more one-sided than the model expected (projected ~{lam:.1f}–{mu:.1f}).")
+
+    return lines
 
 def main():
-    print("WC2026 Performance Tracker — generating data/wc2026_perf.json")
+    print("WC2026 Performance Tracker v2 — with match narratives")
 
-    # Load real results from live_data.json (football-data.org)
+    # Load real results
     with open('data/live_data.json') as f:
         live = json.load(f)
 
     wc = live.get('wc_results') or {}
-    raw_matches = wc.get('matches', [])
-    played = [m for m in raw_matches if m.get('home_score') is not None and m.get('away_score') is not None]
-    print(f"  Found {len(played)} played matches in live_data.json")
-
+    played = [m for m in wc.get('matches', []) if m.get('home_score') is not None]
+    print(f"  {len(played)} played matches")
     if not played:
-        print("  No played matches found — aborting (keeping existing file)")
         return
 
-    # Fetch real verified xG data (mominullptr dataset)
-    real_xg = fetch_real_xg_data()
-    real_stats = fetch_real_team_stats()
+    # Load mominullptr data
+    BASE = "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main"
+    print("  Fetching mominullptr data...")
+    md_rows = fetch_csv(f"{BASE}/matches_detailed.csv")
+    evt_rows = fetch_csv(f"{BASE}/match_events.csv")
+    match_rows = fetch_csv(f"{BASE}/matches.csv")
+    team_rows = fetch_csv(f"{BASE}/teams.csv")
+    squad_rows = fetch_csv(f"{BASE}/squads_and_players.csv")
+    stats_rows = fetch_csv(f"{BASE}/match_team_stats.csv")
 
-    teams = {}
+    team_id_to_our = {t['team_id']: FIFA_TO_OUR.get(t['fifa_code'], t['fifa_code']) for t in team_rows}
+    player_id_to_name = {s['player_id']: s['player_name'] for s in squad_rows}
+    match_id_map = {m['match_id']: m for m in match_rows}
+
+    # index: (date, hC, aC) -> match_detailed row
+    det_by_key = {}
+    for r in md_rows:
+        hc = FIFA_TO_OUR.get(r['home_fifa_code'], r['home_fifa_code'])
+        ac = FIFA_TO_OUR.get(r['away_fifa_code'], r['away_fifa_code'])
+        det_by_key[(r['date'], hc, ac)] = r
+
+    # events by match_id
+    evts_by_mid = {}
+    for e in evt_rows:
+        evts_by_mid.setdefault(e['match_id'], []).append(e)
+
+    # real xG by (date, hC, aC)
+    real_xg_map = {}
+    for r in md_rows:
+        if r.get('status') != 'Completed': continue
+        hc = FIFA_TO_OUR.get(r['home_fifa_code'], '')
+        ac = FIFA_TO_OUR.get(r['away_fifa_code'], '')
+        try:
+            real_xg_map[(r['date'], hc, ac)] = (float(r['home_xg']), float(r['away_xg']))
+        except (ValueError, TypeError): pass
+
+    # stats by (mid, tid)
+    stats_map = {}
+    for s in stats_rows:
+        stats_map[(s['match_id'], s['team_id'])] = s
+
+    teams_out = {}
     matches_out = []
     real_xg_used = 0
+    narratives_built = 0
 
     for m in played:
-        hc = m.get('home_code', '')
-        ac = m.get('away_code', '')
-        if not hc or not ac:
-            continue
+        hC = m.get('home_code', ''); aC = m.get('away_code', '')
+        if not hC or not aC: continue
         g1, g2 = m['home_score'], m['away_score']
         date = m.get('date', '')
+        pH, pD, pA, lam, mu = match_prob(hC, aC)
 
-        pred = match_prob(hc, ac, neutral=True)
-
-        # Use real xG if available, else model estimate
-        real_match = real_xg.get((date, hc, ac))
-        if real_match:
-            xgf_h, xgf_a = real_match['home_xg'], real_match['away_xg']
-            real_xg_used += 1
+        # Real xG
+        rxg = real_xg_map.get((date, hC, aC))
+        if rxg:
+            hxg, axg = rxg; real_xg_used += 1
         else:
-            xgf_h, xgf_a = pred['lam'], pred['mu']
+            hxg, axg = lam, mu
 
-        matches_out.append({
-            'date': date, 'home': hc, 'away': ac, 'g1': g1, 'g2': g2,
-            'wA': pred['winA'], 'dr': pred['draw'], 'wB': pred['winB'],
-            'lam': pred['lam'], 'mu': pred['mu'],
-            'real_xg': bool(real_match),
-        })
+        # Events
+        det = det_by_key.get((date, hC, aC))
+        mid = det['match_id'] if det else None
+        base = match_id_map.get(mid, {}) if mid else {}
+        evts = evts_by_mid.get(mid, []) if mid else []
+        goals = [(e['minute'], team_id_to_our.get(e['team_id'],'?'), player_id_to_name.get(e['player_id'],'?'))
+                 for e in evts if e['event_type']=='Goal']
+        reds  = [(e['minute'], team_id_to_our.get(e['team_id'],'?'), player_id_to_name.get(e['player_id'],'?'))
+                 for e in evts if e['event_type']=='Red Card']
+        pens  = [e for e in evts if 'Penalty' in e.get('event_type','')]
+
+        # Stats
+        h_tid = base.get('home_team_id','')
+        a_tid = base.get('away_team_id','')
+        hs = stats_map.get((mid, h_tid), {}) if mid else {}
+        as_ = stats_map.get((mid, a_tid), {}) if mid else {}
+
+        def n(d, k): return float(d[k]) if d.get(k) else None
+        hposs=n(hs,'possession_pct'); aposs=n(as_,'possession_pct')
+        hshots=n(hs,'total_shots'); ashots=n(as_,'total_shots')
+        hsot=n(hs,'shots_on_target'); asot=n(as_,'shots_on_target')
+        has_stats = bool(hs or as_)
+
+        # Generate narrative
+        narr = build_narrative(hC,aC,g1,g2,pH,pD,pA,lam,mu,
+                               hxg,axg,goals,reds,pens,
+                               hposs,aposs,hshots,ashots,hsot,asot,has_stats)
+        if narr: narratives_built += 1
+
+        match_entry = {
+            'date': date, 'home': hC, 'away': aC, 'g1': g1, 'g2': g2,
+            'pH': round(pH,3), 'pD': round(pD,3), 'pA': round(pA,3),
+            'lam': round(lam,2), 'mu': round(mu,2),
+            'home_xg': round(hxg,2), 'away_xg': round(axg,2),
+            'real_xg': bool(rxg),
+            'goals': goals, 'reds': reds,
+            'home_poss': hposs, 'away_poss': aposs,
+            'home_shots': hshots, 'away_shots': ashots,
+            'home_sot': hsot, 'away_sot': asot,
+            'has_stats': has_stats,
+            'narrative': narr,
+            'stadium': det.get('stadium_name','') if det else '',
+            'city': det.get('city','') if det else '',
+            'referee': det.get('referee_name','') if det else '',
+        }
+        matches_out.append(match_entry)
 
         for code, opp, gf, ga, p_win, p_draw, p_loss, xgf, xga in [
-            (hc, ac, g1, g2, pred['winA'], pred['draw'], pred['winB'], xgf_h, xgf_a),
-            (ac, hc, g2, g1, pred['winB'], pred['draw'], pred['winA'], xgf_a, xgf_h),
+            (hC,aC,g1,g2,pH,pD,pA,hxg,axg),
+            (aC,hC,g2,g1,pA,pD,pH,axg,hxg),
         ]:
-            if code not in teams:
-                teams[code] = {
-                    'code': code, 'name': TEAM_NAMES.get(code, code),
-                    'games': 0, 'goals_for': 0, 'goals_against': 0,
-                    'xg_for': 0.0, 'xg_against': 0.0,
-                    'wins': 0, 'draws': 0, 'losses': 0, 'points': 0,
-                    'expected_wins': 0.0, 'expected_draws': 0.0, 'expected_losses': 0.0,
-                    'expected_points': 0.0, 'matches': [],
-                }
-            t = teams[code]
-            t['games'] += 1
-            t['goals_for'] += gf
-            t['goals_against'] += ga
-            t['xg_for'] += xgf
-            t['xg_against'] += xga
-            t['expected_wins'] += p_win
-            t['expected_draws'] += p_draw
-            t['expected_losses'] += p_loss
-            t['expected_points'] += (p_win * 3 + p_draw * 1)
+            if code not in teams_out:
+                teams_out[code] = {'code':code,'name':TEAM_NAMES.get(code,code),
+                    'games':0,'goals_for':0,'goals_against':0,'xg_for':0.,'xg_against':0.,
+                    'wins':0,'draws':0,'losses':0,'points':0,
+                    'expected_points':0.,'matches':[]}
+            t = teams_out[code]
+            t['games']+=1; t['goals_for']+=gf; t['goals_against']+=ga
+            t['xg_for']+=xgf; t['xg_against']+=xga
+            t['expected_points']+=p_win*3+p_draw
+            if gf>ga: t['wins']+=1; t['points']+=3; result='W'
+            elif gf<ga: t['losses']+=1; result='L'
+            else: t['draws']+=1; t['points']+=1; result='D'
+            me = {'vs':opp,'date':date,'gf':gf,'ga':ga,'xgf':round(xgf,2),'xga':round(xga,2),
+                  'result':result,'p_win':round(p_win,3)}
+            # attach per-team stats
+            s_ref = hs if code==hC else as_
+            if s_ref:
+                if s_ref.get('possession_pct'): me['real_poss']=float(s_ref['possession_pct'])
+                if s_ref.get('total_shots'): me['real_shots']=float(s_ref['total_shots'])
+                if s_ref.get('shots_on_target'): me['real_sot']=float(s_ref['shots_on_target'])
+                if s_ref.get('corners'): me['real_corners']=float(s_ref['corners'])
+            t['matches'].append(me)
 
-            if gf > ga:
-                result = 'W'; t['wins'] += 1; t['points'] += 3
-            elif gf < ga:
-                result = 'L'; t['losses'] += 1
-            else:
-                result = 'D'; t['draws'] += 1; t['points'] += 1
-
-            t['matches'].append({
-                'vs': opp, 'date': date, 'gf': gf, 'ga': ga,
-                'xgf': round(xgf, 2), 'xga': round(xga, 2),
-                'result': result, 'p_win': round(p_win, 3),
-            })
-            # Attach real stats if available (possession, shots, corners, etc.)
-            real_s = real_stats.get((date, code))
-            if real_s:
-                m_entry = t['matches'][-1]
-                if real_s.get('possession_pct') is not None:
-                    m_entry['real_poss'] = real_s['possession_pct']
-                if real_s.get('total_shots') is not None:
-                    m_entry['real_shots'] = real_s['total_shots']
-                if real_s.get('shots_on_target') is not None:
-                    m_entry['real_sot'] = real_s['shots_on_target']
-                if real_s.get('corners') is not None:
-                    m_entry['real_corners'] = real_s['corners']
-                if real_s.get('fouls') is not None:
-                    m_entry['real_fouls'] = real_s['fouls']
-                m_entry['stats_source'] = real_s.get('data_source', '')
-
-    # Compute derived fields
-    for code, t in teams.items():
+    for code, t in teams_out.items():
         t['xpts'] = round(t['expected_points'], 2)
         t['delta_pts'] = round(t['points'] - t['expected_points'], 2)
-        t['xgf'] = round(t['xg_for'] / t['games'], 2) if t['games'] else 0
-        t['xga'] = round(t['xg_against'] / t['games'], 2) if t['games'] else 0
-        t['dgf'] = round((t['goals_for'] / t['games']) - t['xgf'], 2) if t['games'] else 0
-        t['dga'] = round((t['goals_against'] / t['games']) - t['xga'], 2) if t['games'] else 0
-
-        # Aggregate real stats (possession, shots) from matches that have them
-        real_matches = [m for m in t['matches'] if 'real_poss' in m or 'real_shots' in m]
-        if real_matches:
-            poss_vals = [m['real_poss'] for m in real_matches if 'real_poss' in m]
-            shots_vals = [m['real_shots'] for m in real_matches if 'real_shots' in m]
-            if poss_vals:
-                t['real_possession_avg'] = round(sum(poss_vals) / len(poss_vals), 1)
-            if shots_vals:
-                t['real_shots_avg'] = round(sum(shots_vals) / len(shots_vals), 1)
-            t['real_stats_games'] = len(real_matches)
+        t['xgf'] = round(t['xg_for']/t['games'], 2) if t['games'] else 0
+        t['xga'] = round(t['xg_against']/t['games'], 2) if t['games'] else 0
+        poss_vals = [m['real_poss'] for m in t['matches'] if 'real_poss' in m]
+        shots_vals = [m['real_shots'] for m in t['matches'] if 'real_shots' in m]
+        if poss_vals: t['real_possession_avg'] = round(sum(poss_vals)/len(poss_vals),1)
+        if shots_vals: t['real_shots_avg'] = round(sum(shots_vals)/len(shots_vals),1)
 
     output = {
         'updated_at': datetime.now(timezone.utc).isoformat(),
-        'teams': sorted(teams.values(), key=lambda x: -x['delta_pts']),
+        'teams': sorted(teams_out.values(), key=lambda x: -x['delta_pts']),
         'matches': sorted(matches_out, key=lambda x: x['date']),
-        'real_xg_source': 'mominullptr/FIFA-World-Cup-2026-Dataset (FIFA/Sofascore/Guardian verified)',
-        'real_xg_updated_at': datetime.now(timezone.utc).isoformat(),
         'real_xg_games': real_xg_used,
-        'real_stats_rows': len(real_stats),
-        'odds_source': 'football-data.org',
-        'odds_updated_at': live.get('updated_at', ''),
+        'narratives_built': narratives_built,
+        'source': 'football-data.org + mominullptr/FIFA-World-Cup-2026-Dataset',
     }
-
     os.makedirs('data', exist_ok=True)
     with open('data/wc2026_perf.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-
-    print(f"  Saved data/wc2026_perf.json")
-    print(f"  Teams: {len(teams)} | Matches: {len(matches_out)} | Real xG: {real_xg_used}/{len(matches_out)} | Real stats rows: {len(real_stats)}")
-    over = [t for t in teams.values() if t['delta_pts'] > 0.8]
-    under = [t for t in teams.values() if t['delta_pts'] < -0.8]
-    print(f"  Overperforming: {len(over)} | Underperforming: {len(under)}")
-    for t in sorted(teams.values(), key=lambda x: -x['delta_pts'])[:5]:
-        print(f"    {t['code']}: pts={t['points']} xpts={t['xpts']} delta={t['delta_pts']:+.2f}")
-
+    print(f"  Saved: {len(teams_out)} teams, {len(matches_out)} matches, {narratives_built} narratives, {real_xg_used} real xG")
+    print(f"\nSample narratives:")
+    for m in matches_out[:3]:
+        print(f"  {m['home']} {m['g1']}-{m['g2']} {m['away']}:")
+        for line in m.get('narrative',[])[:2]:
+            print(f"    • {line}")
 
 if __name__ == '__main__':
     main()
