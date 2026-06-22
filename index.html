@@ -269,7 +269,7 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
   <div class="filter-bar">
     <label data-t="sortLabel">Ordenar:</label>
     <select id="scoutSort" onchange="renderScouts()">
-      <option value="rating">Rating</option><option value="xG">xG</option><option value="pos">Posse</option><option value="FD">Duelos</option>
+      <option value="rating">Rating</option><option value="xG">xG</option><option value="pos">Posse</option><option value="FD">Duelos</option><option value="squad">Plantel €</option>
     </select>
     <label>Grupo:</label>
     <select id="scoutGroup" onchange="renderScouts()">
@@ -855,7 +855,7 @@ function renderScouts(){
   const gf=document.getElementById('scoutGroup').value;
   let teams=Object.entries(SCOUTS).filter(([,t])=>t.rating);
   if(gf)teams=teams.filter(([,t])=>t.group===gf);
-  teams.sort((a,b)=>{if(sb==='rating')return b[1].rating-a[1].rating;if(sb==='xG')return(b[1].xG||0)-(a[1].xG||0);if(sb==='pos')return(b[1].pos||0)-(a[1].pos||0);if(sb==='FD')return(b[1].FD||0)-(a[1].FD||0);return 0;});
+  teams.sort((a,b)=>{if(sb==='rating')return b[1].rating-a[1].rating;if(sb==='xG')return(b[1].xG||0)-(a[1].xG||0);if(sb==='pos')return(b[1].pos||0)-(a[1].pos||0);if(sb==='FD')return(b[1].FD||0)-(a[1].FD||0);if(sb==='squad')return(SQUAD_STRENGTH[a[0]]||0)>(SQUAD_STRENGTH[b[0]]||0)?-1:1;return 0;});
   document.getElementById('scoutGrid').innerHTML=teams.map(([code,t])=>{
     const v=calcVal(code);
     return`<div class="tcard ${selTeam===code?'selected':''}" onclick="selectTeam('${code}')">
@@ -863,6 +863,7 @@ function renderScouts(){
       <div class="sr"><span class="sk">${T('xg')}</span><span class="sv">${t.xG||'N/D'}</span></div>
       <div class="sr"><span class="sk">${T('poss')}</span><span class="sv">${t.pos?t.pos+'%':'N/D'}</span></div>
       <div class="sr"><span class="sk">${T('goals')}</span><span class="sv">${t.gm||'N/D'}</span></div>
+      ${(function(){var sq=SQUAD_STRENGTH[code];if(!sq)return '';var mv=Math.round(sq*3396);var pct=Math.round(sq*100);var col=pct>=60?'var(--gn)':pct>=30?'var(--am)':'var(--tx3)';return '<div style="margin-top:6px"><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--tx3);margin-bottom:2px"><span>Plantel</span><span style="color:'+col+';font-weight:700">€'+mv+'M ('+pct+'%)</span></div><div style="height:4px;background:var(--bd);border-radius:2px;overflow:hidden"><div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:2px"></div></div></div>';})()}
       ${v?`<div style="margin-top:5px">${vpill(v.edge)}</div>`:''}
     </div>`;
   }).join('');
