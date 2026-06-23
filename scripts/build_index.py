@@ -142,6 +142,17 @@ def main():
     result = result.replace("{{PREVIEWS_HTML}}", previews_html)
     result = result.replace("{{NEWS_TICKER}}", news_html)
     result = result.replace("{{LIVE_DATA_JSON}}", live_json)
+
+    # ── Inject live ELO (auto-updated from real match results) ──────────────
+    live_elo = live.get('live_elo')
+    if live_elo:
+        import re as _re
+        elo_js = 'var ELO_RATINGS=' + json.dumps(dict(sorted(live_elo.items())), separators=(',',':')) + ';'
+        result = _re.sub(r'var ELO_RATINGS=\{[^}]+\};', elo_js, result, count=1)
+        elo_date = live.get('live_elo_updated', '')[:10]
+        elo_games = live.get('live_elo_games', 0)
+        result = _re.sub(r"ELO_LIVE_UPDATED='[\d-]+'", f"ELO_LIVE_UPDATED='{elo_date}'", result, count=1)
+        print(f"   Live ELO: {len(live_elo)} teams, {elo_games} games, updated {elo_date}")
     result = result.replace("{{AI_DATA_JSON}}", ai_json)
 
     with open("index.html","w") as f:
