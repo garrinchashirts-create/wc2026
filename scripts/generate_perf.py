@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
-WC2026 Performance Tracker + Match Narratives
-Generates data/wc2026_perf.json with per-match stats summaries and
-model deviation analysis (why a game went well or badly vs prediction).
-
-Data sources:
-- results + standings: football-data.org (via live_data.json)
-- xG, match events, player names, possession/shots: mominullptr/FIFA-World-Cup-2026-Dataset
+WC2026 Performance Tracker — v3
+Sources:
+  - results/standings : football-data.org (via live_data.json)
+  - xG/events/stats  : mominullptr/FIFA-World-Cup-2026-Dataset  (primary, 32 matches)
+  - shot maps/xG/BC  : nlbair/wc2026-events  (supplement — 39 matches, WhoScored)
+  - ELO auto-update  : computed from all played matches (K=55)
 """
-import json, math, os, urllib.request, ssl, csv, io
+import json, math, os, urllib.request, ssl, csv, io, re
 from datetime import datetime, timezone
 
 FIFA_TO_OUR = {
@@ -22,7 +21,22 @@ FIFA_TO_OUR = {
     'UZB':'UZB','COL':'COL','ENG':'ING','CRO':'CRO','GHA':'GAN','PAN':'PAN',
 }
 
-ELO = {
+# Our code → WhoScored filename slug (nlbair/wc2026-events)
+OUR_TO_NLBAIR = {
+    'MEX':'mexico','AFS':'south_africa','COR':'republic_of_korea','TCH':'czechia',
+    'CAN':'canada','BOS':'bosnia_and_herzegovina','CAT':'qatar','SUI':'switzerland',
+    'BRA':'brazil','MAR':'morocco','HAI':'haiti','ESC':'scotland','EUA':'usa',
+    'PAR':'paraguay','AUS':'australia','TUR':'turkiye','ALE':'germany','CUR':'curacao',
+    'CDM':'ivory_coast','EQU':'ecuador','HOL':'netherlands','JAP':'japan',
+    'SUE':'sweden','TUN':'tunisia','BEL':'belgium','EGI':'egypt','IRA':'iran',
+    'NZE':'new_zealand','ESP':'spain','CAB':'cabo_verde','ARS':'saudi_arabia',
+    'URU':'uruguay','FRA':'france','SEN':'senegal','IRQ':'iraq','NOR':'norway',
+    'ARG':'argentina','AGL':'algeria','AUT':'austria','JOR':'jordan','POR':'portugal',
+    'RDC':'dr_congo','UZB':'uzbekistan','COL':'colombia','ING':'england',
+    'CRO':'croatia','GAN':'ghana','PAN':'panama',
+}
+
+ELO_BASE = {
     'ESP':2010,'FRA':2009,'ING':1993,'ARG':1976,'BRA':1955,'POR':1945,'ALE':1926,
     'HOL':1894,'NOR':1880,'BEL':1878,'COL':1878,'MAR':1874,'CRO':1852,'SEN':1848,
     'MEX':1834,'URU':1831,'EQU':1829,'EUA':1826,'JAP':1825,'SUI':1812,'AUS':1772,
@@ -31,8 +45,9 @@ ELO = {
     'TCH':1651,'RDC':1650,'UZB':1633,'PAN':1615,'BOS':1602,'IRQ':1599,'CAB':1599,
     'CAT':1592,'AFS':1591,'NZE':1591,'JOR':1548,'CUR':1548,'HAI':1537,
 }
-HOME_BONUS = {'MEX': 100, 'EUA': 100, 'CAN': 80}
+HOME_BONUS = {'MEX':100,'EUA':100,'CAN':80}
 DC_RHO = -0.13
+ELO_K = 55
 
 TEAM_NAMES = {
     'ESP':'Spain','ARG':'Argentina','FRA':'France','ING':'England','BRA':'Brazil',
@@ -49,335 +64,346 @@ TEAM_NAMES = {
 
 SSL_CTX = ssl.create_default_context()
 
-def fetch_csv(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    r = urllib.request.urlopen(req, timeout=20, context=SSL_CTX)
-    return list(csv.DictReader(io.StringIO(r.read().decode())))
+def fetch_csv(url, timeout=20):
+    req = urllib.request.Request(url, headers={"User-Agent":"Mozilla/5.0"})
+    r = urllib.request.urlopen(req, timeout=timeout, context=SSL_CTX)
+    return list(csv.DictReader(io.StringIO(r.read().decode('utf-8','replace'))))
 
 def fetch_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    req = urllib.request.Request(url, headers={"User-Agent":"Mozilla/5.0"})
     r = urllib.request.urlopen(req, timeout=20, context=SSL_CTX)
     return json.loads(r.read().decode())
 
 def poisson_pmf(k, lam):
-    if lam <= 0: return 1.0 if k == 0 else 0.0
+    if lam <= 0: return 1.0 if k==0 else 0.0
     p = math.exp(-lam)
-    for i in range(1, k+1): p *= lam / i
+    for i in range(1, k+1): p *= lam/i
     return p
 
 def dc_tau(a, b, lam, mu):
-    if a==0 and b==0: return 1 - lam*mu*DC_RHO
-    if a==0 and b==1: return 1 + lam*DC_RHO
-    if a==1 and b==0: return 1 + mu*DC_RHO
-    if a==1 and b==1: return 1 - DC_RHO
+    if a==0 and b==0: return 1-lam*mu*DC_RHO
+    if a==0 and b==1: return 1+lam*DC_RHO
+    if a==1 and b==0: return 1+mu*DC_RHO
+    if a==1 and b==1: return 1-DC_RHO
     return 1.0
 
-def match_prob(hC, aC):
-    rH = ELO.get(hC, 1650); rA = ELO.get(aC, 1650)
-    hb = HOME_BONUS.get(hC, 0) - HOME_BONUS.get(aC, 0)
-    lam = max(0.3, min(3.5, 1.35 + ((rH+hb) - rA) / 400))
-    mu  = max(0.3, min(3.5, 1.35 + (rA - (rH+hb/2)) / 400))
-    pH = pD = pA = 0.0
+def match_prob(hC, aC, elo=None):
+    E = elo or ELO_BASE
+    rH = E.get(hC,1650); rA = E.get(aC,1650)
+    hb = HOME_BONUS.get(hC,0)-HOME_BONUS.get(aC,0)
+    lam = max(0.3, min(3.5, 1.35+((rH+hb)-rA)/400))
+    mu  = max(0.3, min(3.5, 1.35+(rA-(rH+hb/2))/400))
+    pH=pD=pA=0.0
     for a in range(9):
         pa = poisson_pmf(a, lam)
         for b in range(9):
-            p = pa * poisson_pmf(b, mu) * dc_tau(a, b, lam, mu)
-            if a > b: pH += p
-            elif a < b: pA += p
-            else: pD += p
-    t = pH + pD + pA
+            p = pa*poisson_pmf(b,mu)*dc_tau(a,b,lam,mu)
+            if a>b: pH+=p
+            elif a<b: pA+=p
+            else: pD+=p
+    t=pH+pD+pA
     return pH/t, pD/t, pA/t, lam, mu
+
+def compute_live_elo(played_matches):
+    elo = dict(ELO_BASE)
+    for m in sorted(played_matches, key=lambda x: x.get('date','')):
+        hC,aC = m.get('home_code',''), m.get('away_code','')
+        hg,ag = m.get('home_score'), m.get('away_score')
+        if not hC or not aC or hg is None: continue
+        rH,rA = elo.get(hC,1600), elo.get(aC,1600)
+        pH = 1/(1+10**((rA-rH)/400))
+        ah = 1.0 if hg>ag else (0.5 if hg==ag else 0.0)
+        dH = ELO_K*(ah-pH)
+        elo[hC] = round(elo.get(hC,1600)+dH)
+        elo[aC] = round(elo.get(aC,1600)-dH)
+    return elo
+
+# ── nlbair xG model (zone-based, calibrated) ─────────────────────────────────
+XG_ZONES = {
+    'qual_SmallBoxCentre': 0.42,
+    'qual_BoxCentre':      0.12,
+    'qual_BoxLeft':        0.08,
+    'qual_BoxRight':       0.08,
+    'qual_DeepBoxRight':   0.07,
+    'qual_OutOfBoxCentre': 0.05,
+    'qual_LowCentre':      0.10,
+    'qual_LowRight':       0.06,
+    'qual_LowLeft':        0.06,
+    'qual_HighCentre':     0.04,
+    'qual_HighRight':      0.03,
+    'qual_HighLeft':       0.03,
+}
+
+def shot_xg(row):
+    if row.get('qual_Penalty') == 'True': return 0.79
+    base = 0.07  # default (unknown zone)
+    for zone, val in XG_ZONES.items():
+        if row.get(zone) == 'True':
+            base = val; break
+    if row.get('qual_Head') == 'True': base *= 0.70
+    if row.get('qual_BigChance') == 'True': base = max(base, 0.40)
+    return round(min(0.96, base), 3)
+
+def fetch_nlbair_stats(hC, aC, date):
+    """Fetch match stats from nlbair/wc2026-events. Returns dict or None."""
+    hs = OUR_TO_NLBAIR.get(hC); as_ = OUR_TO_NLBAIR.get(aC)
+    if not hs or not as_: return None
+    fname = f"wc2026_{hs}_vs_{as_}_{date}_events.csv"
+    url = f"https://raw.githubusercontent.com/nlbair/wc2026-events/main/data/raw/{fname}"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent":"Mozilla/5.0"})
+        r = urllib.request.urlopen(req, timeout=25, context=SSL_CTX)
+        rows = list(csv.DictReader(io.StringIO(r.read().decode('utf-8','replace'))))
+        if not rows: return None
+        home_ws = rows[0].get('home_team','')
+        away_ws = rows[0].get('away_team','')
+        out = {}
+        for side, tname in [('home', home_ws), ('away', away_ws)]:
+            tr = [r for r in rows if r.get('team')==tname]
+            sr = [r for r in tr if r.get('isShot')=='True']
+            gr = [r for r in tr if r.get('isGoal')=='True']
+            bc = [r for r in sr if r.get('qual_BigChance')=='True']
+            sot = sum(1 for r in sr if r.get('event') in ('Goal','SavedShot','ShotOnPost'))
+            touches = sum(1 for r in tr if r.get('isTouch')=='True')
+            xg = round(sum(shot_xg(r) for r in sr), 2)
+            goals_info = [{'player': r.get('player','?'), 'minute': r.get('minute','?'),
+                           'type': 'penalty' if r.get('qual_Penalty')=='True' else 'regular'}
+                          for r in gr]
+            out[side] = {
+                'shots': len(sr), 'sot': sot, 'goals': len(gr),
+                'big_chances': len(bc), 'xg': xg, 'touches': touches,
+                'goals_info': goals_info,
+            }
+        total_t = out.get('home',{}).get('touches',0) + out.get('away',{}).get('touches',0)
+        if total_t > 0:
+            out['home']['poss'] = round(out['home']['touches']/total_t*100, 1)
+            out['away']['poss'] = round(out['away']['touches']/total_t*100, 1)
+        out['source'] = 'nlbair'
+        out['file'] = fname
+        return out
+    except Exception as e:
+        return None
 
 def build_narrative(hC, aC, g1, g2, pH, pD, pA, lam, mu,
                     hxg, axg, goals, reds, pens,
-                    hposs, aposs, hshots, ashots, hsot, asot,
-                    has_stats):
-    """Build a concise structured narrative explaining the match result vs model."""
+                    hposs, aposs, hshots, ashots, hbc, abc):
     n = TEAM_NAMES
-    h, a = n.get(hC, hC), n.get(aC, aC)
-
-    pred = 'H' if pH >= pD and pH >= pA else ('A' if pA >= pH and pA >= pD else 'D')
-    real = 'H' if g1 > g2 else ('A' if g2 > g1 else 'D')
-    surprise = pred != real
-
+    h, a = n.get(hC,hC), n.get(aC,aC)
+    pred = 'H' if pH>=pD and pH>=pA else ('A' if pA>=pH and pA>=pD else 'D')
+    real = 'H' if g1>g2 else ('A' if g2>g1 else 'D')
     lines = []
-
-    # 1. Match result vs model verdict
-    pred_label = {'H': f'{h} win', 'D': 'draw', 'A': f'{a} win'}
-    real_label  = {'H': f'{h} {g1}–{g2} {a}', 'D': f'{h} {g1}–{g2} {a} (draw)', 'A': f'{a} won {g2}–{g1}'}
-
-    if surprise:
+    if pred != real:
         conf = pH if pred=='H' else (pA if pred=='A' else pD)
-        lines.append(f"🚨 **Upset**: model predicted {pred_label[pred]} ({conf*100:.0f}% confidence) but ended {g1}–{g2}.")
+        pred_lbl = {'H':f'{h} win','D':'draw','A':f'{a} win'}
+        lines.append(f"🚨 **Upset**: model predicted {pred_lbl[pred]} ({conf*100:.0f}%) but ended {g1}–{g2}.")
     else:
         conf = pH if real=='H' else (pA if real=='A' else pD)
-        lines.append(f"✅ **Result matched prediction** ({conf*100:.0f}% confidence). Final: {g1}–{g2}.")
-
-    # 2. xG story
-    if hxg > 0 or axg > 0:
-        if g1 > hxg + 0.8:
-            lines.append(f"⚡ {h} outscored their xG significantly ({g1} goals vs {hxg:.1f} xG) — clinical finishing.")
-        elif g1 < hxg - 0.8:
-            lines.append(f"🧱 {h} underperformed xG ({g1} goals vs {hxg:.1f} xG) — poor finishing or great goalkeeping.")
-        if g2 > axg + 0.8:
-            lines.append(f"⚡ {a} outscored their xG ({g2} goals vs {axg:.1f} xG) — clinical finishing.")
-        elif g2 < axg - 0.8:
-            lines.append(f"🧱 {a} underperformed xG ({g2} goals vs {axg:.1f} xG) — poor finishing or great goalkeeping.")
-        if abs(g1-g2) <= 1 and abs(hxg-axg) > 1.2:
-            dom = h if hxg > axg else a
-            lines.append(f"📊 xG suggests {dom} dominated but score doesn't reflect it.")
-
-    # 3. Red cards
-    if reds:
-        for min_, team, player in reds:
-            side = h if team==hC else a
-            lines.append(f"🟥 {side} reduced to 10 men ({player}, {min_}') — impacted the game dynamics.")
-
-    # 4. Possession/shots
-    if has_stats and hposs and aposs:
-        dom = h if float(hposs) > float(aposs) else a
-        dom_poss = max(float(hposs), float(aposs))
-        if dom_poss > 60:
-            lines.append(f"🎯 {dom} controlled possession ({dom_poss:.0f}%) but {['efficiency was the difference','could not convert'][int(dom==h and g1<g2 or dom==a and g2<g1)]}.")
-
-    # 5. Shots efficiency
-    if has_stats and hshots and ashots:
-        if float(hshots or 0) > 0 and float(ashots or 0) > 0:
-            h_conv = g1 / float(hshots) if float(hshots) > 0 else 0
-            a_conv = g2 / float(ashots) if float(ashots) > 0 else 0
-            if h_conv > 0.25:
-                lines.append(f"💥 {h} were clinical: {g1} goals from {hshots} shots ({h_conv*100:.0f}% conversion).")
-            if a_conv > 0.25:
-                lines.append(f"💥 {a} were clinical: {g2} goals from {ashots} shots ({a_conv*100:.0f}% conversion).")
-
-    # 6. Scoreline vs model xG
-    model_diff = lam - mu
-    actual_diff = g1 - g2
-    if abs(actual_diff) > 3:
-        lines.append(f"📉 Scoreline ({g1}–{g2}) was far more one-sided than the model expected (projected ~{lam:.1f}–{mu:.1f}).")
-
+        lines.append(f"✅ **Result matched prediction** ({conf*100:.0f}%). Final: {g1}–{g2}.")
+    if hxg>0 or axg>0:
+        for code,gf,xg,name in [(hC,g1,hxg,h),(aC,g2,axg,a)]:
+            if gf>xg+0.8: lines.append(f"⚡ {name} outscored xG ({gf} goals vs {xg:.1f} xG) — clinical finishing.")
+            elif gf<xg-0.8: lines.append(f"🧱 {name} underperformed xG ({gf} goals vs {xg:.1f} xG).")
+    if hbc or abc:
+        if hbc: lines.append(f"💥 {h} created {hbc} big chance{'s' if hbc>1 else ''}.")
+        if abc: lines.append(f"💥 {a} created {abc} big chance{'s' if abc>1 else ''}.")
+    for min_,team,player in (reds or []):
+        side = h if team==hC else a
+        lines.append(f"🟥 {side} down to 10 men ({player}, {min_}').")
+    if hposs and aposs:
+        dom = h if hposs>aposs else a
+        dom_p = max(hposs,aposs)
+        if dom_p>60: lines.append(f"🎯 {dom} dominated possession ({dom_p:.0f}%).")
+    if hshots and ashots and (hshots+ashots)>0:
+        for gf,shots,name in [(g1,hshots,h),(g2,ashots,a)]:
+            if shots>0 and gf/shots>0.28: lines.append(f"🎯 {name}: {gf} goals from {int(shots)} shots ({gf/shots*100:.0f}% conversion).")
+    if abs(g1-g2)>3: lines.append(f"📉 Scoreline ({g1}–{g2}) far more one-sided than model expected (~{lam:.1f}–{mu:.1f}).")
     return lines
 
-# ── ELO auto-update from real WC2026 results ──────────────────────────────
-ELO_BASE = {
-    'ESP':2010,'FRA':2009,'ING':1993,'ARG':1976,'BRA':1955,'POR':1945,'ALE':1926,
-    'HOL':1894,'NOR':1880,'BEL':1878,'COL':1878,'MAR':1874,'CRO':1852,'SEN':1848,
-    'MEX':1834,'URU':1831,'EQU':1829,'EUA':1826,'JAP':1825,'SUI':1812,'AUS':1772,
-    'COR':1760,'SUE':1752,'IRA':1747,'CAN':1740,'CDM':1732,'TUR':1731,'AUT':1718,
-    'AGL':1704,'EGI':1695,'PAR':1681,'TUN':1680,'ESC':1663,'GAN':1659,'ARS':1657,
-    'TCH':1651,'RDC':1650,'UZB':1633,'PAN':1615,'BOS':1602,'IRQ':1599,'CAB':1599,
-    'CAT':1592,'AFS':1591,'NZE':1591,'JOR':1548,'CUR':1548,'HAI':1537,
-}
-ELO_K = 55
-
-def compute_live_elo(played_matches):
-    """Recalculate ELO from base values using all played WC2026 matches (K=55)."""
-    elo = dict(ELO_BASE)
-    for m in sorted(played_matches, key=lambda x: x.get('date', '')):
-        hC = m.get('home_code', '')
-        aC = m.get('away_code', '')
-        hg = m.get('home_score')
-        ag = m.get('away_score')
-        if not hC or not aC or hg is None or ag is None:
-            continue
-        rH = elo.get(hC, 1600)
-        rA = elo.get(aC, 1600)
-        pH_exp = 1 / (1 + 10**((rA - rH) / 400))
-        ah = 1.0 if hg > ag else (0.5 if hg == ag else 0.0)
-        dH = ELO_K * (ah - pH_exp)
-        elo[hC] = round(elo.get(hC, 1600) + dH)
-        elo[aC] = round(elo.get(aC, 1600) - dH)
-    return elo
-
-
 def main():
-    print("WC2026 Performance Tracker v2 — with match narratives")
+    print("WC2026 Performance Tracker v3 — mominullptr + nlbair/wc2026-events")
 
-    # Load real results
     with open('data/live_data.json') as f:
         live = json.load(f)
-
     wc = live.get('wc_results') or {}
-    played = [m for m in wc.get('matches', []) if m.get('home_score') is not None]
+    played = [m for m in wc.get('matches',[]) if m.get('home_score') is not None and m.get('home_code') and m.get('away_code')]
     print(f"  {len(played)} played matches")
-    if not played:
-        return
 
-    # Load mominullptr data
+    # Compute live ELO
+    live_elo = compute_live_elo(played)
+
+    # ── mominullptr data ────────────────────────────────────────────────────
     BASE = "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main"
-    print("  Fetching mominullptr data...")
-    md_rows = fetch_csv(f"{BASE}/matches_detailed.csv")
-    evt_rows = fetch_csv(f"{BASE}/match_events.csv")
-    match_rows = fetch_csv(f"{BASE}/matches.csv")
-    team_rows = fetch_csv(f"{BASE}/teams.csv")
-    squad_rows = fetch_csv(f"{BASE}/squads_and_players.csv")
-    stats_rows = fetch_csv(f"{BASE}/match_team_stats.csv")
+    print("  Fetching mominullptr...")
+    try:
+        md_rows   = fetch_csv(f"{BASE}/matches_detailed.csv")
+        evt_rows  = fetch_csv(f"{BASE}/match_events.csv")
+        match_rows= fetch_csv(f"{BASE}/matches.csv")
+        team_rows = fetch_csv(f"{BASE}/teams.csv")
+        squad_rows= fetch_csv(f"{BASE}/squads_and_players.csv")
+        stats_rows= fetch_csv(f"{BASE}/match_team_stats.csv")
+        momi_ok = True
+    except Exception as e:
+        print(f"  WARNING mominullptr: {e}")
+        md_rows=evt_rows=match_rows=team_rows=squad_rows=stats_rows=[]; momi_ok=False
 
-    team_id_to_our = {t['team_id']: FIFA_TO_OUR.get(t['fifa_code'], t['fifa_code']) for t in team_rows}
-    player_id_to_name = {s['player_id']: s['player_name'] for s in squad_rows}
-    match_id_map = {m['match_id']: m for m in match_rows}
-
-    # index: (date, hC, aC) -> match_detailed row
-    det_by_key = {}
+    tid_to_our    = {t['team_id']: FIFA_TO_OUR.get(t['fifa_code'],t['fifa_code']) for t in team_rows}
+    pid_to_name   = {s['player_id']: s['player_name'] for s in squad_rows}
+    match_id_map  = {m['match_id']: m for m in match_rows}
+    det_by_key    = {}
     for r in md_rows:
         hc = FIFA_TO_OUR.get(r['home_fifa_code'], r['home_fifa_code'])
         ac = FIFA_TO_OUR.get(r['away_fifa_code'], r['away_fifa_code'])
-        det_by_key[(r['date'], hc, ac)] = r
-
-    # events by match_id
-    evts_by_mid = {}
-    for e in evt_rows:
-        evts_by_mid.setdefault(e['match_id'], []).append(e)
-
-    # real xG by (date, hC, aC)
+        det_by_key[(r['date'],hc,ac)] = r
     real_xg_map = {}
     for r in md_rows:
-        if r.get('status') != 'Completed': continue
-        hc = FIFA_TO_OUR.get(r['home_fifa_code'], '')
-        ac = FIFA_TO_OUR.get(r['away_fifa_code'], '')
-        try:
-            real_xg_map[(r['date'], hc, ac)] = (float(r['home_xg']), float(r['away_xg']))
-        except (ValueError, TypeError): pass
-
-    # stats by (mid, tid)
+        if r.get('status')!='Completed': continue
+        hc = FIFA_TO_OUR.get(r.get('home_fifa_code',''),'')
+        ac = FIFA_TO_OUR.get(r.get('away_fifa_code',''),'')
+        try: real_xg_map[(r['date'],hc,ac)] = (float(r['home_xg']),float(r['away_xg']))
+        except: pass
+    evts_by_mid = {}
+    for e in evt_rows:
+        evts_by_mid.setdefault(e['match_id'],[]).append(e)
     stats_map = {}
     for s in stats_rows:
-        stats_map[(s['match_id'], s['team_id'])] = s
+        stats_map[(s['match_id'],s['team_id'])] = s
 
     teams_out = {}
     matches_out = []
-    real_xg_used = 0
-    narratives_built = 0
+    real_xg_used = nlbair_used = narratives_built = 0
 
     for m in played:
-        hC = m.get('home_code', ''); aC = m.get('away_code', '')
-        if not hC or not aC: continue
-        g1, g2 = m['home_score'], m['away_score']
-        date = m.get('date', '')
-        pH, pD, pA, lam, mu = match_prob(hC, aC)
+        hC,aC = m['home_code'], m['away_code']
+        g1,g2 = m['home_score'], m['away_score']
+        date  = m.get('date','')
+        pH,pD,pA,lam,mu = match_prob(hC, aC, live_elo)
 
-        # Real xG
-        rxg = real_xg_map.get((date, hC, aC))
-        if rxg:
-            hxg, axg = rxg; real_xg_used += 1
+        # ── Stats priority: nlbair > mominullptr ──────────────────────────
+        nlb = fetch_nlbair_stats(hC, aC, date)
+        if nlb:
+            nlbair_used += 1
+            hxg    = nlb['home']['xg']
+            axg    = nlb['away']['xg']
+            hshots = nlb['home']['shots']
+            ashots = nlb['away']['shots']
+            hsot   = nlb['home']['sot']
+            asot   = nlb['away']['sot']
+            hposs  = nlb['home'].get('poss')
+            aposs  = nlb['away'].get('poss')
+            hbc    = nlb['home']['big_chances']
+            abc    = nlb['away']['big_chances']
+            # If mominullptr has real xG, prefer it (more validated)
+            rxg = real_xg_map.get((date,hC,aC))
+            if rxg: hxg,axg = rxg; real_xg_used+=1
         else:
-            hxg, axg = lam, mu
+            rxg = real_xg_map.get((date,hC,aC))
+            if rxg: hxg,axg=rxg; real_xg_used+=1
+            else:   hxg,axg=lam,mu
+            det = det_by_key.get((date,hC,aC))
+            mid = det['match_id'] if det else None
+            base = match_id_map.get(mid,{}) if mid else {}
+            hs = stats_map.get((mid, base.get('home_team_id','')),{}) if mid else {}
+            as_ = stats_map.get((mid, base.get('away_team_id','')),{}) if mid else {}
+            def n_(d,k): return float(d[k]) if d.get(k) else None
+            hposs=n_(hs,'possession_pct'); aposs=n_(as_,'possession_pct')
+            hshots=n_(hs,'total_shots');   ashots=n_(as_,'total_shots')
+            hsot=n_(hs,'shots_on_target'); asot=n_(as_,'shots_on_target')
+            hbc=abc=None
 
-        # Events
-        det = det_by_key.get((date, hC, aC))
+        # ── Events (mominullptr) ──────────────────────────────────────────
+        det = det_by_key.get((date,hC,aC))
         mid = det['match_id'] if det else None
-        base = match_id_map.get(mid, {}) if mid else {}
-        evts = evts_by_mid.get(mid, []) if mid else []
-        goals = [(e['minute'], team_id_to_our.get(e['team_id'],'?'), player_id_to_name.get(e['player_id'],'?'))
-                 for e in evts if e['event_type']=='Goal']
-        reds  = [(e['minute'], team_id_to_our.get(e['team_id'],'?'), player_id_to_name.get(e['player_id'],'?'))
-                 for e in evts if e['event_type']=='Red Card']
-        pens  = [e for e in evts if 'Penalty' in e.get('event_type','')]
+        base2 = match_id_map.get(mid,{}) if mid else {}
+        evts = evts_by_mid.get(mid,[]) if mid else []
+        goals = [(e['minute'],tid_to_our.get(e['team_id'],'?'),pid_to_name.get(e['player_id'],'?'))
+                 for e in evts if e.get('event_type')=='Goal']
+        reds  = [(e['minute'],tid_to_our.get(e['team_id'],'?'),pid_to_name.get(e['player_id'],'?'))
+                 for e in evts if e.get('event_type')=='Red Card']
 
-        # Stats
-        h_tid = base.get('home_team_id','')
-        a_tid = base.get('away_team_id','')
-        hs = stats_map.get((mid, h_tid), {}) if mid else {}
-        as_ = stats_map.get((mid, a_tid), {}) if mid else {}
+        # Merge nlbair goal info (better names) if available
+        if nlb:
+            h_goals = [{'min':g['minute'],'player':g['player'],'type':g['type']}
+                       for g in nlb['home']['goals_info']]
+            a_goals = [{'min':g['minute'],'player':g['player'],'type':g['type']}
+                       for g in nlb['away']['goals_info']]
+        else:
+            h_goals = [{'min':g[0],'player':g[2],'type':'regular'} for g in goals if g[1]==hC]
+            a_goals = [{'min':g[0],'player':g[2],'type':'regular'} for g in goals if g[1]==aC]
 
-        def n(d, k): return float(d[k]) if d.get(k) else None
-        hposs=n(hs,'possession_pct'); aposs=n(as_,'possession_pct')
-        hshots=n(hs,'total_shots'); ashots=n(as_,'total_shots')
-        hsot=n(hs,'shots_on_target'); asot=n(as_,'shots_on_target')
-        has_stats = bool(hs or as_)
-
-        # Generate narrative
         narr = build_narrative(hC,aC,g1,g2,pH,pD,pA,lam,mu,
-                               hxg,axg,goals,reds,pens,
-                               hposs,aposs,hshots,ashots,hsot,asot,has_stats)
-        if narr: narratives_built += 1
+                               hxg,axg,goals,reds,[],
+                               hposs or 0, aposs or 0,
+                               hshots or 0, ashots or 0, hbc or 0, abc or 0)
+        if narr: narratives_built+=1
 
-        match_entry = {
-            'date': date, 'home': hC, 'away': aC, 'g1': g1, 'g2': g2,
-            'pH': round(pH,3), 'pD': round(pD,3), 'pA': round(pA,3),
-            'lam': round(lam,2), 'mu': round(mu,2),
-            'home_xg': round(hxg,2), 'away_xg': round(axg,2),
-            'real_xg': bool(rxg),
-            'goals': goals, 'reds': reds,
-            'home_poss': hposs, 'away_poss': aposs,
-            'home_shots': hshots, 'away_shots': ashots,
-            'home_sot': hsot, 'away_sot': asot,
-            'has_stats': has_stats,
-            'narrative': narr,
-            'stadium': det.get('stadium_name','') if det else '',
-            'city': det.get('city','') if det else '',
-            'referee': det.get('referee_name','') if det else '',
-        }
-        matches_out.append(match_entry)
+        matches_out.append({
+            'date':date,'home':hC,'away':aC,'g1':g1,'g2':g2,
+            'pH':round(pH,3),'pD':round(pD,3),'pA':round(pA,3),
+            'lam':round(lam,2),'mu':round(mu,2),
+            'home_xg':round(hxg,2),'away_xg':round(axg,2),
+            'real_xg':bool(rxg),
+            'home_shots':hshots,'away_shots':ashots,
+            'home_sot':hsot,'away_sot':asot,
+            'home_poss':hposs,'away_poss':aposs,
+            'home_big_chances':hbc,'away_big_chances':abc,
+            'home_goals':h_goals,'away_goals':a_goals,
+            'reds':reds,'has_stats':bool(nlb or rxg),
+            'narrative':narr,'nlbair':bool(nlb),
+            'stadium':det.get('stadium_name','') if det else '',
+            'city':det.get('city','') if det else '',
+        })
 
-        for code, opp, gf, ga, p_win, p_draw, p_loss, xgf, xga in [
-            (hC,aC,g1,g2,pH,pD,pA,hxg,axg),
-            (aC,hC,g2,g1,pA,pD,pH,axg,hxg),
+        for code,opp,gf,ga,p_win,p_draw,p_loss,xgf,xga,shots,bc in [
+            (hC,aC,g1,g2,pH,pD,pA,hxg,axg,hshots,hbc),
+            (aC,hC,g2,g1,pA,pD,pH,axg,hxg,ashots,abc),
         ]:
             if code not in teams_out:
-                teams_out[code] = {'code':code,'name':TEAM_NAMES.get(code,code),
+                teams_out[code]={'code':code,'name':TEAM_NAMES.get(code,code),
                     'games':0,'goals_for':0,'goals_against':0,'xg_for':0.,'xg_against':0.,
                     'wins':0,'draws':0,'losses':0,'points':0,
-                    'expected_points':0.,'matches':[]}
-            t = teams_out[code]
+                    'expected_points':0.,'big_chances_created':0,'big_chances_conceded':0,'matches':[]}
+            t=teams_out[code]
             t['games']+=1; t['goals_for']+=gf; t['goals_against']+=ga
             t['xg_for']+=xgf; t['xg_against']+=xga
             t['expected_points']+=p_win*3+p_draw
+            if bc: t['big_chances_created']+=bc
             if gf>ga: t['wins']+=1; t['points']+=3; result='W'
             elif gf<ga: t['losses']+=1; result='L'
             else: t['draws']+=1; t['points']+=1; result='D'
-            me = {'vs':opp,'date':date,'gf':gf,'ga':ga,'xgf':round(xgf,2),'xga':round(xga,2),
-                  'result':result,'p_win':round(p_win,3)}
-            # attach per-team stats
-            s_ref = hs if code==hC else as_
-            if s_ref:
-                if s_ref.get('possession_pct'): me['real_poss']=float(s_ref['possession_pct'])
-                if s_ref.get('total_shots'): me['real_shots']=float(s_ref['total_shots'])
-                if s_ref.get('shots_on_target'): me['real_sot']=float(s_ref['shots_on_target'])
-                if s_ref.get('corners'): me['real_corners']=float(s_ref['corners'])
-            t['matches'].append(me)
+            t['matches'].append({'vs':opp,'date':date,'gf':gf,'ga':ga,
+                'xgf':round(xgf,2),'xga':round(xga,2),'result':result,'p_win':round(p_win,3)})
 
-    for code, t in teams_out.items():
-        t['xpts'] = round(t['expected_points'], 2)
-        t['delta_pts'] = round(t['points'] - t['expected_points'], 2)
-        t['xgf'] = round(t['xg_for']/t['games'], 2) if t['games'] else 0
-        t['xga'] = round(t['xg_against']/t['games'], 2) if t['games'] else 0
-        poss_vals = [m['real_poss'] for m in t['matches'] if 'real_poss' in m]
-        shots_vals = [m['real_shots'] for m in t['matches'] if 'real_shots' in m]
-        if poss_vals: t['real_possession_avg'] = round(sum(poss_vals)/len(poss_vals),1)
-        if shots_vals: t['real_shots_avg'] = round(sum(shots_vals)/len(shots_vals),1)
+    for t in teams_out.values():
+        g = t['games'] or 1
+        t['xpts']=round(t['expected_points'],2)
+        t['delta_pts']=round(t['points']-t['expected_points'],2)
+        t['xgf']=round(t['xg_for']/g,2); t['xga']=round(t['xg_against']/g,2)
+
+    # Save live ELO to live_data.json
+    try:
+        with open('data/live_data.json') as lf: ld=json.load(lf)
+        ld['live_elo']=live_elo; ld['live_elo_games']=len(played)
+        ld['live_elo_updated']=datetime.now(timezone.utc).isoformat()
+        with open('data/live_data.json','w') as lf:
+            json.dump(ld,lf,ensure_ascii=False,separators=(',',':'))
+        print(f"  ELO updated: {len(live_elo)} teams from {len(played)} games")
+    except Exception as e:
+        print(f"  WARNING ELO: {e}")
 
     output = {
         'updated_at': datetime.now(timezone.utc).isoformat(),
         'teams': sorted(teams_out.values(), key=lambda x: -x['delta_pts']),
         'matches': sorted(matches_out, key=lambda x: x['date']),
         'real_xg_games': real_xg_used,
+        'nlbair_games': nlbair_used,
         'narratives_built': narratives_built,
-        'source': 'football-data.org + mominullptr/FIFA-World-Cup-2026-Dataset',
+        'source': 'football-data.org + mominullptr + nlbair/wc2026-events',
     }
-    # Store live ELO back into live_data.json for build_index.py to inject
-    try:
-        with open('data/live_data.json') as lf:
-            ld = json.load(lf)
-        live_elo = compute_live_elo(played)
-        ld['live_elo'] = live_elo
-        ld['live_elo_games'] = len(played)
-        ld['live_elo_updated'] = datetime.now(timezone.utc).isoformat()
-        with open('data/live_data.json', 'w') as lf:
-            json.dump(ld, lf, ensure_ascii=False, separators=(',', ':'))
-        print(f"  Live ELO updated: {len(live_elo)} teams from {len(played)} games")
-    except Exception as e:
-        print(f"  WARNING: could not update live ELO: {e}")
+    os.makedirs('data',exist_ok=True)
+    with open('data/wc2026_perf.json','w',encoding='utf-8') as f:
+        json.dump(output,f,ensure_ascii=False,indent=2)
+    print(f"  Saved: {len(teams_out)} teams, {len(matches_out)} matches")
+    print(f"  nlbair: {nlbair_used} matches | mominullptr xG: {real_xg_used} | narratives: {narratives_built}")
 
-    os.makedirs('data', exist_ok=True)
-    with open('data/wc2026_perf.json', 'w', encoding='utf-8') as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"  Saved: {len(teams_out)} teams, {len(matches_out)} matches, {narratives_built} narratives, {real_xg_used} real xG")
-    print(f"\nSample narratives:")
-    for m in matches_out[:3]:
-        print(f"  {m['home']} {m['g1']}-{m['g2']} {m['away']}:")
-        for line in m.get('narrative',[])[:2]:
-            print(f"    • {line}")
-
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
