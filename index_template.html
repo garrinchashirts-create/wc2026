@@ -1727,40 +1727,43 @@ function simGroups(rand){
 // and only simulates unplayed matches
 
 function getRealGroupBase() {
-  // Returns {st, playedPairs} from LIVE_DATA standings + matches
+  // Compute standings ONLY from match results (avoids standings/matches API timing race)
   var ld = window.LIVE_DATA;
   if (!ld || !ld.wc_results) return null;
 
-  var standings = ld.wc_results.standings || [];
-  var matches   = ld.wc_results.matches || [];
-
-  if (!standings.length) return null;
-
-  // Build current points/gf/ga per team from standings
+  var matches = ld.wc_results.matches || [];
   var st = {};
-  standings.forEach(function(e) {
-    var code = e.code;
-    if (!code) return;
-    st[code] = {
-      pts: e.points       || 0,
-      gf:  e.goals_for    || 0,
-      ga:  e.goals_against|| 0,
-      gd:  e.goal_diff    || 0,
-      w:   e.won  || 0,
-      d:   e.draw || 0,
-      l:   e.lost || 0,
-    };
-  });
-
-  // Build set of already-played matchups
   var playedPairs = {};
+
   matches.forEach(function(m) {
-    if (m.home_score !== null && m.home_score !== undefined) {
-      playedPairs[m.home_code + '-' + m.away_code] = true;
-      playedPairs[m.away_code + '-' + m.home_code] = true; // symmetric
+    if (m.home_score === null || m.home_score === undefined) return;
+    var hC = m.home_code, aC = m.away_code;
+    if (!hC || !aC) return;
+
+    if (!st[hC]) st[hC] = { pts:0, gf:0, ga:0, w:0, d:0, l:0 };
+    if (!st[aC]) st[aC] = { pts:0, gf:0, ga:0, w:0, d:0, l:0 };
+
+    var hg = m.home_score, ag = m.away_score;
+    st[hC].gf += hg; st[hC].ga += ag;
+    st[aC].gf += ag; st[aC].ga += hg;
+
+    if (hg > ag) {
+      st[hC].pts += 3; st[hC].w++;
+      st[aC].l++;
+    } else if (ag > hg) {
+      st[aC].pts += 3; st[aC].w++;
+      st[hC].l++;
+    } else {
+      st[hC].pts += 1; st[hC].d++;
+      st[aC].pts += 1; st[aC].d++;
     }
+
+    // Mark pair as played (both directions)
+    playedPairs[hC + '-' + aC] = true;
+    playedPairs[aC + '-' + hC] = true;
   });
 
+  if (!Object.keys(st).length) return null;
   return { st: st, playedPairs: playedPairs };
 }
 
