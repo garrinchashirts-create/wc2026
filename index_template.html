@@ -429,7 +429,7 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
   <div id="simContent" style="display:none">
   <div class="sim-tabs">
     <button class="sim-tab active" onclick="showSimTab('champion',this)">🏆 Campeão</button>
-    <button class="sim-tab" onclick="showSimTab('bracket',this)">📊 Chaveamento</button>
+    <button class="sim-tab" onclick="showSimTab('bracket',this);refreshAndRenderBracket()">📊 Chaveamento</button>
     <button class="sim-tab" onclick="showSimTab('groups',this)">📋 Grupos</button>
     <button class="sim-tab" onclick="showSimTab('groupresults',this)">⚽ Resultados</button>
     <button class="sim-tab" onclick="showSimTab('montecarlo',this)">🎲 Monte Carlo</button>
@@ -2063,6 +2063,76 @@ function assignBest3rds(best8,qual){
     if(match) assigned[slot.slot]=match.team;
   });
   return assigned;
+}
+
+
+
+// ── Live Chaveamento — auto-refresh ──────────────────────────────────────────
+var _liveRefreshBusy = false;
+
+async function refreshAndRenderBracket(btn) {
+  if (_liveRefreshBusy) return;
+  _liveRefreshBusy = true;
+  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+  try {
+    var r = await fetch('https://raw.githubusercontent.com/garrinchashirts-create/wc2026/main/data/live_data.json?t=' + Date.now());
+    if (r.ok) {
+      var fresh = await r.json();
+      window.LIVE_DATA = fresh;
+      var upd = fresh.updated_at_brt || '';
+      var el = document.getElementById('bracketLastUpdate');
+      if (el) el.textContent = 'Dados: ' + upd;
+    }
+  } catch(e) {}
+  renderLiveBracket();
+  _liveRefreshBusy = false;
+  if (btn) { btn.disabled = false; btn.textContent = '🔄'; }
+}
+
+function renderLiveBracket() {
+  // Build bracket from current LIVE_DATA standings + simGroupsWithRealBase
+  var base = getRealGroupBase ? getRealGroupBase() : null;
+  if (!base || !Object.keys(base.st || {}).length) {
+    // Fallback: run deterministic sim
+    try {
+      var g2 = simGroupsWithRealBase(false);
+      var br2 = simKO(g2.qual, false, g2.best8);
+      renderSimBracket(br2, window._simMC ? window._simMC.counts : null, window._simMC ? window._simMC.N : 1);
+      renderSimGroups(g2);
+      renderSimGroupResults(g2);
+    } catch(e) { console.error('bracket err:', e); }
+    return;
+  }
+  try {
+    var g3 = simGroupsWithRealBase(false);
+    var br3 = simKO(g3.qual, false, g3.best8);
+    renderSimBracket(br3, window._simMC ? window._simMC.counts : null, window._simMC ? window._simMC.N : 1);
+    renderSimGroups(g3);
+    renderSimGroupResults(g3);
+    // Update champion
+    if (br3.champion) renderSimChampion(br3.champion, window._simMC ? window._simMC.counts : null);
+    // Show KO real results if any
+    renderKOReal();
+  } catch(e) { console.error('live bracket err:', e); }
+}
+
+function renderKOReal() {
+  // Overlay real KO scores on bracket cards when available
+  var ld = window.LIVE_DATA;
+  if (!ld || !ld.wc_results) return;
+  var ko_played = (ld.wc_results.matches || []).filter(function(m) {
+    return m.stage && m.stage !== 'GROUP_STAGE' && m.home_score !== null && m.home_score !== undefined;
+  });
+  if (!ko_played.length) return;
+  // Mark bracket cards with real results (visual badge)
+  var note = document.getElementById('bracketKONote');
+  if (!note) return;
+  note.innerHTML = ko_played.map(function(m) {
+    var sc = SCOUTS[m.home_code] || {}; var sa = SCOUTS[m.away_code] || {};
+    return '<span style="font-size:11px;background:var(--gn-bg);color:var(--gn-tx);padding:2px 8px;border-radius:4px;margin-right:4px">'
+      + (sc.flag||'🏳') + ' ' + m.home_score + '-' + m.away_score + ' ' + (sa.flag||'🏳') + '</span>';
+  }).join('');
+  note.style.display = 'block';
 }
 
 
