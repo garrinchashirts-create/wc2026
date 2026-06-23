@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-23T02:21:59.891624+00:00",
-  "generated_at_brt": "22/06/2026 23:21 BRT",
+  "generated_at": "2026-06-23T11:44:39.250978+00:00",
+  "generated_at_brt": "23/06/2026 08:44 BRT",
   "value_bets_today": {
     "summary": "Erro na geração: HTTP Error 404: Not Found",
     "bets": [],
@@ -8,42 +8,18 @@
   },
   "match_previews": [
     {
-      "game_id": "fd8533b650e655030f6a7946f8795db2",
-      "home": "Jordan",
-      "away": "Algeria",
-      "time": "2026-06-23T03:00:00Z",
-      "h2h": {
-        "away": 1.6,
-        "home": 7.2,
-        "draw": 4.55
-      },
-      "totals": {
-        "over25": 2.7,
-        "under25": 1.93
-      },
-      "btts_yes": null,
-      "preview": {
-        "resumo": "Erro na geração: HTTP Error 404: Not Found",
-        "aposta_principal": "N/D",
-        "justificativa": "",
-        "apostas_alternativas": [],
-        "risco": "",
-        "confianca": "media"
-      }
-    },
-    {
       "game_id": "8ba93d190f1f934e33862a97a6353a6e",
       "home": "Portugal",
       "away": "Uzbekistan",
       "time": "2026-06-23T17:00:00Z",
       "h2h": {
-        "home": 1.23,
+        "home": 3.82,
         "away": 24.0,
-        "draw": 8.75
+        "draw": 9.5
       },
       "totals": {
-        "over25": 2.42,
-        "under25": 2.5
+        "over25": 2.27,
+        "under25": 2.72
       },
       "btts_yes": null,
       "preview": {
@@ -61,13 +37,13 @@
       "away": "Ghana",
       "time": "2026-06-23T20:00:00Z",
       "h2h": {
-        "home": 1.25,
-        "away": 18.0,
-        "draw": 7.5
+        "home": 4.25,
+        "away": 21.0,
+        "draw": 8.0
       },
       "totals": {
         "over25": 2.6,
-        "under25": 2.4
+        "under25": 2.43
       },
       "btts_yes": null,
       "preview": {
@@ -85,13 +61,13 @@
       "away": "Croatia",
       "time": "2026-06-23T23:00:00Z",
       "h2h": {
-        "away": 1.58,
-        "home": 7.8,
-        "draw": 4.4
+        "away": 4.8,
+        "home": 9.7,
+        "draw": 4.6
       },
       "totals": {
-        "over25": 2.4,
-        "under25": 2.16
+        "over25": 2.2,
+        "under25": 2.24
       },
       "btts_yes": null,
       "preview": {
@@ -109,13 +85,13 @@
       "away": "DR Congo",
       "time": "2026-06-24T02:00:00Z",
       "h2h": {
-        "home": 1.6,
-        "away": 7.4,
+        "home": 4.95,
+        "away": 9.2,
         "draw": 4.2
       },
       "totals": {
-        "over25": 2.32,
-        "under25": 2.9
+        "over25": 2.25,
+        "under25": 3.0
       },
       "btts_yes": null,
       "preview": {
@@ -133,13 +109,37 @@
       "away": "Qatar",
       "time": "2026-06-24T19:00:00Z",
       "h2h": {
-        "home": 1.48,
-        "away": 7.8,
-        "draw": 5.3
+        "home": 1.45,
+        "away": 8.2,
+        "draw": 5.4
       },
       "totals": {
-        "over25": 2.09,
-        "under25": 2.3
+        "over25": 2.7,
+        "under25": 2.42
+      },
+      "btts_yes": null,
+      "preview": {
+        "resumo": "Erro na geração: HTTP Error 404: Not Found",
+        "aposta_principal": "N/D",
+        "justificativa": "",
+        "apostas_alternativas": [],
+        "risco": "",
+        "confianca": "media"
+      }
+    },
+    {
+      "game_id": "c9ef5822ee64fd5275f7c73251bb56c7",
+      "home": "Switzerland",
+      "away": "Canada",
+      "time": "2026-06-24T19:00:00Z",
+      "h2h": {
+        "away": 3.5,
+        "home": 2.48,
+        "draw": 3.2
+      },
+      "totals": {
+        "over25": 2.12,
+        "under25": 2.55
       },
       "btts_yes": null,
       "preview": {
