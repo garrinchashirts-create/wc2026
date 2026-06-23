@@ -1769,47 +1769,54 @@ function getRealGroupBase() {
 
 function simGroupsWithRealBase(rand) {
   var base = getRealGroupBase();
+  if (!base || !Object.keys(base.st).length) return simGroups(rand);
 
-  // Fall back to full simulation if no real data
-  if (!base || !Object.keys(base.st).length) {
-    return simGroups(rand);
-  }
+  var st = {}, res = {};
 
-  var st = {};
-  var res = {};
-
-  // Initialize from real standings
   Object.keys(SIM_GROUPS).forEach(function(g) {
     res[g] = [];
     SIM_GROUPS[g].forEach(function(t) {
       st[t] = base.st[t]
-        ? { pts: base.st[t].pts, gf: base.st[t].gf, ga: base.st[t].ga,
-            w: base.st[t].w, d: base.st[t].d, l: base.st[t].l }
-        : { pts: 0, gf: 0, ga: 0, w: 0, d: 0, l: 0 };
+        ? { pts:base.st[t].pts, gf:base.st[t].gf, ga:base.st[t].ga,
+            w:base.st[t].w, d:base.st[t].d, l:base.st[t].l }
+        : { pts:0, gf:0, ga:0, w:0, d:0, l:0 };
     });
   });
 
-  // Simulate only UNPLAYED games
   Object.entries(SIM_GROUPS).forEach(function(ge) {
     var g = ge[0], teams = ge[1];
     for (var i = 0; i < teams.length; i++) {
       for (var j = i + 1; j < teams.length; j++) {
         var a = teams[i], b = teams[j];
-        var key = a + '-' + b;
+        if (base.playedPairs[a + '-' + b]) continue;
 
-        // Skip if already played
-        if (base.playedPairs[key]) continue;
+        // Use matchProbV2 — our full model (ELO + form + squad + altitude + drawBias)
+        var probs;
+        try { probs = matchProbV2(a, b, g, false); } catch(e) { probs = null; }
 
-        // Simulate the unplayed match
-        var m = rand
-          ? simMatch(a, b, true)
-          : (simStr(a) > simStr(b)
-              ? { winner: a, loser: b, draw: false, sA: 2, sB: 1 }
-              : simStr(b) > simStr(a)
-                ? { winner: b, loser: a, draw: false, sA: 1, sB: 2 }
-                : { winner: null, loser: null, draw: true, sA: 1, sB: 1 });
+        var m;
+        if (probs) {
+          if (rand) {
+            // Monte Carlo: sample from Poisson using model's λ/μ
+            var gA = poissonSample(probs.lam);
+            var gB = poissonSample(probs.mu);
+            var w = gA > gB ? a : gB > gA ? b : null;
+            m = { winner:w, loser:w===a?b:w===b?a:null, draw:gA===gB, sA:gA, sB:gB };
+          } else {
+            // Deterministic: most likely outcome from model
+            var sc = scoreFromPrediction(probs.winA, probs.draw, probs.winB, probs.lam, probs.mu);
+            var w2 = sc.h > sc.a ? a : sc.a > sc.h ? b : null;
+            m = { winner:w2, loser:w2===a?b:w2===b?a:null, draw:sc.h===sc.a, sA:sc.h, sB:sc.a };
+          }
+        } else {
+          // Fallback: legacy simMatch
+          m = rand ? simMatch(a, b, true)
+            : (getElo(a) >= getElo(b)
+                ? { winner:a, loser:b, draw:false, sA:2, sB:1 }
+                : { winner:b, loser:a, draw:false, sA:1, sB:2 });
+        }
 
-        res[g].push({ a: a, b: b, winner: m.winner, sA: m.sA, sB: m.sB, draw: m.draw });
+        res[g].push({ a:a, b:b, winner:m.winner, sA:m.sA, sB:m.sB, draw:m.draw });
 
         if (m.draw) {
           st[a].pts += 1; st[a].d++;
@@ -1824,38 +1831,32 @@ function simGroupsWithRealBase(rand) {
     }
   });
 
-  // Sort groups → qual
   var qual = {}, rank = {}, thirds = [];
   Object.entries(SIM_GROUPS).forEach(function(ge) {
     var g = ge[0], teams = ge[1];
     var s = teams.slice().sort(function(x, y) {
       var sx = st[x], sy = st[y];
       if (sy.pts !== sx.pts) return sy.pts - sx.pts;
-      var dgd = (sy.gf - sy.ga) - (sx.gf - sx.ga);
+      var dgd = (sy.gf-sy.ga) - (sx.gf-sx.ga);
       if (dgd !== 0) return dgd;
       return sy.gf - sx.gf;
     });
     rank[g] = s;
-    qual[g] = { first: s[0], second: s[1], third: s[2] };
-    thirds.push({
-      team: s[2], group: g,
-      pts: st[s[2]].pts,
-      gd: st[s[2]].gf - st[s[2]].ga,
-      gf: st[s[2]].gf,
-    });
+    qual[g] = { first:s[0], second:s[1], third:s[2] };
+    thirds.push({ team:s[2], group:g, pts:st[s[2]].pts,
+                  gd:st[s[2]].gf-st[s[2]].ga, gf:st[s[2]].gf });
   });
 
-  thirds.sort(function(a, b) {
-    if (b.pts !== a.pts) return b.pts - a.pts;
-    if (b.gd !== a.gd)  return b.gd - a.gd;
-    return b.gf - a.gf;
+  thirds.sort(function(a,b) {
+    if (b.pts!==a.pts) return b.pts-a.pts;
+    if (b.gd!==a.gd)  return b.gd-a.gd;
+    return b.gf-a.gf;
   });
 
-  var best8thirds = thirds.slice(0, 8).map(function(x) {
-    return { team: x.team, group: x.group };
-  });
-
-  return { st: st, qual: qual, rank: rank, res: res, best8: best8thirds };
+  return {
+    st: st, qual: qual, rank: rank, res: res,
+    best8: thirds.slice(0,8).map(function(x){ return {team:x.team,group:x.group}; })
+  };
 }
 
 function assignBest3rds(best8,qual){
