@@ -365,6 +365,7 @@ select:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
     <div class="hero" id="heroBlock"></div>
     <div id="bfMatchupBlock"></div>
     <div id="aiAnalysisBlock" style="margin-bottom:12px"></div>
+    <div id="confrontoPerfBlock"></div>
     <div style="margin-bottom:12px"><div class="stitle" data-t="swTitle">Pontos fortes e fracos</div><div class="g2" id="swBlock"></div></div>
     <div class="card"><div class="stitle" data-t="cmpTitle">Comparativo de métricas</div><div id="cmpBlock"></div></div>
     <div class="card" id="efiCard" style="display:none"><div class="stitle">🏃 FIFA EFI — Dados oficiais do torneio</div><div id="efiCmpBlock"></div></div>
@@ -1441,6 +1442,147 @@ function copyAI(){
 populateSelects();
 renderDashboard();
 loadOdds();
+
+
+// ── WC2026 real performance in Confronto ─────────────────────────────────────
+var _confrontoPerfCache = null;
+
+async function loadConfrontoPerfData() {
+  if (_confrontoPerfCache) return _confrontoPerfCache;
+  try {
+    var r = await fetch('./data/wc2026_perf.json?t=' + Date.now());
+    if (!r.ok) return null;
+    _confrontoPerfCache = await r.json();
+    return _confrontoPerfCache;
+  } catch(e) { return null; }
+}
+
+function buildTeamPerfIndex(perfData) {
+  // Build {code: {xg, shots, sot, poss, bc, form, games}} from perf matches
+  var idx = {};
+  if (!perfData || !perfData.matches) return idx;
+
+  perfData.matches.forEach(function(m) {
+    [
+      [m.home, m.home_xg, m.home_shots, m.home_sot, m.home_poss, m.home_big_chances, m.g1, m.g2],
+      [m.away, m.away_xg, m.away_shots, m.away_sot, m.away_poss, m.away_big_chances, m.g2, m.g1],
+    ].forEach(function(row) {
+      var code = row[0], xg = row[1], shots = row[2], sot = row[3],
+          poss = row[4], bc = row[5], gf = row[6], ga = row[7];
+      if (!code) return;
+      if (!idx[code]) idx[code] = { xg:[], shots:[], sot:[], poss:[], bc:[], form:[], gf:0, ga:0, games:0 };
+      var t = idx[code];
+      t.games++;
+      if (xg != null) t.xg.push(xg);
+      if (shots != null) t.shots.push(shots);
+      if (sot != null) t.sot.push(sot);
+      if (poss != null) t.poss.push(poss);
+      if (bc != null) t.bc.push(bc);
+      t.gf += gf; t.ga += ga;
+      t.form.push(gf > ga ? 'W' : gf < ga ? 'L' : 'D');
+    });
+  });
+
+  // Compute averages
+  Object.keys(idx).forEach(function(code) {
+    var t = idx[code];
+    var avg = function(arr) { return arr.length ? Math.round(arr.reduce(function(a,b){return a+b},0)/arr.length*10)/10 : null; };
+    t.xg_avg = avg(t.xg); t.shots_avg = avg(t.shots); t.sot_avg = avg(t.sot);
+    t.poss_avg = avg(t.poss); t.bc_avg = avg(t.bc);
+  });
+
+  return idx;
+}
+
+function renderConfrontoPerfCard(hC, aC, perfIdx) {
+  var el = document.getElementById('confrontoPerfBlock');
+  if (!el) return;
+
+  var h = perfIdx[hC], a = perfIdx[aC];
+  if (!h && !a) { el.innerHTML = ''; return; }
+
+  function statRow(label, hv, av, higherBetter, fmt) {
+    if (hv == null && av == null) return '';
+    var hF = hv != null ? (fmt ? fmt(hv) : hv) : '—';
+    var aF = av != null ? (fmt ? fmt(av) : av) : '—';
+    var hB = hv != null && av != null && (higherBetter ? hv > av : hv < av);
+    var aB = hv != null && av != null && (higherBetter ? av > hv : av < hv);
+    var bCol = 'var(--bl)';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:0.5px solid var(--bd);font-size:12px">'
+      + '<span style="font-weight:' + (hB?700:400) + ';color:' + (hB?bCol:'var(--tx2)') + ';width:36px;text-align:right">' + hF + '</span>'
+      + '<span style="flex:1;text-align:center;font-size:10px;color:var(--tx3)">' + label + '</span>'
+      + '<span style="font-weight:' + (aB?700:400) + ';color:' + (aB?bCol:'var(--tx2)') + ';width:36px;text-align:left">' + aF + '</span>'
+      + '</div>';
+  }
+
+  function formDots(form) {
+    if (!form || !form.length) return '—';
+    return form.slice(-5).map(function(r) {
+      var col = r==='W'?'var(--gn)':r==='D'?'var(--am)':'var(--rd-tx)';
+      return '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:' + col
+        + ';color:#fff;font-size:8px;font-weight:700;text-align:center;line-height:14px">' + r + '</span>';
+    }).join(' ');
+  }
+
+  var hs = SCOUTS[hC] || {}; var as_ = SCOUTS[aC] || {};
+  var rows = [
+    statRow('xG/jogo', h && h.xg_avg, a && a.xg_avg, true, function(v){return v.toFixed(1)}),
+    statRow('Chutes/jogo', h && h.shots_avg, a && a.shots_avg, true, function(v){return v.toFixed(0)}),
+    statRow('No alvo/jogo', h && h.sot_avg, a && a.sot_avg, true, function(v){return v.toFixed(1)}),
+    statRow('Posse %', h && h.poss_avg, a && a.poss_avg, true, function(v){return v.toFixed(0)+'%'}),
+    statRow('Gdes chances', h && h.bc_avg, a && a.bc_avg, true, function(v){return v.toFixed(1)}),
+  ].filter(Boolean).join('');
+
+  var hGames = h ? h.games : 0; var aGames = a ? a.games : 0;
+
+  el.innerHTML = '<div class="card" style="margin-bottom:12px">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    + '<span style="font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:0.5px">📊 Copa 2026 · Médias reais</span>'
+    + '<span style="font-size:10px;color:var(--tx3)">nlbair/WhoScored</span>'
+    + '</div>'
+    // Header with team names
+    + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px">'
+    + '<span style="width:36px;text-align:right;font-weight:600">' + (hs.flag||'') + '</span>'
+    + '<span style="flex:1;text-align:center;color:var(--tx3)">(' + hGames + 'J vs ' + aGames + 'J)</span>'
+    + '<span style="width:36px;text-align:left;font-weight:600">' + (as_.flag||'') + '</span>'
+    + '</div>'
+    + rows
+    // Form row
+    + '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:11px">'
+    + '<div style="display:flex;gap:3px;justify-content:flex-end;width:80px">' + formDots(h && h.form) + '</div>'
+    + '<span style="flex:1;text-align:center;font-size:10px;color:var(--tx3)">Forma</span>'
+    + '<div style="display:flex;gap:3px;width:80px">' + formDots(a && a.form) + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+// Hook into renderMatchup — called after existing render
+var _origRenderMatchup = null;
+function initConfrontoPerfHook() {
+  if (typeof renderMatchup !== 'undefined' && !_origRenderMatchup) {
+    _origRenderMatchup = renderMatchup;
+    renderMatchup = function() {
+      _origRenderMatchup.apply(this, arguments);
+      // Load and render perf data asynchronously
+      var hC = document.getElementById('selHome') ? document.getElementById('selHome').value : null;
+      var aC = document.getElementById('selAway') ? document.getElementById('selAway').value : null;
+      if (!hC || !aC || hC === aC) return;
+      loadConfrontoPerfData().then(function(perf) {
+        if (!perf) return;
+        var idx = buildTeamPerfIndex(perf);
+        renderConfrontoPerfCard(hC, aC, idx);
+      });
+    };
+  }
+}
+// Init once DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initConfrontoPerfHook);
+} else {
+  setTimeout(initConfrontoPerfHook, 100);
+}
+
+
 </script>
 
 <script>
