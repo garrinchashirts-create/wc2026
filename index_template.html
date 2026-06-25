@@ -2957,12 +2957,12 @@ function scoreFromPrediction(pH, pD, pA, lam, mu) {
 }
 
 // ── 4. AI MATCH ANALYSIS (buildAiPrompt + Claude API) ────────────────────────
-var _aiMatchCache = {};
+var _aiMatchCache = {}; // invalidate on deploy: 2026-06-25
 
 function buildMatchAiPrompt(hC, aC, probs, cfg) {
   var h = SCOUTS[hC] || {}, a = SCOUTS[aC] || {};
-  var hn = h.names ? (h.names.en || h.name) : hC;
-  var an = a.names ? (a.names.en || a.name) : aC;
+  var hn = h.names ? (h.names.en || h.name) : (h.name || hC);
+  var an = a.names ? (a.names.en || a.name) : (a.name || aC);
   var fH = Math.round(getWC2026FormScore(hC) * 100);
   var fA = Math.round(getWC2026FormScore(aC) * 100);
   var mvH = Math.round((SQUAD_STRENGTH[hC]||0.05)*100);
@@ -2971,16 +2971,59 @@ function buildMatchAiPrompt(hC, aC, probs, cfg) {
   var venue = MATCH_VENUE[grp] || 'Dallas';
   var alt = VENUE_ALTITUDE[venue] || 0;
 
-  return [
-    'FIFA World Cup 2026: ' + hn + ' vs ' + an + ' (Group ' + grp + ', venue: ' + venue + (alt>500?' — altitude '+alt+'m':'') + ')',
-    hn + ': ELO ' + (getElo(hC)||'?') + ', form ' + fH + '%, squad value ' + mvH + '% of tournament max',
-    an + ': ELO ' + (getElo(aC)||'?') + ', form ' + fA + '%, squad value ' + mvA + '% of tournament max',
-    'Statistical model (' + (cfg||'balanced') + '): home ' + Math.round(probs.winA*100) + '% / draw ' + Math.round(probs.draw*100) + '% / away ' + Math.round(probs.winB*100) + '%',
-    'Expected goals: ' + probs.lam + ' – ' + probs.mu,
+  // ── Real WC2026 performance (nlbair/WhoScored + Bustami EFI) ─────────────
+  var pH = WC26_PERF_SUMMARY[hC] || {}, pA = WC26_PERF_SUMMARY[aC] || {};
+
+  function perfLine(code, name, p) {
+    if (!p.rg) return null;
+    var parts = [name + ' na Copa (' + p.rg + 'j):'];
+    if (p.xgf != null) parts.push('xG criado ' + p.xgf.toFixed(2) + '/j');
+    if (p.xga != null) parts.push('xG concedido ' + p.xga.toFixed(2) + '/j');
+    if (p.pa  != null) parts.push('precisão de passe ' + p.pa.toFixed(1) + '%');
+    return parts.join(', ');
+  }
+
+  // Real form sequence
+  function formSeq(code) {
+    var ld = window.LIVE_DATA;
+    if (!ld || !ld.wc_results) return null;
+    var res = [];
+    (ld.wc_results.matches || []).forEach(function(m) {
+      if (m.home_score === null || m.home_score === undefined) return;
+      if (m.home_code === code) res.push(m.home_score > m.away_score ? 'W' : m.home_score < m.away_score ? 'L' : 'D');
+      if (m.away_code === code) res.push(m.away_score > m.home_score ? 'W' : m.away_score < m.home_score ? 'L' : 'D');
+    });
+    return res.length ? res.join('-') : null;
+  }
+
+  var formH = formSeq(hC), formA = formSeq(aC);
+  var perfH = perfLine(hC, hn, pH), perfA = perfLine(aC, an, pA);
+
+  var lines = [
+    'FIFA World Cup 2026: ' + hn + ' vs ' + an,
+    'Venue: ' + venue + (alt > 500 ? ' (altitude ' + alt + 'm — penaliza visitantes)' : ''),
     '',
-    'In 2-3 sentences: explain the tactical and contextual factors that will decide this match. Be specific about form, squad quality, altitude effects, and key strengths/weaknesses. End with one sentence on the most likely result and why.',
-    'Return only plain text, no JSON, no headers.',
-  ].join('\n');
+    '— ' + hn + ' —',
+    'ELO: ' + (getElo(hC)||'?') + ' | Forma recente: ' + fH + '%' + (formH ? ' | Copa 2026: ' + formH : ''),
+    'Valor plantel: ' + mvH + '% do máximo do torneio',
+  ];
+  if (perfH) lines.push(perfH);
+
+  lines.push('');
+  lines.push('— ' + an + ' —');
+  lines.push('ELO: ' + (getElo(aC)||'?') + ' | Forma recente: ' + fA + '%' + (formA ? ' | Copa 2026: ' + formA : ''));
+  lines.push('Valor plantel: ' + mvA + '% do máximo do torneio');
+  if (perfA) lines.push(perfA);
+
+  lines.push('');
+  lines.push('Modelo (' + (cfg||'balanced') + '): ' + hn + ' ' + Math.round(probs.winA*100) + '% / empate ' + Math.round(probs.draw*100) + '% / ' + an + ' ' + Math.round(probs.winB*100) + '%');
+  lines.push('xG esperado: ' + probs.lam + ' – ' + probs.mu + (probs.xgBlend ? ' (ajustado com xG real da Copa)' : ''));
+
+  lines.push('');
+  lines.push('Em 3-4 frases em português: analisa os factores táticos e contextuais decisivos. Usa os dados reais da Copa (forma W/D/L, xG real, posse) como contexto principal, complementando com ELO e valor de plantel. Termina com uma frase sobre o resultado mais provável e porquê.');
+  lines.push('Responde apenas em texto corrido, sem JSON, sem títulos, em português de Portugal.');
+
+  return lines.join('\n');
 }
 
 async function getAiMatchAnalysis(hC, aC, probs, cfg) {
