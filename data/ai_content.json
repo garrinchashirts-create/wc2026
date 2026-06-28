@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-27T20:18:37.794593+00:00",
-  "generated_at_brt": "27/06/2026 17:18 BRT",
+  "generated_at": "2026-06-28T08:36:34.850969+00:00",
+  "generated_at_brt": "28/06/2026 05:36 BRT",
   "value_bets_today": {
     "summary": "Erro na geração: HTTP Error 404: Not Found",
     "bets": [],
@@ -8,18 +8,18 @@
   },
   "match_previews": [
     {
-      "game_id": "537c0997cd899394f47f16545b7068b2",
-      "home": "Croatia",
-      "away": "Ghana",
-      "time": "2026-06-27T21:00:00Z",
+      "game_id": "def55b09ef3d6854e3c01e74b5c63415",
+      "home": "South Africa",
+      "away": "Canada",
+      "time": "2026-06-28T19:00:00Z",
       "h2h": {
-        "home": 1.87,
-        "away": 6.0,
-        "draw": 3.4
+        "away": 1.69,
+        "home": 6.4,
+        "draw": 3.9
       },
       "totals": {
-        "over25": 2.38,
-        "under25": 2.8
+        "over25": 2.16,
+        "under25": 3.15
       },
       "btts_yes": null,
       "preview": {
@@ -32,66 +32,18 @@
       }
     },
     {
-      "game_id": "4be17c8e1ccfecb0f2a5ef79e045c415",
-      "home": "Panama",
-      "away": "England",
-      "time": "2026-06-27T21:00:00Z",
+      "game_id": "4f3d72fba877939d36a5315618184093",
+      "home": "Brazil",
+      "away": "Japan",
+      "time": "2026-06-29T17:00:00Z",
       "h2h": {
-        "away": 1.19,
-        "home": 22.99,
-        "draw": 9.6
-      },
-      "totals": {
-        "over25": 2.8,
-        "under25": 2.92
-      },
-      "btts_yes": null,
-      "preview": {
-        "resumo": "Erro na geração: HTTP Error 404: Not Found",
-        "aposta_principal": "N/D",
-        "justificativa": "",
-        "apostas_alternativas": [],
-        "risco": "",
-        "confianca": "media"
-      }
-    },
-    {
-      "game_id": "67ae5751c401a98409b8566ae4897069",
-      "home": "Colombia",
-      "away": "Portugal",
-      "time": "2026-06-27T23:30:00Z",
-      "h2h": {
-        "home": 3.6,
-        "away": 2.12,
-        "draw": 4.1
-      },
-      "totals": {
-        "over25": 1.93,
-        "under25": 3.4
-      },
-      "btts_yes": null,
-      "preview": {
-        "resumo": "Erro na geração: HTTP Error 404: Not Found",
-        "aposta_principal": "N/D",
-        "justificativa": "",
-        "apostas_alternativas": [],
-        "risco": "",
-        "confianca": "media"
-      }
-    },
-    {
-      "game_id": "13eab94a136b9c264ba974cf437a5f71",
-      "home": "DR Congo",
-      "away": "Uzbekistan",
-      "time": "2026-06-27T23:30:00Z",
-      "h2h": {
-        "home": 1.76,
-        "away": 5.5,
+        "home": 1.74,
+        "away": 5.6,
         "draw": 4.0
       },
       "totals": {
-        "over25": 3.25,
-        "under25": 1.93
+        "over25": 2.9,
+        "under25": 1.85
       },
       "btts_yes": null,
       "preview": {
@@ -104,42 +56,18 @@
       }
     },
     {
-      "game_id": "8756200e539155e571557c4f2e0d7f05",
-      "home": "Algeria",
-      "away": "Austria",
-      "time": "2026-06-28T02:00:00Z",
+      "game_id": "4930db8e83436874d09e59bd0e29c1a5",
+      "home": "Germany",
+      "away": "Paraguay",
+      "time": "2026-06-29T20:30:00Z",
       "h2h": {
-        "home": 4.0,
-        "away": 3.86,
-        "draw": 2.12
+        "home": 1.4,
+        "away": 10.5,
+        "draw": 5.28
       },
       "totals": {
-        "over25": 3.25,
-        "under25": 2.2
-      },
-      "btts_yes": null,
-      "preview": {
-        "resumo": "Erro na geração: HTTP Error 404: Not Found",
-        "aposta_principal": "N/D",
-        "justificativa": "",
-        "apostas_alternativas": [],
-        "risco": "",
-        "confianca": "media"
-      }
-    },
-    {
-      "game_id": "54697f453437ab26276d773be1d72e9b",
-      "home": "Jordan",
-      "away": "Argentina",
-      "time": "2026-06-28T02:00:00Z",
-      "h2h": {
-        "away": 1.17,
-        "home": 26.0,
-        "draw": 10.0
-      },
-      "totals": {
-        "over25": 2.32,
-        "under25": 2.65
+        "over25": 1.94,
+        "under25": 3.25
       },
       "btts_yes": null,
       "preview": {
