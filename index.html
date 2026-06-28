@@ -3209,41 +3209,132 @@ function renderCalConfronto() {
   });
 }
 
+
 function renderTodayFixtures() {
   var el = document.getElementById('todayFixtures');
   if (!el) return;
-  var fixtures = window.WC_FIXTURES || [];
+
   var today = new Date().toISOString().split('T')[0];
-  var seen={}, allDates=[];
-  fixtures.forEach(function(f){ if(f.date>=today&&!seen[f.date]){seen[f.date]=1;allDates.push(f.date);} });
-  allDates.sort();
-  var targets = allDates.slice(0, allDates[0]===today ? 3 : 2);
-  var games = fixtures.filter(function(f){ return targets.indexOf(f.date)>=0; });
-  if (!games.length) { el.innerHTML=''; return; }
+
+  // Build unified fixture list from LIVE_DATA (KO) + WC_FIXTURES (group stage fallback)
+  var allFixtures = [];
+
+  // 1. KO matches from LIVE_DATA — have real team codes
+  var ld = window.LIVE_DATA;
+  if (ld && ld.wc_results) {
+    var koMatches = (ld.wc_results.matches || []).filter(function(m) {
+      return m.stage && m.stage !== 'GROUP_STAGE';
+    });
+    koMatches.forEach(function(m) {
+      if (!m.home_code || !m.away_code) return;
+      allFixtures.push({
+        date: m.date, time: (m.time_utc || '').substring(0, 5),
+        home: m.home_code, away: m.away_code,
+        stage: m.stage,
+        played: m.home_score !== null && m.home_score !== undefined,
+        score1: m.home_score, score2: m.away_score,
+        went_pens: m.went_pens, went_extra: m.went_extra,
+        pen_h: m.home_score_pen, pen_a: m.away_score_pen,
+        isKO: true
+      });
+    });
+  }
+
+  // 2. Group stage from WC_FIXTURES (fallback for historical context)
+  var fixtures = window.WC_FIXTURES || [];
+  fixtures.forEach(function(f) {
+    if (f.group && f.home && SCOUTS[f.home] && SCOUTS[f.away]) {
+      allFixtures.push({
+        date: f.date, time: f.time,
+        home: f.home, away: f.away,
+        stage: 'GROUP_STAGE', group: f.group,
+        played: f.played, score1: f.score1, score2: f.score2,
+        isKO: false
+      });
+    }
+  });
+
+  // Sort and filter — show upcoming + recent (last 2 days)
+  allFixtures.sort(function(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+
+  var twoDaysAgo = new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0];
+  var upcoming = allFixtures.filter(function(f) { return f.date >= twoDaysAgo; });
+
+  // Pick: today + next 2 days with games
+  var dates = [];
+  var seen = {};
+  upcoming.forEach(function(f) {
+    if (!seen[f.date]) { seen[f.date] = 1; dates.push(f.date); }
+  });
+  var targets = dates.slice(0, 3);
+  var games = upcoming.filter(function(f) { return targets.indexOf(f.date) >= 0; });
+
+  if (!games.length) { el.innerHTML = ''; return; }
+
   var container = document.createElement('div');
   container.style.cssText = 'background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rl);padding:.7rem 1rem';
+
+  var stageLabel = games.some(function(g){return g.isKO;}) ? '16 AVOS DE FINAL' : 'JOGOS';
   var title = document.createElement('div');
-  title.style.cssText = 'font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;margin-bottom:.5rem';
-  title.textContent = 'JOGOS · clique para analisar';
+  title.style.cssText = 'font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;margin-bottom:.5rem;letter-spacing:0.5px';
+  title.textContent = stageLabel + ' · clique para analisar';
   container.appendChild(title);
+
   var wrap = document.createElement('div');
   wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px';
+
   games.forEach(function(f) {
-    var ht=SCOUTS[f.home]||{flag:'',name:f.home}, at=SCOUTS[f.away]||{flag:'',name:f.away};
-    var isToday=f.date===today;
-    var d=new Date(f.date+'T12:00:00');
-    var lbl=isToday?'':(d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' · ');
-    var sc=f.played?(f.score1+'-'+f.score2):(f.time||'');
-    var btn=document.createElement('button');
-    btn.style.cssText='background:'+(isToday?'var(--ac)':'var(--sf)')+';color:'+(isToday?'#fff':'var(--tx)')+';border:1px solid '+(isToday?'var(--ac)':'var(--bd)')+';border-radius:var(--r);padding:5px 11px;cursor:pointer;font-size:12px;font-family:inherit;display:inline-flex;align-items:center;gap:5px';
-    btn.innerHTML='<span style="font-size:14px">'+(ht.flag||'')+'</span><b>'+tn(f.home)+'</b><span style="opacity:.7;font-size:11px">'+lbl+sc+'</span><b>'+tn(f.away)+'</b><span style="font-size:14px">'+(at.flag||'')+'</span>';
-    btn.addEventListener('click', (function(h,a){ return function(){ selectMatchup(h,a); }; })(f.home,f.away));
+    var ht = SCOUTS[f.home] || {flag:'', name: f.home};
+    var at = SCOUTS[f.away] || {flag:'', name: f.away};
+    var isToday = f.date === today;
+
+    var d = new Date(f.date + 'T12:00:00Z');
+    var lbl = isToday ? '' : (d.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'}) + ' · ');
+
+    var sc = '';
+    if (f.played) {
+      sc = f.score1 + '-' + f.score2;
+      if (f.went_pens) sc += ' (pen ' + (f.pen_h||'?') + '-' + (f.pen_a||'?') + ')';
+      else if (f.went_extra) sc += ' aet';
+    } else {
+      sc = f.time || '';
+    }
+
+    var btn = document.createElement('button');
+    var bg = f.played ? 'var(--sf)' : (isToday ? 'var(--ac)' : 'var(--sf)');
+    var col = f.played ? 'var(--tx2)' : (isToday ? '#fff' : 'var(--tx)');
+    var bdr = f.played ? 'var(--bd)' : (isToday ? 'var(--ac)' : 'var(--bd)');
+    btn.style.cssText = 'background:' + bg + ';color:' + col + ';border:1px solid ' + bdr + ';border-radius:var(--r);padding:5px 11px;cursor:pointer;font-size:12px;font-family:inherit;display:inline-flex;align-items:center;gap:5px;white-space:nowrap';
+
+    var htName = (ht.name || f.home).substring(0, 10);
+    var atName = (at.name || f.away).substring(0, 10);
+
+    btn.innerHTML = '<span style="font-size:14px">' + (ht.flag||'🏳') + '</span>'
+      + '<b>' + htName + '</b>'
+      + '<span style="opacity:.7;font-size:11px">' + lbl + sc + '</span>'
+      + '<b>' + atName + '</b>'
+      + '<span style="font-size:14px">' + (at.flag||'🏳') + '</span>';
+
+    btn.addEventListener('click', function() {
+      var hSel = document.getElementById('selHome');
+      var aSel = document.getElementById('selAway');
+      if (hSel && aSel) {
+        hSel.value = f.home;
+        aSel.value = f.away;
+        renderMatchup();
+        var section = document.getElementById('confrontoSection') || document.querySelector('[data-section="confronto"]');
+        if (section) section.scrollIntoView({behavior:'smooth'});
+      }
+    });
+
     wrap.appendChild(btn);
   });
+
   container.appendChild(wrap);
-  el.innerHTML='';
+  el.innerHTML = '';
   el.appendChild(container);
 }
+
 
 function selectMatchup(h, a) {
   var selH=document.getElementById('selHome'), selA=document.getElementById('selAway');
