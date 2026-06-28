@@ -2373,7 +2373,7 @@ function renderSimBracket(br, counts, N) {
   var koReal={};
   allMatches.forEach(function(m){
     if(m.stage&&m.stage!=='GROUP_STAGE'&&m.home_score!==null&&m.home_score!==undefined){
-      koReal[m.home_code+'-'+m.away_code]={h:m.home_score,a:m.away_score};
+      koReal[m.home_code+'-'+m.away_code]={h:m.home_score,a:m.away_score,aet:m.went_extra,pens:m.went_pens,pen_h:m.home_score_pen,pen_a:m.away_score_pen};
     }
   });
 
@@ -2429,6 +2429,8 @@ function renderSimBracket(br, counts, N) {
     var real=koReal[cA+'-'+cB]||(koReal[cB+'-'+cA]?{h:koReal[cB+'-'+cA].a,a:koReal[cB+'-'+cA].h}:null);
     var sA=real?real.h:null,sB=real?real.a:null;
     var border=real?'1.5px solid var(--gn)':'1px solid var(--bd)';
+    var penLabel=real&&real.pens?'<span style="font-size:8px;background:var(--am-bg);color:var(--am-tx);padding:0 4px;border-radius:2px">PEN '+(real.pen_h||'?')+'-'+(real.pen_a||'?')+'</span>':'';
+    var aetLabel=real&&real.aet&&!real.pens?'<span style="font-size:8px;color:var(--tx3)"> AET</span>':'';
     var hist=WC_KO_HIST.rounds[rndKey];
     var h2h=cA&&cA!=='?'&&cB&&cB!=='?'?confH2HEdge(cA,cB):null;
 
