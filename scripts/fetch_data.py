@@ -203,6 +203,13 @@ def fetch_wc_results():
                 "home_code": NAME_TO_CODE.get(ht, ""),
                 "away_code": NAME_TO_CODE.get(at, ""),
                 "home_score": ft.get("home"),
+                "home_score_et": score.get("extraTime", {}).get("home"),
+                "away_score_et": score.get("extraTime", {}).get("away"),
+                "home_score_pen": score.get("penalties", {}).get("home"),
+                "away_score_pen": score.get("penalties", {}).get("away"),
+                "went_extra": score.get("duration") in ("EXTRA_TIME", "PENALTY_SHOOTOUT"),
+                "went_pens": score.get("duration") == "PENALTY_SHOOTOUT",
+                "match_winner": score.get("winner"),
                 "away_score": ft.get("away"),
                 "status": m.get("status"),
             })
