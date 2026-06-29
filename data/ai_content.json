@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-29T14:00:25.331779+00:00",
-  "generated_at_brt": "29/06/2026 11:00 BRT",
+  "generated_at": "2026-06-29T20:32:43.929196+00:00",
+  "generated_at_brt": "29/06/2026 17:32 BRT",
   "value_bets_today": {
     "summary": "Erro na geração: HTTP Error 404: Not Found",
     "bets": [],
@@ -8,42 +8,18 @@
   },
   "match_previews": [
     {
-      "game_id": "4f3d72fba877939d36a5315618184093",
-      "home": "Brazil",
-      "away": "Japan",
-      "time": "2026-06-29T17:00:00Z",
-      "h2h": {
-        "home": 1.81,
-        "away": 5.4,
-        "draw": 4.1
-      },
-      "totals": {
-        "over25": 3.15,
-        "under25": 1.96
-      },
-      "btts_yes": null,
-      "preview": {
-        "resumo": "Erro na geração: HTTP Error 404: Not Found",
-        "aposta_principal": "N/D",
-        "justificativa": "",
-        "apostas_alternativas": [],
-        "risco": "",
-        "confianca": "media"
-      }
-    },
-    {
       "game_id": "4930db8e83436874d09e59bd0e29c1a5",
       "home": "Germany",
       "away": "Paraguay",
       "time": "2026-06-29T20:30:00Z",
       "h2h": {
-        "home": 1.41,
-        "away": 10.5,
-        "draw": 5.4
+        "home": 1.4,
+        "away": 12.0,
+        "draw": 5.5
       },
       "totals": {
-        "over25": 1.93,
-        "under25": 3.3
+        "over25": 2.7,
+        "under25": 2.34
       },
       "btts_yes": null,
       "preview": {
@@ -62,12 +38,12 @@
       "time": "2026-06-30T01:00:00Z",
       "h2h": {
         "away": 4.0,
-        "home": 2.38,
-        "draw": 3.27
+        "home": 2.5,
+        "draw": 3.23
       },
       "totals": {
-        "over25": 3.2,
-        "under25": 1.93
+        "over25": 3.3,
+        "under25": 1.91
       },
       "btts_yes": null,
       "preview": {
@@ -85,13 +61,13 @@
       "away": "Norway",
       "time": "2026-06-30T17:00:00Z",
       "h2h": {
-        "home": 4.0,
-        "away": 2.1,
-        "draw": 3.71
+        "home": 3.9,
+        "away": 2.2,
+        "draw": 3.7
       },
       "totals": {
-        "over25": 2.3,
-        "under25": 2.1
+        "over25": 2.7,
+        "under25": 2.0
       },
       "btts_yes": null,
       "preview": {
@@ -111,10 +87,10 @@
       "h2h": {
         "home": 1.31,
         "away": 13.0,
-        "draw": 6.52
+        "draw": 6.56
       },
       "totals": {
-        "over25": 2.27,
+        "over25": 2.24,
         "under25": 2.75
       },
       "btts_yes": null,

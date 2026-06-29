@@ -1,36 +1,8 @@
 {
-  "updated_at": "2026-06-29 14:00 UTC",
+  "updated_at": "2026-06-29 20:32 UTC",
   "source": "betting.betfair.com",
   "count": 10,
   "items": [
-    {
-      "title": "World Cup Day 20 Tipsheet: Best bets and predictions for all three games including a 20/1 treble",
-      "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-day-20-tipsheet-best-bets-and-predictions-including-a-20-1-treble-290626-1320.html",
-      "date": "Mon, 29 Jun 2026 09:00:00 +0100",
-      "desc": "Jimmy The Punt previews day 20 of the 2026 World Cup which begins with ivory Coast v Norway and features World Cup favourites France as well as co-hosts Mexico. Jimmy has fouls angles on Haaland and a",
-      "isWC": true
-    },
-    {
-      "title": "World Cup Daily ACCA: Back Brazilian corners, Germany win and goals in Andy Robson&#039;s 3/1 multi on Day 19",
-      "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-daily-acca-tips-100626-1302.html",
-      "date": "Mon, 29 Jun 2026 10:00:00 +0100",
-      "desc": "Every day Andy Robson consults his World Cup betting experts to come up with a daily ACCA using Betfair&#039;s Bet Builder Multi tool. Monday&#039;s multi features today&#039;s three Round of 32 games",
-      "isWC": true
-    },
-    {
-      "title": "Will England make the World Cup Final? Plotting the Three Lions route to New York and rating their chances",
-      "link": "https://betting.betfair.com/football/world-cup-2026/will-england-make-the-world-cup-final-plotting-englands-possible-route-and-latest-betting-240626-200.html",
-      "date": "Mon, 29 Jun 2026 17:00:00 +0100",
-      "desc": "The World Cup 2026 knockout stage is where the tournament really comes alive. England&#039;s route to the final is now set, so stay up to date with every fixture, result and the latest betting odds as",
-      "isWC": true
-    },
-    {
-      "title": "World Cup Round of 32: Opta stats and tips for first knockout matches",
-      "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-round-of-32-opta-stats-tips-for-first-knockout-matches-including-england-v-dr-congo-290626-204.html",
-      "date": "Mon, 29 Jun 2026 17:01:00 +0100",
-      "desc": "Get an Opta stat and tip for the World Cup round of 32 as teams take part in the first knockout ties of the tournament with the potential for extra-time and penalty shootouts...\n\nOpta stats and tips f",
-      "isWC": true
-    },
     {
       "title": "World Cup Day 19 Tipsheet: Get Mark Stinchcombe&#039;s best bets and predictions including an 11/1 treble",
       "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-day-19-tipsheet-get-mark-stinchcombes-best-bets-and-predictions-including-a-11-1-treble-280626-1329.html",
@@ -39,24 +11,38 @@
       "isWC": true
     },
     {
-      "title": "Ivory Coast v Norway: Get the best value from Haaland with 9/1 Bet Builder double",
-      "link": "https://betting.betfair.com/football/world-cup-2026/ivory-coast-v-norway-world-cup-knockout-betting-tips-best-bets-match-prediction-280626-1063.html",
-      "date": "Mon, 29 Jun 2026 09:00:00 +0100",
-      "desc": "Paul Higham is backing Norway&#039;s well-rested starters to battle past Ivory Coast in this last 32 clash, and thinks a [9/1] Bet Builder double could be the best value way to back Erling Haaland...\n",
-      "isWC": false
+      "title": "World Cup Round of 32: Opta stats and tips for first knockout matches",
+      "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-round-of-32-opta-stats-tips-for-first-knockout-matches-including-england-v-dr-congo-290626-204.html",
+      "date": "Tue, 30 Jun 2026 10:01:00 +0100",
+      "desc": "Get an Opta stat and tip for the World Cup round of 32 as teams take part in the first knockout ties of the tournament with the potential for extra-time and penalty shootouts...\n\nOpta stats and tips f",
+      "isWC": true
+    },
+    {
+      "title": "Will England make the World Cup Final? Plotting the Three Lions route to New York and rating their chances",
+      "link": "https://betting.betfair.com/football/world-cup-2026/will-england-make-the-world-cup-final-plotting-englands-possible-route-and-latest-betting-240626-200.html",
+      "date": "Tue, 30 Jun 2026 12:00:00 +0100",
+      "desc": "The World Cup 2026 knockout stage is where the tournament really comes alive. England&#039;s route to the final is now set, so stay up to date with every fixture, result and the latest betting odds as",
+      "isWC": true
+    },
+    {
+      "title": "World Cup Daily ACCA: Back Haaland and Mbappe shots in Andy Robson&#039;s 9/2 multi on Day 20",
+      "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-daily-acca-tips-100626-1302.html",
+      "date": "Tue, 30 Jun 2026 13:30:00 +0100",
+      "desc": "Every day Andy Robson consults his World Cup betting experts to come up with a daily ACCA using Betfair&#039;s Bet Builder Multi tool. Tuesday&#039;s multi features shots on target for Haaland and Mba",
+      "isWC": true
+    },
+    {
+      "title": "World Cup Day 20 Tipsheet: Best bets and predictions for all three games including a 20/1 treble",
+      "link": "https://betting.betfair.com/football/world-cup-2026/world-cup-day-20-tipsheet-best-bets-and-predictions-including-a-20-1-treble-290626-1320.html",
+      "date": "Tue, 30 Jun 2026 18:50:00 +0100",
+      "desc": "Jimmy The Punt previews day 20 of the 2026 World Cup which begins with ivory Coast v Norway and features World Cup favourites France as well as co-hosts Mexico. Jimmy has fouls angles on Haaland and a",
+      "isWC": true
     },
     {
       "title": "Golden Boot Betting: Messi goes odds-on after scoring sixth goal in three games, Kane three behind",
       "link": "https://betting.betfair.com/football/world-cup-2026/golden-boot-betting-guide---who-will-win-at-the-2026-world-cup-280526-140.html",
       "date": "Mon, 29 Jun 2026 13:50:00 +0100",
       "desc": "We&#039;ve reached the knock-out stages of the World Cup and the elite names remain at the top of the Betfair Sportsbook&#039;s Golden Boot betting market with Messi now odds-on ahead of Mbappe, Dembe",
-      "isWC": false
-    },
-    {
-      "title": "England v DR Congo Betting Pointers: Second-half drama likely while Anderson and Rice can combine in 13/1 Bet Builder",
-      "link": "https://betting.betfair.com/football/world-cup-2026/england-v-dr-congo-betting-tips-back-second-half-drama-plus-13-1-bet-builder-290626-718.html",
-      "date": "Mon, 29 Jun 2026 14:43:00 +0100",
-      "desc": "Ste Tudor predicts a cautious start from both teams on Wednesday...until England find their gears after the break.\n\n\nA nervy first-half awaits\n\n\nInfluence of Bellingham and Rice should tell\n\nSte has B",
       "isWC": false
     },
     {
@@ -67,10 +53,24 @@
       "isWC": false
     },
     {
-      "title": "South Africa v Canada: Back co-hosts to edge it &amp; a 7/2 SoFi sending off",
-      "link": "https://betting.betfair.com/football/world-cup-2026/south-africa-v-canada-world-cup-knockout-tips-best-bets-match-prediction-260626-1063.html",
-      "date": "Sun, 28 Jun 2026 14:00:00 +0100",
-      "desc": "Paul Higham is backing [12/5] Canada to dump South Africa out of the opening knockout game of the World Cup, and thinks the [7/2] on a red card in Los Angeles is worth taking...\n\nBack co-hosts Canada ",
+      "title": "Man City 2026/27: Win the league, sell Haaland and more prices for Maresca&#039;s &quot;almost impossible task&quot;",
+      "link": "https://betting.betfair.com/football/premier-league/man-city-2026-27-betting-tips-premier-league-specials-prices-as-enzo-maresca-confirmed-manager-290626-204.html",
+      "date": "Tue, 30 Jun 2026 08:55:00 +0100",
+      "desc": "Manchester City have confirmed Enzo Maresca as their new manager so check out the Betfair prices on the Etihad club for 2026/27...\n\nSucceeding Guardiola is &quot;almost impossible task&quot; says Betf",
+      "isWC": false
+    },
+    {
+      "title": "England v DR Congo Betting Pointers: Second-half drama likely while Anderson and Rice can combine in 13/1 Bet Builder",
+      "link": "https://betting.betfair.com/football/world-cup-2026/england-v-dr-congo-betting-tips-back-second-half-drama-plus-13-1-bet-builder-290626-718.html",
+      "date": "Tue, 30 Jun 2026 08:59:00 +0100",
+      "desc": "Ste Tudor predicts a cautious start from both teams as England meet DR Congo in the last 32 on Wednesday...at least until the Three Lions find their gears after the break.\n\n\nA nervy first-half awaits\n",
+      "isWC": false
+    },
+    {
+      "title": "Ivory Coast v Norway: Get the best value from Haaland with 9/1 Bet Builder double",
+      "link": "https://betting.betfair.com/football/world-cup-2026/ivory-coast-v-norway-world-cup-knockout-betting-tips-best-bets-match-prediction-280626-1063.html",
+      "date": "Tue, 30 Jun 2026 19:00:00 +0100",
+      "desc": "Paul Higham is backing Norway&#039;s well-rested starters to battle past Ivory Coast in this last 32 clash, and thinks a [9/1] Bet Builder double could be the best value way to back Erling Haaland...\n",
       "isWC": false
     }
   ]
