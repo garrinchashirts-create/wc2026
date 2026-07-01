@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-01T11:42:24.371049+00:00",
+  "updated_at": "2026-07-01T19:14:42.604162+00:00",
   "teams": [
     {
       "code": "FRA",
@@ -426,58 +426,6 @@
       "xga": 0.8
     },
     {
-      "code": "COL",
-      "name": "Colombia",
-      "games": 3,
-      "goals_for": 4,
-      "goals_against": 1,
-      "xg_for": 5.772500000000001,
-      "xg_against": 2.8475,
-      "wins": 2,
-      "draws": 1,
-      "losses": 0,
-      "points": 7,
-      "expected_points": 5.756093812678035,
-      "big_chances_created": 6,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "UZB",
-          "date": "2026-06-18",
-          "gf": 3,
-          "ga": 1,
-          "xgf": 2.45,
-          "xga": 0.82,
-          "result": "W",
-          "p_win": 0.728
-        },
-        {
-          "vs": "RDC",
-          "date": "2026-06-24",
-          "gf": 1,
-          "ga": 0,
-          "xgf": 2.04,
-          "xga": 0.61,
-          "result": "W",
-          "p_win": 0.624
-        },
-        {
-          "vs": "POR",
-          "date": "2026-06-27",
-          "gf": 0,
-          "ga": 0,
-          "xgf": 1.28,
-          "xga": 1.42,
-          "result": "D",
-          "p_win": 0.324
-        }
-      ],
-      "xpts": 5.76,
-      "delta_pts": 1.24,
-      "xgf": 1.92,
-      "xga": 0.95
-    },
-    {
       "code": "SUI",
       "name": "Switzerland",
       "games": 3,
@@ -530,56 +478,56 @@
       "xga": 1.0
     },
     {
-      "code": "RDC",
-      "name": "DR Congo",
+      "code": "COL",
+      "name": "Colombia",
       "games": 3,
       "goals_for": 4,
-      "goals_against": 3,
-      "xg_for": 3.3375,
-      "xg_against": 4.942500000000001,
-      "wins": 1,
+      "goals_against": 1,
+      "xg_for": 5.772500000000001,
+      "xg_against": 2.8475,
+      "wins": 2,
       "draws": 1,
-      "losses": 1,
-      "points": 4,
-      "expected_points": 2.8940131235225293,
-      "big_chances_created": 1,
+      "losses": 0,
+      "points": 7,
+      "expected_points": 5.781236749069216,
+      "big_chances_created": 6,
       "big_chances_conceded": 0,
       "matches": [
         {
-          "vs": "POR",
-          "date": "2026-06-17",
-          "gf": 1,
-          "ga": 1,
-          "xgf": 1.15,
-          "xga": 1.78,
-          "result": "D",
-          "p_win": 0.115
-        },
-        {
-          "vs": "COL",
-          "date": "2026-06-24",
-          "gf": 0,
-          "ga": 1,
-          "xgf": 0.61,
-          "xga": 2.04,
-          "result": "L",
-          "p_win": 0.136
-        },
-        {
           "vs": "UZB",
-          "date": "2026-06-27",
+          "date": "2026-06-18",
           "gf": 3,
           "ga": 1,
-          "xgf": 1.58,
-          "xga": 1.12,
+          "xgf": 2.45,
+          "xga": 0.82,
           "result": "W",
-          "p_win": 0.463
+          "p_win": 0.728
+        },
+        {
+          "vs": "RDC",
+          "date": "2026-06-24",
+          "gf": 1,
+          "ga": 0,
+          "xgf": 2.04,
+          "xga": 0.61,
+          "result": "W",
+          "p_win": 0.633
+        },
+        {
+          "vs": "POR",
+          "date": "2026-06-27",
+          "gf": 0,
+          "ga": 0,
+          "xgf": 1.28,
+          "xga": 1.42,
+          "result": "D",
+          "p_win": 0.324
         }
       ],
-      "xpts": 2.89,
-      "delta_pts": 1.11,
-      "xgf": 1.11,
-      "xga": 1.65
+      "xpts": 5.78,
+      "delta_pts": 1.22,
+      "xgf": 1.92,
+      "xga": 0.95
     },
     {
       "code": "GAN",
@@ -593,7 +541,7 @@
       "draws": 1,
       "losses": 1,
       "points": 4,
-      "expected_points": 2.9503634285340183,
+      "expected_points": 2.9323950797115,
       "big_chances_created": 2,
       "big_chances_conceded": 0,
       "matches": [
@@ -615,7 +563,7 @@
           "xgf": 0.89,
           "xga": 1.12,
           "result": "D",
-          "p_win": 0.077
+          "p_win": 0.073
         },
         {
           "vs": "CRO",
@@ -628,8 +576,8 @@
           "p_win": 0.173
         }
       ],
-      "xpts": 2.95,
-      "delta_pts": 1.05,
+      "xpts": 2.93,
+      "delta_pts": 1.07,
       "xgf": 0.97,
       "xga": 0.79
     },
@@ -811,7 +759,7 @@
       "draws": 0,
       "losses": 1,
       "points": 6,
-      "expected_points": 5.187588382761332,
+      "expected_points": 5.162597845092046,
       "big_chances_created": 2,
       "big_chances_conceded": 0,
       "matches": [
@@ -823,7 +771,7 @@
           "xgf": 1.64,
           "xga": 2.92,
           "result": "L",
-          "p_win": 0.215
+          "p_win": 0.207
         },
         {
           "vs": "PAN",
@@ -846,10 +794,72 @@
           "p_win": 0.568
         }
       ],
-      "xpts": 5.19,
-      "delta_pts": 0.81,
+      "xpts": 5.16,
+      "delta_pts": 0.84,
       "xgf": 1.21,
       "xga": 1.36
+    },
+    {
+      "code": "RDC",
+      "name": "DR Congo",
+      "games": 4,
+      "goals_for": 5,
+      "goals_against": 5,
+      "xg_for": 3.8425000000000002,
+      "xg_against": 7.1375,
+      "wins": 1,
+      "draws": 1,
+      "losses": 2,
+      "points": 4,
+      "expected_points": 3.2091869390849617,
+      "big_chances_created": 1,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "POR",
+          "date": "2026-06-17",
+          "gf": 1,
+          "ga": 1,
+          "xgf": 1.15,
+          "xga": 1.78,
+          "result": "D",
+          "p_win": 0.11
+        },
+        {
+          "vs": "COL",
+          "date": "2026-06-24",
+          "gf": 0,
+          "ga": 1,
+          "xgf": 0.61,
+          "xga": 2.04,
+          "result": "L",
+          "p_win": 0.129
+        },
+        {
+          "vs": "UZB",
+          "date": "2026-06-27",
+          "gf": 3,
+          "ga": 1,
+          "xgf": 1.56,
+          "xga": 1.14,
+          "result": "W",
+          "p_win": 0.453
+        },
+        {
+          "vs": "ING",
+          "date": "2026-07-01",
+          "gf": 1,
+          "ga": 2,
+          "xgf": 0.53,
+          "xga": 2.17,
+          "result": "L",
+          "p_win": 0.065
+        }
+      ],
+      "xpts": 3.21,
+      "delta_pts": 0.79,
+      "xgf": 0.96,
+      "xga": 1.78
     },
     {
       "code": "AFS",
@@ -912,6 +922,68 @@
       "delta_pts": 0.7,
       "xgf": 0.88,
       "xga": 1.66
+    },
+    {
+      "code": "ING",
+      "name": "England",
+      "games": 4,
+      "goals_for": 8,
+      "goals_against": 3,
+      "xg_for": 8.765,
+      "xg_against": 4.085,
+      "wins": 3,
+      "draws": 1,
+      "losses": 0,
+      "points": 10,
+      "expected_points": 9.30676706372691,
+      "big_chances_created": 13,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "CRO",
+          "date": "2026-06-17",
+          "gf": 4,
+          "ga": 2,
+          "xgf": 2.92,
+          "xga": 1.64,
+          "result": "W",
+          "p_win": 0.523
+        },
+        {
+          "vs": "GAN",
+          "date": "2026-06-23",
+          "gf": 0,
+          "ga": 0,
+          "xgf": 1.12,
+          "xga": 0.89,
+          "result": "D",
+          "p_win": 0.732
+        },
+        {
+          "vs": "PAN",
+          "date": "2026-06-27",
+          "gf": 2,
+          "ga": 0,
+          "xgf": 2.55,
+          "xga": 1.03,
+          "result": "W",
+          "p_win": 0.839
+        },
+        {
+          "vs": "RDC",
+          "date": "2026-07-01",
+          "gf": 2,
+          "ga": 1,
+          "xgf": 2.17,
+          "xga": 0.53,
+          "result": "W",
+          "p_win": 0.746
+        }
+      ],
+      "xpts": 9.31,
+      "delta_pts": 0.69,
+      "xgf": 2.19,
+      "xga": 1.02
     },
     {
       "code": "CAB",
@@ -1120,58 +1192,6 @@
       "delta_pts": 0.17,
       "xgf": 1.55,
       "xga": 1.23
-    },
-    {
-      "code": "ING",
-      "name": "England",
-      "games": 3,
-      "goals_for": 6,
-      "goals_against": 2,
-      "xg_for": 6.59,
-      "xg_against": 3.5599999999999996,
-      "wins": 2,
-      "draws": 1,
-      "losses": 0,
-      "points": 7,
-      "expected_points": 6.8259768682101924,
-      "big_chances_created": 13,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "CRO",
-          "date": "2026-06-17",
-          "gf": 4,
-          "ga": 2,
-          "xgf": 2.92,
-          "xga": 1.64,
-          "result": "W",
-          "p_win": 0.513
-        },
-        {
-          "vs": "GAN",
-          "date": "2026-06-23",
-          "gf": 0,
-          "ga": 0,
-          "xgf": 1.12,
-          "xga": 0.89,
-          "result": "D",
-          "p_win": 0.723
-        },
-        {
-          "vs": "PAN",
-          "date": "2026-06-27",
-          "gf": 2,
-          "ga": 0,
-          "xgf": 2.55,
-          "xga": 1.03,
-          "result": "W",
-          "p_win": 0.836
-        }
-      ],
-      "xpts": 6.83,
-      "delta_pts": 0.17,
-      "xgf": 2.2,
-      "xga": 1.19
     },
     {
       "code": "HOL",
@@ -1890,58 +1910,6 @@
       "xga": 1.43
     },
     {
-      "code": "POR",
-      "name": "Portugal",
-      "games": 3,
-      "goals_for": 6,
-      "goals_against": 1,
-      "xg_for": 6.737500000000001,
-      "xg_against": 2.8525,
-      "wins": 1,
-      "draws": 2,
-      "losses": 0,
-      "points": 5,
-      "expected_points": 6.0993357625196705,
-      "big_chances_created": 7,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "RDC",
-          "date": "2026-06-17",
-          "gf": 1,
-          "ga": 1,
-          "xgf": 1.78,
-          "xga": 1.15,
-          "result": "D",
-          "p_win": 0.656
-        },
-        {
-          "vs": "UZB",
-          "date": "2026-06-23",
-          "gf": 5,
-          "ga": 0,
-          "xgf": 3.54,
-          "xga": 0.42,
-          "result": "W",
-          "p_win": 0.757
-        },
-        {
-          "vs": "COL",
-          "date": "2026-06-27",
-          "gf": 0,
-          "ga": 0,
-          "xgf": 1.42,
-          "xga": 1.28,
-          "result": "D",
-          "p_win": 0.386
-        }
-      ],
-      "xpts": 6.1,
-      "delta_pts": -1.1,
-      "xgf": 2.25,
-      "xga": 0.95
-    },
-    {
       "code": "NZE",
       "name": "New Zealand",
       "games": 3,
@@ -1992,6 +1960,58 @@
       "delta_pts": -1.12,
       "xgf": 1.38,
       "xga": 2.62
+    },
+    {
+      "code": "POR",
+      "name": "Portugal",
+      "games": 3,
+      "goals_for": 6,
+      "goals_against": 1,
+      "xg_for": 6.737500000000001,
+      "xg_against": 2.8525,
+      "wins": 1,
+      "draws": 2,
+      "losses": 0,
+      "points": 5,
+      "expected_points": 6.1236432357594675,
+      "big_chances_created": 7,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "RDC",
+          "date": "2026-06-17",
+          "gf": 1,
+          "ga": 1,
+          "xgf": 1.78,
+          "xga": 1.15,
+          "result": "D",
+          "p_win": 0.665
+        },
+        {
+          "vs": "UZB",
+          "date": "2026-06-23",
+          "gf": 5,
+          "ga": 0,
+          "xgf": 3.54,
+          "xga": 0.42,
+          "result": "W",
+          "p_win": 0.757
+        },
+        {
+          "vs": "COL",
+          "date": "2026-06-27",
+          "gf": 0,
+          "ga": 0,
+          "xgf": 1.42,
+          "xga": 1.28,
+          "result": "D",
+          "p_win": 0.386
+        }
+      ],
+      "xpts": 6.12,
+      "delta_pts": -1.12,
+      "xgf": 2.25,
+      "xga": 0.95
     },
     {
       "code": "IRQ",
@@ -2389,7 +2409,7 @@
       "draws": 0,
       "losses": 3,
       "points": 0,
-      "expected_points": 1.6797480114201893,
+      "expected_points": 1.6762235005216117,
       "big_chances_created": 0,
       "big_chances_conceded": 0,
       "matches": [
@@ -2487,13 +2507,13 @@
       "games": 3,
       "goals_for": 2,
       "goals_against": 11,
-      "xg_for": 2.3625,
-      "xg_against": 7.567500000000001,
+      "xg_for": 2.3825000000000003,
+      "xg_against": 7.5475,
       "wins": 0,
       "draws": 0,
       "losses": 3,
       "points": 0,
-      "expected_points": 1.829854273201084,
+      "expected_points": 1.856138052071004,
       "big_chances_created": 1,
       "big_chances_conceded": 0,
       "matches": [
@@ -2522,14 +2542,14 @@
           "date": "2026-06-27",
           "gf": 1,
           "ga": 3,
-          "xgf": 1.12,
-          "xga": 1.58,
+          "xgf": 1.14,
+          "xga": 1.56,
           "result": "L",
-          "p_win": 0.255
+          "p_win": 0.264
         }
       ],
-      "xpts": 1.83,
-      "delta_pts": -1.83,
+      "xpts": 1.86,
+      "delta_pts": -1.86,
       "xgf": 0.79,
       "xga": 2.52
     },
@@ -3717,11 +3737,11 @@
       "away": "RDC",
       "g1": 1,
       "g2": 1,
-      "pH": 0.656,
-      "pD": 0.229,
-      "pA": 0.115,
-      "lam": 1.98,
-      "mu": 0.73,
+      "pH": 0.665,
+      "pD": 0.225,
+      "pA": 0.11,
+      "lam": 2.0,
+      "mu": 0.71,
       "home_xg": 1.78,
       "away_xg": 1.15,
       "real_xg": true,
@@ -3764,11 +3784,11 @@
       "away": "CRO",
       "g1": 4,
       "g2": 2,
-      "pH": 0.513,
-      "pD": 0.272,
-      "pA": 0.215,
-      "lam": 1.68,
-      "mu": 1.02,
+      "pH": 0.523,
+      "pD": 0.27,
+      "pA": 0.207,
+      "lam": 1.7,
+      "mu": 1.0,
       "home_xg": 2.92,
       "away_xg": 1.64,
       "real_xg": true,
@@ -3817,7 +3837,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "✅ **Result matched prediction** (51%). Final: 4–2.",
+        "✅ **Result matched prediction** (52%). Final: 4–2.",
         "⚡ England outscored xG (4 goals vs 2.9 xG) — clinical finishing.",
         "💥 England created 7 big chances.",
         "💥 Croatia created 2 big chances."
@@ -5052,11 +5072,11 @@
       "away": "GAN",
       "g1": 0,
       "g2": 0,
-      "pH": 0.723,
-      "pD": 0.2,
-      "pA": 0.077,
-      "lam": 2.12,
-      "mu": 0.58,
+      "pH": 0.732,
+      "pD": 0.196,
+      "pA": 0.073,
+      "lam": 2.14,
+      "mu": 0.56,
       "home_xg": 1.12,
       "away_xg": 0.89,
       "real_xg": true,
@@ -5073,7 +5093,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "🚨 **Upset**: model predicted England win (72%) but ended 0–0.",
+        "🚨 **Upset**: model predicted England win (73%) but ended 0–0.",
         "🧱 England underperformed xG (0 goals vs 1.1 xG).",
         "🧱 Ghana underperformed xG (0 goals vs 0.9 xG).",
         "💥 England created 2 big chances.",
@@ -5129,11 +5149,11 @@
       "away": "RDC",
       "g1": 1,
       "g2": 0,
-      "pH": 0.624,
-      "pD": 0.241,
-      "pA": 0.136,
-      "lam": 1.91,
-      "mu": 0.79,
+      "pH": 0.633,
+      "pD": 0.237,
+      "pA": 0.129,
+      "lam": 1.93,
+      "mu": 0.77,
       "home_xg": 2.04,
       "away_xg": 0.61,
       "real_xg": false,
@@ -5156,7 +5176,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "✅ **Result matched prediction** (62%). Final: 1–0.",
+        "✅ **Result matched prediction** (63%). Final: 1–0.",
         "🧱 Colombia underperformed xG (1 goals vs 2.0 xG).",
         "💥 Colombia created 2 big chances.",
         "🎯 Colombia dominated possession (61%)."
@@ -6078,10 +6098,10 @@
       "g1": 0,
       "g2": 2,
       "pH": 0.026,
-      "pD": 0.138,
-      "pA": 0.836,
+      "pD": 0.136,
+      "pA": 0.839,
       "lam": 0.3,
-      "mu": 2.4,
+      "mu": 2.42,
       "home_xg": 1.03,
       "away_xg": 2.55,
       "real_xg": false,
@@ -6211,13 +6231,13 @@
       "away": "UZB",
       "g1": 3,
       "g2": 1,
-      "pH": 0.463,
-      "pD": 0.281,
-      "pA": 0.255,
-      "lam": 1.58,
-      "mu": 1.12,
-      "home_xg": 1.58,
-      "away_xg": 1.12,
+      "pH": 0.453,
+      "pD": 0.283,
+      "pA": 0.264,
+      "lam": 1.56,
+      "mu": 1.14,
+      "home_xg": 1.56,
+      "away_xg": 1.14,
       "real_xg": false,
       "home_shots": null,
       "away_shots": null,
@@ -6232,7 +6252,7 @@
       "reds": [],
       "has_stats": false,
       "narrative": [
-        "✅ **Result matched prediction** (46%). Final: 3–1.",
+        "✅ **Result matched prediction** (45%). Final: 3–1.",
         "⚡ DR Congo outscored xG (3 goals vs 1.6 xG) — clinical finishing."
       ],
       "nlbair": false,
@@ -6639,10 +6659,43 @@
       "nlbair": false,
       "stadium": "Mexico City Stadium (Estadio Azteca)",
       "city": "Mexico City"
+    },
+    {
+      "date": "2026-07-01",
+      "home": "ING",
+      "away": "RDC",
+      "g1": 2,
+      "g2": 1,
+      "pH": 0.746,
+      "pD": 0.189,
+      "pA": 0.065,
+      "lam": 2.17,
+      "mu": 0.53,
+      "home_xg": 2.17,
+      "away_xg": 0.53,
+      "real_xg": false,
+      "home_shots": null,
+      "away_shots": null,
+      "home_sot": null,
+      "away_sot": null,
+      "home_poss": null,
+      "away_poss": null,
+      "home_big_chances": null,
+      "away_big_chances": null,
+      "home_goals": [],
+      "away_goals": [],
+      "reds": [],
+      "has_stats": false,
+      "narrative": [
+        "✅ **Result matched prediction** (75%). Final: 2–1."
+      ],
+      "nlbair": false,
+      "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
+      "city": "Atlanta"
     }
   ],
   "real_xg_games": 40,
   "nlbair_games": 63,
-  "narratives_built": 79,
+  "narratives_built": 80,
   "source": "football-data.org + mominullptr + nlbair/wc2026-events"
 }
