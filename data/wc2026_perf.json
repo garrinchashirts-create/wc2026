@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-01T19:14:42.604162+00:00",
+  "updated_at": "2026-07-02T00:02:16.303563+00:00",
   "teams": [
     {
       "code": "FRA",
@@ -13,7 +13,7 @@
       "draws": 0,
       "losses": 0,
       "points": 12,
-      "expected_points": 9.05362461023233,
+      "expected_points": 9.127120600650695,
       "big_chances_created": 10,
       "big_chances_conceded": 0,
       "matches": [
@@ -25,7 +25,7 @@
           "xgf": 2.44,
           "xga": 1.05,
           "result": "W",
-          "p_win": 0.639
+          "p_win": 0.667
         },
         {
           "vs": "IRQ",
@@ -58,8 +58,8 @@
           "p_win": 0.717
         }
       ],
-      "xpts": 9.05,
-      "delta_pts": 2.95,
+      "xpts": 9.13,
+      "delta_pts": 2.87,
       "xgf": 1.93,
       "xga": 0.85
     },
@@ -261,7 +261,7 @@
       "draws": 0,
       "losses": 1,
       "points": 9,
-      "expected_points": 6.901020006342876,
+      "expected_points": 6.983794597221189,
       "big_chances_created": 14,
       "big_chances_conceded": 0,
       "matches": [
@@ -283,7 +283,7 @@
           "xgf": 2.74,
           "xga": 2.18,
           "result": "W",
-          "p_win": 0.462
+          "p_win": 0.491
         },
         {
           "vs": "FRA",
@@ -306,8 +306,8 @@
           "p_win": 0.551
         }
       ],
-      "xpts": 6.9,
-      "delta_pts": 2.1,
+      "xpts": 6.98,
+      "delta_pts": 2.02,
       "xgf": 2.16,
       "xga": 1.19
     },
@@ -582,6 +582,58 @@
       "xga": 0.79
     },
     {
+      "code": "EGI",
+      "name": "Egypt",
+      "games": 3,
+      "goals_for": 5,
+      "goals_against": 3,
+      "xg_for": 4.41,
+      "xg_against": 4.19,
+      "wins": 1,
+      "draws": 2,
+      "losses": 0,
+      "points": 5,
+      "expected_points": 4.0127130312426855,
+      "big_chances_created": 5,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "BEL",
+          "date": "2026-06-15",
+          "gf": 1,
+          "ga": 1,
+          "xgf": 1.12,
+          "xga": 1.58,
+          "result": "D",
+          "p_win": 0.188
+        },
+        {
+          "vs": "NZE",
+          "date": "2026-06-22",
+          "gf": 3,
+          "ga": 1,
+          "xgf": 2.44,
+          "xga": 1.69,
+          "result": "W",
+          "p_win": 0.54
+        },
+        {
+          "vs": "IRA",
+          "date": "2026-06-27",
+          "gf": 1,
+          "ga": 1,
+          "xgf": 0.85,
+          "xga": 0.92,
+          "result": "D",
+          "p_win": 0.337
+        }
+      ],
+      "xpts": 4.01,
+      "delta_pts": 0.99,
+      "xgf": 1.47,
+      "xga": 1.4
+    },
+    {
       "code": "CDM",
       "name": "Ivory Coast",
       "games": 4,
@@ -694,58 +746,6 @@
       "delta_pts": 0.96,
       "xgf": 1.11,
       "xga": 1.58
-    },
-    {
-      "code": "EGI",
-      "name": "Egypt",
-      "games": 3,
-      "goals_for": 5,
-      "goals_against": 3,
-      "xg_for": 4.41,
-      "xg_against": 4.19,
-      "wins": 1,
-      "draws": 2,
-      "losses": 0,
-      "points": 5,
-      "expected_points": 4.086475377445524,
-      "big_chances_created": 5,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "BEL",
-          "date": "2026-06-15",
-          "gf": 1,
-          "ga": 1,
-          "xgf": 1.12,
-          "xga": 1.58,
-          "result": "D",
-          "p_win": 0.21
-        },
-        {
-          "vs": "NZE",
-          "date": "2026-06-22",
-          "gf": 3,
-          "ga": 1,
-          "xgf": 2.44,
-          "xga": 1.69,
-          "result": "W",
-          "p_win": 0.54
-        },
-        {
-          "vs": "IRA",
-          "date": "2026-06-27",
-          "gf": 1,
-          "ga": 1,
-          "xgf": 0.85,
-          "xga": 0.92,
-          "result": "D",
-          "p_win": 0.337
-        }
-      ],
-      "xpts": 4.09,
-      "delta_pts": 0.91,
-      "xgf": 1.47,
-      "xga": 1.4
     },
     {
       "code": "CRO",
@@ -1140,6 +1140,68 @@
       "delta_pts": 0.2,
       "xgf": 1.29,
       "xga": 1.79
+    },
+    {
+      "code": "BEL",
+      "name": "Belgium",
+      "games": 4,
+      "goals_for": 9,
+      "goals_against": 4,
+      "xg_for": 7.86,
+      "xg_against": 3.3400000000000003,
+      "wins": 2,
+      "draws": 2,
+      "losses": 0,
+      "points": 8,
+      "expected_points": 7.825451626497584,
+      "big_chances_created": 7,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "EGI",
+          "date": "2026-06-15",
+          "gf": 1,
+          "ga": 1,
+          "xgf": 1.58,
+          "xga": 1.12,
+          "result": "D",
+          "p_win": 0.549
+        },
+        {
+          "vs": "IRA",
+          "date": "2026-06-21",
+          "gf": 0,
+          "ga": 0,
+          "xgf": 1.45,
+          "xga": 0.62,
+          "result": "D",
+          "p_win": 0.529
+        },
+        {
+          "vs": "NZE",
+          "date": "2026-06-27",
+          "gf": 5,
+          "ga": 1,
+          "xgf": 3.25,
+          "xga": 0.48,
+          "result": "W",
+          "p_win": 0.729
+        },
+        {
+          "vs": "SEN",
+          "date": "2026-07-01",
+          "gf": 3,
+          "ga": 2,
+          "xgf": 1.58,
+          "xga": 1.12,
+          "result": "W",
+          "p_win": 0.464
+        }
+      ],
+      "xpts": 7.83,
+      "delta_pts": 0.17,
+      "xgf": 1.97,
+      "xga": 0.84
     },
     {
       "code": "AGL",
@@ -1754,110 +1816,6 @@
       "xga": 1.82
     },
     {
-      "code": "SEN",
-      "name": "Senegal",
-      "games": 3,
-      "goals_for": 8,
-      "goals_against": 6,
-      "xg_for": 6.24,
-      "xg_against": 5.319999999999999,
-      "wins": 1,
-      "draws": 0,
-      "losses": 2,
-      "points": 3,
-      "expected_points": 3.8495204421590414,
-      "big_chances_created": 10,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "FRA",
-          "date": "2026-06-16",
-          "gf": 1,
-          "ga": 3,
-          "xgf": 1.05,
-          "xga": 2.44,
-          "result": "L",
-          "p_win": 0.126
-        },
-        {
-          "vs": "NOR",
-          "date": "2026-06-23",
-          "gf": 2,
-          "ga": 3,
-          "xgf": 2.18,
-          "xga": 2.74,
-          "result": "L",
-          "p_win": 0.256
-        },
-        {
-          "vs": "IRQ",
-          "date": "2026-06-26",
-          "gf": 5,
-          "ga": 0,
-          "xgf": 3.01,
-          "xga": 0.14,
-          "result": "W",
-          "p_win": 0.652
-        }
-      ],
-      "xpts": 3.85,
-      "delta_pts": -0.85,
-      "xgf": 2.08,
-      "xga": 1.77
-    },
-    {
-      "code": "BEL",
-      "name": "Belgium",
-      "games": 3,
-      "goals_for": 6,
-      "goals_against": 2,
-      "xg_for": 6.28,
-      "xg_against": 2.22,
-      "wins": 1,
-      "draws": 2,
-      "losses": 0,
-      "points": 5,
-      "expected_points": 5.920680635394515,
-      "big_chances_created": 7,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "EGI",
-          "date": "2026-06-15",
-          "gf": 1,
-          "ga": 1,
-          "xgf": 1.58,
-          "xga": 1.12,
-          "result": "D",
-          "p_win": 0.519
-        },
-        {
-          "vs": "IRA",
-          "date": "2026-06-21",
-          "gf": 0,
-          "ga": 0,
-          "xgf": 1.45,
-          "xga": 0.62,
-          "result": "D",
-          "p_win": 0.5
-        },
-        {
-          "vs": "NZE",
-          "date": "2026-06-27",
-          "gf": 5,
-          "ga": 1,
-          "xgf": 3.25,
-          "xga": 0.48,
-          "result": "W",
-          "p_win": 0.703
-        }
-      ],
-      "xpts": 5.92,
-      "delta_pts": -0.92,
-      "xgf": 2.09,
-      "xga": 0.74
-    },
-    {
       "code": "COR",
       "name": "South Korea",
       "games": 3,
@@ -1921,7 +1879,7 @@
       "draws": 1,
       "losses": 2,
       "points": 1,
-      "expected_points": 2.1206272267655732,
+      "expected_points": 2.0653297588037405,
       "big_chances_created": 5,
       "big_chances_conceded": 0,
       "matches": [
@@ -1953,11 +1911,11 @@
           "xgf": 0.48,
           "xga": 3.25,
           "result": "L",
-          "p_win": 0.088
+          "p_win": 0.074
         }
       ],
-      "xpts": 2.12,
-      "delta_pts": -1.12,
+      "xpts": 2.07,
+      "delta_pts": -1.07,
       "xgf": 1.38,
       "xga": 2.62
     },
@@ -2025,7 +1983,7 @@
       "draws": 0,
       "losses": 3,
       "points": 0,
-      "expected_points": 1.1439610440394592,
+      "expected_points": 1.208234466467885,
       "big_chances_created": 2,
       "big_chances_conceded": 0,
       "matches": [
@@ -2057,13 +2015,65 @@
           "xgf": 0.14,
           "xga": 3.01,
           "result": "L",
-          "p_win": 0.118
+          "p_win": 0.136
         }
       ],
-      "xpts": 1.14,
-      "delta_pts": -1.14,
+      "xpts": 1.21,
+      "delta_pts": -1.21,
       "xgf": 0.42,
       "xga": 2.69
+    },
+    {
+      "code": "IRA",
+      "name": "Iran",
+      "games": 3,
+      "goals_for": 3,
+      "goals_against": 3,
+      "xg_for": 3.7,
+      "xg_against": 4.279999999999999,
+      "wins": 0,
+      "draws": 3,
+      "losses": 0,
+      "points": 3,
+      "expected_points": 4.225655732499907,
+      "big_chances_created": 9,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "NZE",
+          "date": "2026-06-16",
+          "gf": 2,
+          "ga": 2,
+          "xgf": 2.16,
+          "xga": 1.98,
+          "result": "D",
+          "p_win": 0.56
+        },
+        {
+          "vs": "BEL",
+          "date": "2026-06-21",
+          "gf": 0,
+          "ga": 0,
+          "xgf": 0.62,
+          "xga": 1.45,
+          "result": "D",
+          "p_win": 0.202
+        },
+        {
+          "vs": "EGI",
+          "date": "2026-06-27",
+          "gf": 1,
+          "ga": 1,
+          "xgf": 0.92,
+          "xga": 0.85,
+          "result": "D",
+          "p_win": 0.374
+        }
+      ],
+      "xpts": 4.23,
+      "delta_pts": -1.23,
+      "xgf": 1.23,
+      "xga": 1.43
     },
     {
       "code": "CAT",
@@ -2168,58 +2178,6 @@
       "delta_pts": -1.27,
       "xgf": 0.89,
       "xga": 2.48
-    },
-    {
-      "code": "IRA",
-      "name": "Iran",
-      "games": 3,
-      "goals_for": 3,
-      "goals_against": 3,
-      "xg_for": 3.7,
-      "xg_against": 4.279999999999999,
-      "wins": 0,
-      "draws": 3,
-      "losses": 0,
-      "points": 3,
-      "expected_points": 4.300885791005175,
-      "big_chances_created": 9,
-      "big_chances_conceded": 0,
-      "matches": [
-        {
-          "vs": "NZE",
-          "date": "2026-06-16",
-          "gf": 2,
-          "ga": 2,
-          "xgf": 2.16,
-          "xga": 1.98,
-          "result": "D",
-          "p_win": 0.56
-        },
-        {
-          "vs": "BEL",
-          "date": "2026-06-21",
-          "gf": 0,
-          "ga": 0,
-          "xgf": 0.62,
-          "xga": 1.45,
-          "result": "D",
-          "p_win": 0.225
-        },
-        {
-          "vs": "EGI",
-          "date": "2026-06-27",
-          "gf": 1,
-          "ga": 1,
-          "xgf": 0.92,
-          "xga": 0.85,
-          "result": "D",
-          "p_win": 0.374
-        }
-      ],
-      "xpts": 4.3,
-      "delta_pts": -1.3,
-      "xgf": 1.23,
-      "xga": 1.43
     },
     {
       "code": "ALE",
@@ -2396,6 +2354,68 @@
       "delta_pts": -1.6,
       "xgf": 0.9,
       "xga": 2.32
+    },
+    {
+      "code": "SEN",
+      "name": "Senegal",
+      "games": 4,
+      "goals_for": 10,
+      "goals_against": 9,
+      "xg_for": 7.36,
+      "xg_against": 6.8999999999999995,
+      "wins": 1,
+      "draws": 0,
+      "losses": 3,
+      "points": 3,
+      "expected_points": 4.678601119063858,
+      "big_chances_created": 10,
+      "big_chances_conceded": 0,
+      "matches": [
+        {
+          "vs": "FRA",
+          "date": "2026-06-16",
+          "gf": 1,
+          "ga": 3,
+          "xgf": 1.05,
+          "xga": 2.44,
+          "result": "L",
+          "p_win": 0.108
+        },
+        {
+          "vs": "NOR",
+          "date": "2026-06-23",
+          "gf": 2,
+          "ga": 3,
+          "xgf": 2.18,
+          "xga": 2.74,
+          "result": "L",
+          "p_win": 0.232
+        },
+        {
+          "vs": "IRQ",
+          "date": "2026-06-26",
+          "gf": 5,
+          "ga": 0,
+          "xgf": 3.01,
+          "xga": 0.14,
+          "result": "W",
+          "p_win": 0.624
+        },
+        {
+          "vs": "BEL",
+          "date": "2026-07-01",
+          "gf": 2,
+          "ga": 3,
+          "xgf": 1.12,
+          "xga": 1.58,
+          "result": "L",
+          "p_win": 0.254
+        }
+      ],
+      "xpts": 4.68,
+      "delta_pts": -1.68,
+      "xgf": 1.84,
+      "xga": 1.72
     },
     {
       "code": "PAN",
@@ -3357,11 +3377,11 @@
       "away": "EGI",
       "g1": 1,
       "g2": 1,
-      "pH": 0.519,
-      "pD": 0.271,
-      "pA": 0.21,
-      "lam": 1.69,
-      "mu": 1.01,
+      "pH": 0.549,
+      "pD": 0.264,
+      "pA": 0.188,
+      "lam": 1.75,
+      "mu": 0.95,
       "home_xg": 1.58,
       "away_xg": 1.12,
       "real_xg": true,
@@ -3389,7 +3409,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "🚨 **Upset**: model predicted Belgium win (52%) but ended 1–1.",
+        "🚨 **Upset**: model predicted Belgium win (55%) but ended 1–1.",
         "💥 Belgium created 2 big chances.",
         "💥 Egypt created 2 big chances."
       ],
@@ -3508,11 +3528,11 @@
       "away": "SEN",
       "g1": 3,
       "g2": 1,
-      "pH": 0.639,
-      "pD": 0.235,
-      "pA": 0.126,
-      "lam": 1.94,
-      "mu": 0.76,
+      "pH": 0.667,
+      "pD": 0.224,
+      "pA": 0.108,
+      "lam": 2.0,
+      "mu": 0.7,
       "home_xg": 2.44,
       "away_xg": 1.05,
       "real_xg": true,
@@ -3551,7 +3571,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "✅ **Result matched prediction** (64%). Final: 3–1.",
+        "✅ **Result matched prediction** (67%). Final: 3–1.",
         "💥 France created 4 big chances.",
         "💥 Senegal created 2 big chances."
       ],
@@ -4636,11 +4656,11 @@
       "away": "IRA",
       "g1": 0,
       "g2": 0,
-      "pH": 0.5,
-      "pD": 0.275,
-      "pA": 0.225,
-      "lam": 1.65,
-      "mu": 1.05,
+      "pH": 0.529,
+      "pD": 0.269,
+      "pA": 0.202,
+      "lam": 1.71,
+      "mu": 0.99,
       "home_xg": 1.45,
       "away_xg": 0.62,
       "real_xg": true,
@@ -4663,7 +4683,7 @@
       ],
       "has_stats": true,
       "narrative": [
-        "🚨 **Upset**: model predicted Belgium win (50%) but ended 0–0.",
+        "🚨 **Upset**: model predicted Belgium win (53%) but ended 0–0.",
         "🧱 Belgium underperformed xG (0 goals vs 1.4 xG).",
         "💥 Belgium created 1 big chance.",
         "💥 Iran created 1 big chance.",
@@ -4892,11 +4912,11 @@
       "away": "SEN",
       "g1": 3,
       "g2": 2,
-      "pH": 0.462,
-      "pD": 0.282,
-      "pA": 0.256,
-      "lam": 1.58,
-      "mu": 1.12,
+      "pH": 0.491,
+      "pD": 0.277,
+      "pA": 0.232,
+      "lam": 1.64,
+      "mu": 1.07,
       "home_xg": 2.74,
       "away_xg": 2.18,
       "real_xg": false,
@@ -4940,7 +4960,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "✅ **Result matched prediction** (46%). Final: 3–2.",
+        "✅ **Result matched prediction** (49%). Final: 3–2.",
         "💥 Norway created 5 big chances.",
         "💥 Senegal created 3 big chances."
       ],
@@ -5837,11 +5857,11 @@
       "away": "IRQ",
       "g1": 5,
       "g2": 0,
-      "pH": 0.652,
-      "pD": 0.23,
-      "pA": 0.118,
-      "lam": 1.97,
-      "mu": 0.73,
+      "pH": 0.624,
+      "pD": 0.241,
+      "pA": 0.136,
+      "lam": 1.91,
+      "mu": 0.79,
       "home_xg": 3.01,
       "away_xg": 0.14,
       "real_xg": true,
@@ -5890,12 +5910,12 @@
       ],
       "has_stats": true,
       "narrative": [
-        "✅ **Result matched prediction** (65%). Final: 5–0.",
+        "✅ **Result matched prediction** (62%). Final: 5–0.",
         "⚡ Senegal outscored xG (5 goals vs 3.0 xG) — clinical finishing.",
         "💥 Senegal created 5 big chances.",
         "🟥 Iraq down to 10 men (Ghareeb Solaka Rebin Sulaka, 13').",
         "🎯 Senegal dominated possession (63%).",
-        "📉 Scoreline (5–0) far more one-sided than model expected (~2.0–0.7)."
+        "📉 Scoreline (5–0) far more one-sided than model expected (~1.9–0.8)."
       ],
       "nlbair": true,
       "stadium": "New York New Jersey Stadium (MetLife Stadium)",
@@ -5983,11 +6003,11 @@
       "away": "BEL",
       "g1": 1,
       "g2": 5,
-      "pH": 0.088,
-      "pD": 0.209,
-      "pA": 0.703,
-      "lam": 0.62,
-      "mu": 2.08,
+      "pH": 0.074,
+      "pD": 0.197,
+      "pA": 0.729,
+      "lam": 0.56,
+      "mu": 2.14,
       "home_xg": 0.48,
       "away_xg": 3.25,
       "real_xg": true,
@@ -6036,7 +6056,7 @@
       "reds": [],
       "has_stats": true,
       "narrative": [
-        "✅ **Result matched prediction** (70%). Final: 1–5.",
+        "✅ **Result matched prediction** (73%). Final: 1–5.",
         "⚡ Belgium outscored xG (5 goals vs 3.2 xG) — clinical finishing.",
         "💥 Belgium created 4 big chances.",
         "📉 Scoreline (1–5) far more one-sided than model expected (~0.6–2.1)."
@@ -6692,10 +6712,45 @@
       "nlbair": false,
       "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
       "city": "Atlanta"
+    },
+    {
+      "date": "2026-07-01",
+      "home": "BEL",
+      "away": "SEN",
+      "g1": 3,
+      "g2": 2,
+      "pH": 0.464,
+      "pD": 0.281,
+      "pA": 0.254,
+      "lam": 1.58,
+      "mu": 1.12,
+      "home_xg": 1.58,
+      "away_xg": 1.12,
+      "real_xg": false,
+      "home_shots": null,
+      "away_shots": null,
+      "home_sot": null,
+      "away_sot": null,
+      "home_poss": null,
+      "away_poss": null,
+      "home_big_chances": null,
+      "away_big_chances": null,
+      "home_goals": [],
+      "away_goals": [],
+      "reds": [],
+      "has_stats": false,
+      "narrative": [
+        "✅ **Result matched prediction** (46%). Final: 3–2.",
+        "⚡ Belgium outscored xG (3 goals vs 1.6 xG) — clinical finishing.",
+        "⚡ Senegal outscored xG (2 goals vs 1.1 xG) — clinical finishing."
+      ],
+      "nlbair": false,
+      "stadium": "",
+      "city": ""
     }
   ],
   "real_xg_games": 40,
   "nlbair_games": 63,
-  "narratives_built": 80,
+  "narratives_built": 81,
   "source": "football-data.org + mominullptr + nlbair/wc2026-events"
 }
